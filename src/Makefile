@@ -4,7 +4,6 @@ SRCC=list.c listset.c listmap.c
 SRCC+=hashset.c hashmap.c
 SRCC+=treeset.c treemap.c
 SRCC+=graph.c graph_dag.c graph_matching.c graph_antichain.c graph_path.c
-SRCC+=disjointset.c 
 SRCC+=pqueue.c
 SRCC+=heap.c
  
@@ -13,7 +12,6 @@ SRCH+=list.h listset.h listmap.h queue.h stack.h
 SRCH+=hashset.h hashmap.h
 SRCH+=treeset.h treemap.h
 SRCH+=graph.h graph_dag.h graph_matching.h graph_antichain.h graph_path.h
-SRCH+=disjointset.h
 SRCH+=pqueue.h
 SRCH+=heap.h
 
@@ -21,7 +19,6 @@ DOCH=main.h
 DOCH+=set_doc.h map_doc.h list_doc.h
 DOCH+=graph_doc.h graph_alg_doc.h 
 DOCH+=pqueue_doc.h heap_doc.h
-DOCH+=disjointset_doc.h
 
 OBJS=$(SRCC:.c=.o) 
 
