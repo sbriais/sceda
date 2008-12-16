@@ -1,0 +1,14 @@
+# C Compiler
+CC=gcc
+
+# archiver
+AR=ar
+
+# C Compiler flags
+CFLAGS=-Wall -O3 -DUNSAFE
+
+# Doxygen command
+DOXYGEN=doxygen
+
+# Target installation prefix
+TARGET?=$(HOME)/SCEDA

@@ -1,0 +1,26 @@
+SCEDA installation instructions:
+--------------------------------
+
+0-Prerequisites
+
+To compile SCEDA, you need GNU Make, Doxygen and a C compiler (gcc
+for instance).
+
+1-Customise make options in the Makefile.config file.
+
+A default configuration script Makefile.config.linux is given. In most
+cases, it is sufficient to create a symbolic link from this file to
+Makefile.config, ie:
+
+ln -s Makefile.config.linux Makefile.config
+
+You might want to modify the target installation path of SCEDA by
+changing the value of TARGET variable.
+
+2-Launch the compilation & installation process, ie being in SCEDA
+root directory, type
+
+make install
+
+This will generate also the documentation using Doxygen.
+
