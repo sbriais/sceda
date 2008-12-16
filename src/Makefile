@@ -28,7 +28,6 @@ INSTALLH+=list.h listset.h listmap.h queue.h stack.h
 INSTALLH+=hashset.h hashmap.h
 INSTALLH+=treeset.h treemap.h
 INSTALLH+=graph.h graph_dag.h graph_matching.h graph_antichain.h graph_path.h
-INSTALLH+=disjointset.h
 INSTALLH+=pqueue.h
 INSTALLH+=heap.h
 INSTALLLIB=
