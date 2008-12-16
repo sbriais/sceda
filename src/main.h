@@ -20,7 +20,6 @@
     \li \ref maps
     \li \ref pqueues
     \li \ref heaps
-    \li \ref disjsets
     \li \ref graphs and \ref graphalgs
 
     \section license_sec License
