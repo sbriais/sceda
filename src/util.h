@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __UTIL_H
-#define __UTIL_H
+#ifndef SCEDA_UTIL_H
+#define SCEDA_UTIL_H
 
 #include <stdlib.h>
 #include <string.h>

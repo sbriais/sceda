@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_GRAPH_MATCHING_H
-#define __SCEDA_GRAPH_MATCHING_H
+#ifndef SCEDA_GRAPH_MATCHING_H
+#define SCEDA_GRAPH_MATCHING_H
 /** \file graph_matching.h
     \brief maximum matching in a bipartite graph */
 

@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_DISJOINTSET_H
-#define __SCEDA_DISJOINTSET_H
+#ifndef SCEDA_DISJOINTSET_H
+#define SCEDA_DISJOINTSET_H
 /** \file disjointset.h
     \brief Disjoint Sets "à la Tarjan" 
     (implements efficient union-find operations) */

@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_STACK_H
-#define __SCEDA_STACK_H
+#ifndef SCEDA_STACK_H
+#define SCEDA_STACK_H
 /** \file stack.h
     \brief LIFO stacks implemented as linked lists */
 

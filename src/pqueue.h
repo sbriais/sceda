@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_PQUEUE_H
-#define __SCEDA_PQUEUE_H
+#ifndef SCEDA_PQUEUE_H
+#define SCEDA_PQUEUE_H
 /** \file pqueue.h
     \brief Priority queues implemented as binary heap. */
 

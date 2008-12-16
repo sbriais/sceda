@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_LIST_H
-#define __SCEDA_LIST_H
+#ifndef SCEDA_LIST_H
+#define SCEDA_LIST_H
 /** \file list.h 
     \brief Linked lists implementation */
 

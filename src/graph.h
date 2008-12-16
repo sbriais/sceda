@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_GRAPH_H
-#define __SCEDA_GRAPH_H
+#ifndef SCEDA_GRAPH_H
+#define SCEDA_GRAPH_H
 /** \file graph.h
     \brief Graph basic definitions. */
 

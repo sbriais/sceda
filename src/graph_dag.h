@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_GRAPH_DAG_H
-#define __SCEDA_GRAPH_DAG_H
+#ifndef SCEDA_GRAPH_DAG_H
+#define SCEDA_GRAPH_DAG_H
 /** \file graph_dag.h
     \brief Basic algorithms on DAGs */
 

@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_TREEMAP_H
-#define __SCEDA_TREEMAP_H
+#ifndef SCEDA_TREEMAP_H
+#define SCEDA_TREEMAP_H
 /** \file treemap.h
     \brief TreeMap implementation */
 

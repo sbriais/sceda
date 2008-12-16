@@ -7,6 +7,11 @@
     programmer. It provides efficient implementation of commonly used
     data structures and algorithms.
 
+    \section ns_sec A word about SCEDA namespace
+
+    In order to not pollute C namespace, all SCEDA functions, macros
+    and types are prefixed by the literal "SCEDA_".
+
     \section main_sec Description of SCEDA
 
     \li \ref generalities 

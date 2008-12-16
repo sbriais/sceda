@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_LISTSET_H
-#define __SCEDA_LISTSET_H
+#ifndef SCEDA_LISTSET_H
+#define SCEDA_LISTSET_H
 /** \file listset.h
     \brief ListSet implementation */
 

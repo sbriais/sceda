@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_TREESET_H
-#define __SCEDA_TREESET_H
+#ifndef SCEDA_TREESET_H
+#define SCEDA_TREESET_H
 /** \file treeset.h
     \brief TreeSet implementation */
 

@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_LISTMAP_H
-#define __SCEDA_LISTMAP_H
+#ifndef SCEDA_LISTMAP_H
+#define SCEDA_LISTMAP_H
 /** \file listmap.h
     \brief ListMap implementation */
 
