@@ -316,3 +316,84 @@ SCEDA_Vertex *SCEDA_vertex_pred_iterator_next(SCEDA_VertexPredIterator *iter) {
   SCEDA_hashmap_iterator_next(iter, &v);
   return v;
 }
+
+static void SCEDA_vertex_adj_iterator_next_aux(SCEDA_VertexAdjIterator *iter) {
+  iter->v_adj = NULL;
+  while(SCEDA_vertex_pred_iterator_has_next(&(iter->pred))) {
+    SCEDA_Vertex *v_adj = SCEDA_vertex_pred_iterator_next(&(iter->pred));
+    if(v_adj != iter->v) {
+      iter->v_adj = v_adj;
+      break;
+    }
+  }
+}
+
+void SCEDA_vertex_adj_iterator_init(SCEDA_Vertex *v, SCEDA_VertexAdjIterator *iter) {
+  SCEDA_vertex_pred_iterator_init(v, &(iter->pred));
+  SCEDA_vertex_succ_iterator_init(v, &(iter->succ));
+  iter->v = v;
+  SCEDA_vertex_adj_iterator_next_aux(iter);
+}
+
+int SCEDA_vertex_adj_iterator_has_next(SCEDA_VertexAdjIterator *iter) {
+  if(iter->v_adj == NULL) {
+    return SCEDA_vertex_succ_iterator_has_next(&(iter->succ));
+  } else {
+    return TRUE;
+  }
+}
+
+SCEDA_Vertex *SCEDA_vertex_adj_iterator_next(SCEDA_VertexAdjIterator *iter) {
+  if(iter->v_adj == NULL) {
+    return SCEDA_vertex_succ_iterator_next(&(iter->succ));
+  }
+  SCEDA_Vertex *v = iter->v_adj;
+  SCEDA_vertex_adj_iterator_next_aux(iter);
+  return v;
+}
+
+void SCEDA_vertex_adj_iterator_cleanup(SCEDA_VertexAdjIterator *iter) {
+  SCEDA_vertex_pred_iterator_cleanup(&(iter->pred));
+  SCEDA_vertex_succ_iterator_cleanup(&(iter->succ));
+  memset(iter, 0, sizeof(SCEDA_VertexAdjIterator));
+}
+
+void SCEDA_incident_edges_iterator_next_aux(SCEDA_IncidentEdgesIterator *iter) {
+  iter->e = NULL;
+  while(SCEDA_in_edges_iterator_has_next(&(iter->in_edges))) {
+    SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&(iter->in_edges));
+    if(SCEDA_edge_source(e) != SCEDA_edge_target(e)) {
+      iter->e = e;
+      break;
+    }
+  }
+}
+
+void SCEDA_incident_edges_iterator_init(SCEDA_Vertex *v, SCEDA_IncidentEdgesIterator *iter) {
+  SCEDA_in_edges_iterator_init(v, &(iter->in_edges));
+  SCEDA_out_edges_iterator_init(v, &(iter->out_edges));
+  SCEDA_incident_edges_iterator_next_aux(iter);
+}
+
+int SCEDA_incident_edges_iterator_has_next(SCEDA_IncidentEdgesIterator *iter) {
+  if(iter->e == NULL) {
+    return SCEDA_out_edges_iterator_has_next(&(iter->out_edges));
+  } else {
+    return TRUE;
+  }
+}
+
+SCEDA_Edge *SCEDA_incident_edges_iterator_next(SCEDA_IncidentEdgesIterator *iter) {
+  if(iter->e == NULL) {
+    return SCEDA_out_edges_iterator_next(&(iter->out_edges));
+  }
+  SCEDA_Edge *e = iter->e;
+  SCEDA_incident_edges_iterator_next_aux(iter);
+  return e;
+}
+
+void SCEDA_incident_edges_iterator_cleanup(SCEDA_IncidentEdgesIterator *iter) {
+  SCEDA_in_edges_iterator_cleanup(&(iter->in_edges));
+  SCEDA_out_edges_iterator_cleanup(&(iter->out_edges));
+  memset(iter, 0, sizeof(SCEDA_IncidentEdgesIterator));
+}

@@ -414,5 +414,28 @@ SCEDA_Vertex *SCEDA_vertex_pred_iterator_next(SCEDA_VertexPredIterator *iter);
     \hideinitializer */
 #define SCEDA_vertex_pred_iterator_cleanup SCEDA_hashmap_iterator_cleanup
 
+typedef struct {
+  SCEDA_VertexPredIterator pred;
+  SCEDA_VertexSuccIterator succ;
+  SCEDA_Vertex *v;
+  SCEDA_Vertex *v_adj;
+} SCEDA_VertexAdjIterator;
+
+void SCEDA_vertex_adj_iterator_init(SCEDA_Vertex *v, SCEDA_VertexAdjIterator *iter);
+int SCEDA_vertex_adj_iterator_has_next(SCEDA_VertexAdjIterator *iter);
+SCEDA_Vertex *SCEDA_vertex_adj_iterator_next(SCEDA_VertexAdjIterator *iter);
+void SCEDA_vertex_adj_iterator_cleanup(SCEDA_VertexAdjIterator *iter);
+
+typedef struct {
+  SCEDA_InEdgesIterator in_edges;
+  SCEDA_OutEdgesIterator out_edges;
+  SCEDA_Edge *e;
+} SCEDA_IncidentEdgesIterator;
+
+void SCEDA_incident_edges_iterator_init(SCEDA_Vertex *v, SCEDA_IncidentEdgesIterator *iter);
+int SCEDA_incident_edges_iterator_has_next(SCEDA_IncidentEdgesIterator *iter);
+SCEDA_Edge *SCEDA_incident_edges_iterator_next(SCEDA_IncidentEdgesIterator *iter);
+void SCEDA_incident_edges_iterator_cleanup(SCEDA_IncidentEdgesIterator *iter);
+
 #endif
 

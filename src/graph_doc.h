@@ -168,4 +168,24 @@
     \endcode
 
     Iterator over the set of input edges to a vertex v. 
+
+    \code
+    void vertex_adj_iterator_init(Vertex *v, VertexAdjIterator *iter);
+    int vertex_adj_iterator_has_next(VertexAdjIterator *iter);
+    Vertex *vertex_adj_iterator_next(VertexAdjIterator *iter);
+    void vertex_adj_iterator_cleanup(VertexAdjIterator *iter);
+    \endcode
+
+    Iterator over the set of adjacent vertices (predecessors and
+    successors) of a vertex v.
+
+    \code
+    void incident_edges_iterator_init(Vertex *v, IncidentEdgesIterator *iter);
+    int incident_edges_iterator_has_next(IncidentEdgesIterator *iter);
+    Edge *incident_edges_iterator_next(IncidentEdgesIterator *iter);
+    void incident_edges_iterator_cleanup(IncidentEdgesIterator *iter);
+    \endcode
+
+    Iterator over the set of incident edges (input and outgoing edges)
+    to a vertex v.
  */
