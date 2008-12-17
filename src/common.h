@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef SCEDA_COMMON_H
-#define SCEDA_COMMON_H
+#ifndef __SCEDA_COMMON_H
+#define __SCEDA_COMMON_H
 /** \file common.h
     \brief Useful definitions. */
 

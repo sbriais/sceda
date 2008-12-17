@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef SCEDA_HASHMAP_H
-#define SCEDA_HASHMAP_H
+#ifndef __SCEDA_HASHMAP_H
+#define __SCEDA_HASHMAP_H
 /** \file hashmap.h
     \brief HashMap implementation */
 

@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef SCEDA_GRAPH_ANTICHAIN_H
-#define SCEDA_GRAPH_ANTICHAIN_H
+#ifndef __SCEDA_GRAPH_ANTICHAIN_H
+#define __SCEDA_GRAPH_ANTICHAIN_H
 /** \file graph_antichain.h
     \brief maximum antichain in a DAG */
 

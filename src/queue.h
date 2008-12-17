@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef SCEDA_QUEUE_H
-#define SCEDA_QUEUE_H
+#ifndef __SCEDA_QUEUE_H
+#define __SCEDA_QUEUE_H
 /** \file queue.h
     \brief queues implemented as linked list */
 

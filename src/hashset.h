@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef SCEDA_HASHSET_H
-#define SCEDA_HASHSET_H
+#ifndef __SCEDA_HASHSET_H
+#define __SCEDA_HASHSET_H
 /** \file hashset.h
     \brief HashSet implementation */
 

@@ -16,8 +16,8 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef SCEDA_HEAP_H
-#define SCEDA_HEAP_H
+#ifndef __SCEDA_HEAP_H
+#define __SCEDA_HEAP_H
 /** \file heap.h
     \brief Fibonacci heaps. */
 
