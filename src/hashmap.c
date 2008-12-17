@@ -25,7 +25,7 @@
 
 void SCEDA_hashmap_init(SCEDA_HashMap *hmap, SCEDA_delete_fun delete_key, SCEDA_delete_fun delete_value,
 		  SCEDA_match_fun match_key, SCEDA_hash_fun hash_key) {
-  hmap->buckets = DFLT_SIZE;
+  hmap->buckets = SCEDA_DFLT_SIZE;
   hmap->size = 0;
   hmap->delete_key = delete_key;
   hmap->delete_value = delete_value;

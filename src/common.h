@@ -34,7 +34,7 @@
 #endif
 
 /** DeFauLT SIZE of all growing/shrinking structures */
-#define DFLT_SIZE 10
+#define SCEDA_DFLT_SIZE 10
 
 /** Delete functions. */
 typedef void (*SCEDA_delete_fun)(void *);

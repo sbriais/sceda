@@ -25,7 +25,7 @@
 
 void SCEDA_hashset_init(SCEDA_HashSet *hset, SCEDA_delete_fun delete, 
 		  SCEDA_match_fun match, SCEDA_hash_fun hash) {
-  hset->buckets = DFLT_SIZE;
+  hset->buckets = SCEDA_DFLT_SIZE;
   hset->size = 0;
   hset->delete = delete;
   hset->match = match;

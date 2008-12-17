@@ -30,7 +30,7 @@
 
 void SCEDA_pqueue_init(SCEDA_PQueue *pqueue, SCEDA_delete_fun delete, SCEDA_compare_fun compare) {
   pqueue->size = 0;
-  pqueue->length = DFLT_SIZE;
+  pqueue->length = SCEDA_DFLT_SIZE;
   pqueue->delete = delete;
   pqueue->compare = compare;
   pqueue->elts = safe_calloc(pqueue->length, sizeof(void *));
