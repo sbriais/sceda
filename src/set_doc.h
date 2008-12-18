@@ -162,7 +162,7 @@
     Behaviour is unspecified if "has_next" has not been called before or
     if it returned FALSE.
 
-    \section set_examples Example
+    \section set_examples Examples
 
     The following three examples create a set of Integers.
 
