@@ -203,17 +203,8 @@ int main(int argc, char *argv[]) {
       
   int i;
   for(i = 0; i < 10; i++) {
-    int j;
-    for(j = 0; j < 2; j++) {
-      Integer *x = new_Integer(i);
-      // insert x into the set
-      if(SCEDA_listset_add(set, x) != 0) {
-	// x was not added to the set
-	fprintf(stdout,"%d is already in the set\n", x->value);
-	// so we delete it
-	delete_Integer(x);
-      }
-    }
+    // insert i into the set
+    SCEDA_listset_add(set, new_Integer(i));
   }
 
   // iterate over the set
@@ -271,17 +262,8 @@ int main(int argc, char *argv[]) {
       
   int i;
   for(i = 0; i < 10; i++) {
-    int j;
-    for(j = 0; j < 2; j++) {
-      Integer *x = new_Integer(i);
-      // insert x into the set
-      if(SCEDA_hashset_add(set, x) != 0) {
-	// x was not added to the set
-	fprintf(stdout,"%d is already in the set\n", x->value);
-	// so we delete it
-	delete_Integer(x);
-      }
-    }
+    // insert i into the set
+    SCEDA_hashset_add(set, new_Integer(i));
   }
 
   // iterate over the set
@@ -340,17 +322,8 @@ int main(int argc, char *argv[]) {
       
   int i;
   for(i = 0; i < 10; i++) {
-    int j;
-    for(j = 0; j < 2; j++) {
-      Integer *x = new_Integer(i);
-      // insert x into the set
-      if(SCEDA_treeset_add(set, x) != 0) {
-	// x was not added to the set
-	fprintf(stdout,"%d is already in the set\n", x->value);
-	// so we delete it
-	delete_Integer(x);
-      }
-    }
+    // insert i into the set
+    SCEDA_treeset_add(set, new_Integer(i));
   }
 
   // iterate over the set
