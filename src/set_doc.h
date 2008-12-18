@@ -161,4 +161,212 @@
 
     Behaviour is unspecified if "has_next" has not been called before or
     if it returned FALSE.
+
+    \section set_examples Example
+
+    The following three examples create a set of Integers.
+
+    It then print the set content, using a set iterator.
+
+    Finally, the set is deleted.
+    
+    \subsection listset_exa ListSet example
+    
+    \code
+#include <stdio.h>
+#include <stdlib.h>
+#include <SCEDA/common.h>
+#include <SCEDA/listset.h>
+
+typedef struct {
+  int value;
+} Integer;
+
+Integer *new_Integer(int n) {
+  Integer *x = malloc(sizeof(Integer));
+  x->value = n;
+  return x;
+}
+
+void delete_Integer(Integer *x) {
+  free(x);
+}
+
+int match_Integer(Integer *x, Integer *y) {
+  return x->value == y->value;
+}
+
+int main(int argc, char *argv[]) {
+  // create a set of Integer
+  SCEDA_ListSet *set = SCEDA_listset_create((SCEDA_delete_fun)delete_Integer, 
+					    (SCEDA_match_fun)match_Integer);
+      
+  int i;
+  for(i = 0; i < 10; i++) {
+    int j;
+    for(j = 0; j < 2; j++) {
+      Integer *x = new_Integer(i);
+      // insert x into the set
+      if(SCEDA_listset_add(set, x) != 0) {
+	// x was not added to the set
+	fprintf(stdout,"%d is already in the set\n", x->value);
+	// so we delete it
+	delete_Integer(x);
+      }
+    }
+  }
+
+  // iterate over the set
+  SCEDA_ListSetIterator elts;
+  SCEDA_listset_iterator_init(set, &elts);
+  while(SCEDA_listset_iterator_has_next(&elts)) {
+    // peek the next element
+    Integer *x = SCEDA_listset_iterator_next(&elts);
+    fprintf(stdout,"%d\n",x->value);
+  }
+  SCEDA_listset_iterator_cleanup(&elts);
+
+  // delete the set
+  SCEDA_listset_delete(set);
+
+  return 0;
+}
+    \endcode
+
+    \subsection hashset_exa HashSet example
+
+    \code
+#include <stdio.h>
+#include <stdlib.h>
+#include <SCEDA/common.h>
+#include <SCEDA/hashset.h>
+
+typedef struct {
+  int value;
+} Integer;
+
+Integer *new_Integer(int n) {
+  Integer *x = malloc(sizeof(Integer));
+  x->value = n;
+  return x;
+}
+
+void delete_Integer(Integer *x) {
+  free(x);
+}
+
+int match_Integer(Integer *x, Integer *y) {
+  return x->value == y->value;
+}
+
+unsigned int hash_Integer(Integer *x) {
+  return x->value;
+}
+
+int main(int argc, char *argv[]) {
+  // create a set of Integer
+  SCEDA_HashSet *set = SCEDA_hashset_create((SCEDA_delete_fun)delete_Integer, 
+					    (SCEDA_match_fun)match_Integer,
+					    (SCEDA_hash_fun)hash_Integer);
+      
+  int i;
+  for(i = 0; i < 10; i++) {
+    int j;
+    for(j = 0; j < 2; j++) {
+      Integer *x = new_Integer(i);
+      // insert x into the set
+      if(SCEDA_hashset_add(set, x) != 0) {
+	// x was not added to the set
+	fprintf(stdout,"%d is already in the set\n", x->value);
+	// so we delete it
+	delete_Integer(x);
+      }
+    }
+  }
+
+  // iterate over the set
+  SCEDA_HashSetIterator elts;
+  SCEDA_hashset_iterator_init(set, &elts);
+  while(SCEDA_hashset_iterator_has_next(&elts)) {
+    // peek the next element
+    Integer *x = SCEDA_hashset_iterator_next(&elts);
+    fprintf(stdout,"%d\n",x->value);
+  }
+  SCEDA_hashset_iterator_cleanup(&elts);
+
+  // delete the set
+  SCEDA_hashset_delete(set);
+
+  return 0;
+}
+    \endcode
+
+    \subsection treeeset_exa TreeSet example
+
+    \code
+#include <stdio.h>
+#include <stdlib.h>
+#include <SCEDA/common.h>
+#include <SCEDA/treeset.h>
+
+typedef struct {
+  int value;
+} Integer;
+
+Integer *new_Integer(int n) {
+  Integer *x = malloc(sizeof(Integer));
+  x->value = n;
+  return x;
+}
+
+void delete_Integer(Integer *x) {
+  free(x);
+}
+
+int compare_Integer(Integer *x, Integer *y) {
+  if(x->value < y->value) {
+    return -1;
+  } else if(x->value == y->value) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int main(int argc, char *argv[]) {
+  // create a set of Integer
+  SCEDA_TreeSet *set = SCEDA_treeset_create((SCEDA_delete_fun)delete_Integer, 
+					    (SCEDA_compare_fun)compare_Integer);
+      
+  int i;
+  for(i = 0; i < 10; i++) {
+    int j;
+    for(j = 0; j < 2; j++) {
+      Integer *x = new_Integer(i);
+      // insert x into the set
+      if(SCEDA_treeset_add(set, x) != 0) {
+	// x was not added to the set
+	fprintf(stdout,"%d is already in the set\n", x->value);
+	// so we delete it
+	delete_Integer(x);
+      }
+    }
+  }
+
+  // iterate over the set
+  SCEDA_TreeSetIterator elts;
+  SCEDA_treeset_iterator_init(set, &elts);
+  while(SCEDA_treeset_iterator_has_next(&elts)) {
+    // peek the next element
+    Integer *x = SCEDA_treeset_iterator_next(&elts);
+    fprintf(stdout,"%d\n",x->value);
+  }
+  SCEDA_treeset_iterator_cleanup(&elts);
+
+  // delete the set
+  SCEDA_treeset_delete(set);
+
+  return 0;
+}
+    \endcode
  */
