@@ -11,4 +11,4 @@ CFLAGS=-Wall -O3 -DUNSAFE
 DOXYGEN=doxygen
 
 # Target installation prefix
-TARGET?=$(HOME)/SCEDA
+TARGET?=./build.linux
