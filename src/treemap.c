@@ -429,3 +429,6 @@ void *SCEDA_treemap_iterator_next(SCEDA_TreeMapIterator *iter, void **key) {
   return SCEDA_treemap_value(void *, elt);
 }
 
+void SCEDA_treemap_iterator_cleanup(SCEDA_TreeMapIterator *iter) {
+  memset(iter, 0, sizeof(SCEDA_TreeMapIterator));
+}

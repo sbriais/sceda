@@ -182,4 +182,18 @@
 
     The key is replaced by the corresponding key bound to the returned
     value.
+
+    \section map_examples Examples
+
+    The following three examples create a map indexed by strings and
+    whose target values are Integers.
+
+    It then print the map content, using a map iterator.
+
+    Finally, the map is deleted.
+    
+    \subsection listmap_exa ListMap example
+
+    
+
 */
