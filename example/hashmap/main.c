@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 					    (SCEDA_match_fun)match_string,
 					    (SCEDA_hash_fun)hash_string);
   
-  // note that string are allocated onto the heap, thanks to strdup function
+  // note that strings are allocated onto the heap, thanks to strdup function
   SCEDA_hashmap_put(map, strdup("Odissey"), new_Integer(2001), NULL);
   SCEDA_hashmap_put(map, strdup("Torment"), new_Integer(2002), NULL);
   SCEDA_hashmap_put(map, strdup("Judgment"), new_Integer(2002), NULL);

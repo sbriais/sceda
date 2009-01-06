@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 					    (SCEDA_delete_fun)delete_Integer,
 					    (SCEDA_match_fun)match_string);
   
-  // note that string are allocated onto the heap, thanks to strdup function
+  // note that strings are allocated onto the heap, thanks to strdup function
   SCEDA_listmap_put(map, strdup("Odissey"), new_Integer(2001), NULL);
   SCEDA_listmap_put(map, strdup("Torment"), new_Integer(2002), NULL);
   SCEDA_listmap_put(map, strdup("Judgment"), new_Integer(2002), NULL);
