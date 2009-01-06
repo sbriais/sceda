@@ -258,52 +258,7 @@
 
     Finally, the list is deleted.
 
-    \code
-#include <stdio.h>
-#include <stdlib.h>
-#include <SCEDA/common.h>
-#include <SCEDA/list.h>
-
-typedef struct {
-  int value;
-} Integer;
-
-Integer *new_Integer(int n) {
-  Integer *x = malloc(sizeof(Integer));
-  x->value = n;
-  return x;
-}
-
-void delete_Integer(Integer *x) {
-  free(x);
-}
-
-int main(int argc, char *argv[]) {
-  // create a list of Integer
-  SCEDA_List *list = SCEDA_list_create((SCEDA_delete_fun)delete_Integer);
-      
-  int i;
-  for(i = 0; i < 10; i++) {
-    // add i at head of the list
-    SCEDA_list_add(list, new_Integer(i));
-  }
-
-  // iterate over the list
-  SCEDA_ListIterator elts;
-  SCEDA_list_iterator_init(list, &elts);
-  while(SCEDA_list_iterator_has_next(&elts)) {
-    // peek the next element
-    Integer *x = SCEDA_list_iterator_next(&elts);
-    fprintf(stdout,"%d\n",x->value);
-  }
-  SCEDA_list_iterator_cleanup(&elts);
-
-  // delete the list
-  SCEDA_list_delete(list);
-
-  return 0;
-}
-    \endcode
+    \include "list/main.c"
 
     \subsection stack_exa Stack example
 
@@ -314,52 +269,7 @@ int main(int argc, char *argv[]) {
 
     Finally the stack is deleted.
 
-    \code
-#include <stdio.h>
-#include <stdlib.h>
-#include <SCEDA/common.h>
-#include <SCEDA/stack.h>
-
-typedef struct {
-  int value;
-} Integer;
-
-Integer *new_Integer(int n) {
-  Integer *x = malloc(sizeof(Integer));
-  x->value = n;
-  return x;
-}
-
-void delete_Integer(Integer *x) {
-  free(x);
-}
-
-int main(int argc, char *argv[]) {
-  // create a stack of Integer
-  SCEDA_Stack *stack = SCEDA_stack_create((SCEDA_delete_fun)delete_Integer);
-      
-  int i;
-  for(i = 0; i < 10; i++) {
-    // push i onto the stack
-    SCEDA_stack_push(stack, new_Integer(i));
-  }
-
-  // empty the stack
-  while(!SCEDA_stack_is_empty(stack)) {
-    Integer *x;
-    // pop next element
-    SCEDA_stack_pop(stack, (void **)&x);
-    fprintf(stdout,"%d\n",x->value);
-    // do not forget to delete it
-    delete_Integer(x);
-  }
-
-  // delete the stack
-  SCEDA_stack_delete(stack);
-
-  return 0;
-}
-    \endcode
+    \include "stack/main.c"
 
     \subsection queue_exa Queue example
 
@@ -370,51 +280,6 @@ int main(int argc, char *argv[]) {
 
     Finally the queue is deleted.
 
-    \code
-#include <stdio.h>
-#include <stdlib.h>
-#include <SCEDA/common.h>
-#include <SCEDA/queue.h>
-
-typedef struct {
-  int value;
-} Integer;
-
-Integer *new_Integer(int n) {
-  Integer *x = malloc(sizeof(Integer));
-  x->value = n;
-  return x;
-}
-
-void delete_Integer(Integer *x) {
-  free(x);
-}
-
-int main(int argc, char *argv[]) {
-  // create a queue of Integer
-  SCEDA_Queue *queue = SCEDA_queue_create((SCEDA_delete_fun)delete_Integer);
-      
-  int i;
-  for(i = 0; i < 10; i++) {
-    // enqueue i in the queue
-    SCEDA_queue_enqueue(queue, new_Integer(i));
-  }
-
-  // empty the queue
-  while(!SCEDA_queue_is_empty(queue)) {
-    Integer *x;
-    // dequeue next element
-    SCEDA_queue_dequeue(queue, (void **)&x);
-    fprintf(stdout,"%d\n",x->value);
-    // do not forget to delete it
-    delete_Integer(x);
-  }
-
-  // delete the queue
-  SCEDA_queue_delete(queue);
-
-  return 0;
-}
-    \endcode
+    \include "queue/main.c"
     
  */

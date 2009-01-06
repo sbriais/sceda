@@ -194,6 +194,14 @@
     
     \subsection listmap_exa ListMap example
 
+    \include "listmap/main.c"
+
+    \subsection hashmap_exa HashMap example
+
+    \include "hashmap/main.c"
+
+    \subsection treemap_exa TreeMap example
     
+    \include "treemap/main.c"
 
 */
