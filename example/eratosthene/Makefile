@@ -1,6 +1,6 @@
-CC=gcc
+CC?=gcc
 
-SCEDA=$(HOME)/SCEDA
+SCEDA?=$(HOME)/SCEDA
 
 CFLAGS=-O3 -Wall 
 CPPFLAGS=-I$(SCEDA)/include
