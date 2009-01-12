@@ -44,6 +44,10 @@ typedef void (*SCEDA_delete_fun)(void *);
     @return TRUE=equal, FALSE=different */
 typedef int (*SCEDA_match_fun)(const void *, const void *);
 
+#define SCEDA_LT (-1)
+#define SCEDA_EQ (0)
+#define SCEDA_GT (1)
+
 /** Comparison functions. 
 
     @return 

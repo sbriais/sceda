@@ -77,4 +77,15 @@
     \endcode
 
     Test whether the given priority queue is empty.
+
+    \section pqueue_examples Example
+
+    The following example creates a priority queue of tasks.
+
+    Then it prints the tasks in ascending priority order.
+
+    Finally the priority queue is deleted.
+
+    \include "pqueue/main.c"
+
  */
