@@ -15,12 +15,24 @@ Makefile.config, ie:
 ln -s Makefile.config.linux Makefile.config
 
 You might want to modify the target installation path of SCEDA by
-changing the value of TARGET variable.
+changing the value of TARGET variable. This can also be modified in
+the manner you call the "make install" command below.
 
 2-Launch the compilation & installation process, ie being in SCEDA
-root directory, type
+root directory, type:
 
 make install
 
-This will generate also the documentation using Doxygen.
+or to install in a specified directory:
 
+make install TARGET=/path/to/SCEDA
+
+To generate the documentation (uses Doxygen), type:
+
+make doc
+
+To compile all the examples, type:
+
+make example SCEDA=/path/to/SCEDA
+
+(replace the /path/to/SCEDA with the path you just used for installing SCEDA)

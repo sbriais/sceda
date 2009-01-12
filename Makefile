@@ -1,8 +1,8 @@
 include Makefile.config
 
-ASUBDIRS=src
-OSUBDIRS=doc example
-SUBDIRS=$(ASUBDIRS) $(OSUBDIRS)
+SRCSUBDIRS=src
+OTHERDIRS=doc example
+SUBDIRS=$(SRCSUBDIRS) $(OTHERDIRS)
 
 PROJECT_NAME=SCEDA
 PROJECT_NUMBER=1.0.5
@@ -26,12 +26,12 @@ INSTALLLIB=$(LIBNAME).a
 
 all: $(LIBNAME).a doc 
 
-$(LIBNAME).a: Makefile $(ASUBDIRS) $(OBJS)
-	for dir in $(ASUBDIRS); do $(AR) rvs $(LIBNAME).a $$dir/*.o; done
+$(LIBNAME).a: Makefile $(SRCSUBDIRS) $(OBJS)
+	for dir in $(SRCSUBDIRS); do $(AR) rvs $(LIBNAME).a $$dir/*.o; done
 
 .PHONY: subdirs $(SUBDIRS)
 
-subdirs: $(ASUBDIRS) $(OSUBDIRS)
+subdirs: $(SRCSUBDIRS) $(OTHERDIRS)
 
 $(SUBDIRS):
 	$(MAKE) -C $@ 
@@ -56,7 +56,7 @@ list-headers:
 	for file in $(INSTALLH); do \
 	  echo "$$file"; \
 	done; \
-	for dir in $(SUBDIRS); do \
+	for dir in $(SRCSUBDIRS); do \
 	  for file in `$(MAKE) -s install-h -C $$dir`; do \
 	    echo "$$dir/$$file"; \
 	  done; \
@@ -66,7 +66,7 @@ list-objects:
 	for file in $(INSTALLLIB); do \
 	  echo "$$file"; \
 	done; \
-	for dir in $(SUBDIRS); do \
+	for dir in $(SRCSUBDIRS); do \
 	  for file in `$(MAKE) -s install-lib -C $$dir`; do \
 	    echo "$$dir/$$file"; \
 	  done; \
@@ -78,7 +78,7 @@ install: $(LIBNAME).a
 	for file in $(INSTALLH); do \
 	  install -m "u+rw,go+r" "$$file" "$(TARGET)/include/$(PROJECT)"; \
 	done; \
-	for dir in $(SUBDIRS); do \
+	for dir in $(SRCSUBDIRS); do \
 	  for file in `$(MAKE) -s install-h -C $$dir`; do \
 	    install -m "u+rw,go+r" "$$dir/$$file" "$(TARGET)/include/$(PROJECT)"; \
 	  done; \
@@ -86,11 +86,10 @@ install: $(LIBNAME).a
 	for file in $(INSTALLLIB); do \
 	  install -m "u+rw,go+r" "$$file" "$(TARGET)/lib"; \
 	done; \
-	for dir in $(SUBDIRS); do \
+	for dir in $(SRCSUBDIRS); do \
 	  for file in `$(MAKE) -s install-lib -C $$dir`; do \
 	    install -m "u+rw,go+r" "$$dir/$$file" "$(TARGET)/lib"; \
 	  done; \
 	done
-
 
 -include .depend
