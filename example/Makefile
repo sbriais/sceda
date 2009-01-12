@@ -16,6 +16,13 @@ subdirs: $(SUBDIRS)
 $(SUBDIRS):
 	$(MAKE) -C $@ 
 
+dist-files:
+	for dir in $(SUBDIRS); do \
+	  for file in `$(MAKE) -s dist-files -C $$dir`; do \
+	    echo "$$dir/$$file"; \
+	  done; \
+	done;
+
 clean:
 	for dir in $(SUBDIRS); do $(MAKE) clean -C $$dir; done
 

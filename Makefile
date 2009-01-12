@@ -1,7 +1,7 @@
 include Makefile.config
 
 ASUBDIRS=src
-OSUBDIRS=doc
+OSUBDIRS=doc example
 SUBDIRS=$(ASUBDIRS) $(OSUBDIRS)
 
 PROJECT_NAME=SCEDA
@@ -24,9 +24,9 @@ DISTFILES+=$(SRCC) $(SRCH)
 INSTALLH=
 INSTALLLIB=$(LIBNAME).a
 
-all: $(LIBNAME).a 
+all: $(LIBNAME).a doc 
 
-$(LIBNAME).a: Makefile subdirs $(OBJS)
+$(LIBNAME).a: Makefile $(ASUBDIRS) $(OBJS)
 	for dir in $(ASUBDIRS); do $(AR) rvs $(LIBNAME).a $$dir/*.o; done
 
 .PHONY: subdirs $(SUBDIRS)
