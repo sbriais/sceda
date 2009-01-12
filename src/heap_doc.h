@@ -134,4 +134,15 @@
     \endcode
 
     Return the key (data field) of heap element.
+
+    \section heap_examples Example
+
+    The following example creates a heap of tasks.
+
+    Then it prints the tasks in ascending priority order.
+
+    Finally the heap is deleted.
+
+    \include "heap/main.c"
+
  */
