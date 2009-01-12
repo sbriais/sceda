@@ -159,4 +159,10 @@
     Return a map that gives for each vertex a PathInfo structure,
     which indicates the previous vertex in the shortest path and the
     cost of the shortest path.
+
+    \section graphalgs_examples Examples
+
+    The following example illustrates several of these algorithms on a particular graph.
+
+    \include "graph_alg/main.c"
  */
