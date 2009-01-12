@@ -188,4 +188,13 @@
 
     Iterator over the set of incident edges (input and outgoing edges)
     to a vertex v.
+
+    \section graph_examples Example
+
+    The following example creates a graph whose nodes are labelled by
+    Integers and whose edges are not labelled (NULL).
+
+    Then it prints the graph and finally delete it.
+
+    \include "graph/main.c"
  */
