@@ -114,8 +114,8 @@
     \section shortpathdagsec Shortest paths from a source (to a target) in acylic graphs
 
     \code
-    HashMap *graph_shortest_path_from_in_dag(Graph *g, Vertex *from, distance_fun dist);
-    HashMap *graph_shortest_path_to_in_dag(Graph *g, Vertex *to, distance_fun dist);
+    HashMap *graph_shortest_path_from_in_dag(Graph *g, Vertex *from, distance_fun dist, void *dist_data);
+    HashMap *graph_shortest_path_to_in_dag(Graph *g, Vertex *to, distance_fun dist, void *dist_data);
     \endcode
 
     Computes the shortest paths from a source (resp. to a target) in
@@ -125,14 +125,14 @@
     computed (see \ref topordersec).
 
     The distance function gives for each edge the (integer) cost of
-    the edge.
+    the edge. 
 
     Return a map that gives for each vertex a PathInfo structure,
     which indicates the previous vertex in the shortest path and the
     cost of the shortest path.
 
     \code
-    HashMap *graph_shortest_path_dijkstra(Graph *g, Vertex *from, distance_fun dist);
+    HashMap *graph_shortest_path_dijkstra(Graph *g, Vertex *from, distance_fun dist, void *dist_data);
     \endcode
 
     Computes the shortests paths from a source in a graph, using
@@ -147,7 +147,7 @@
     cost of the shortest path.
 
     \code
-    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist);
+    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist, void *dist_data, int *has_negative_cycles);
     \endcode
 
     Computes the shortests paths from a source in a graph, using

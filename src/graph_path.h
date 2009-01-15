@@ -35,7 +35,7 @@ typedef struct {
 } SCEDA_PathInfo;
 
 /** Type of distance functions */
-typedef int (*SCEDA_distance_fun)(SCEDA_Edge *);
+typedef int (*SCEDA_distance_fun)(SCEDA_Edge *e, void *dist_data);
 
 /** Compute the shortest paths in a DAG from a unique source.
 
@@ -46,7 +46,7 @@ typedef int (*SCEDA_distance_fun)(SCEDA_Edge *);
     @return map of all shortest paths from source vertex 
 
     A topological order must have been computed in g. */
-SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_distance_fun dist);
+SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_distance_fun dist, void *dist_data);
 
 /** Compute the shortest paths in a DAG to a unique target.
 
@@ -57,7 +57,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Verte
     @return map of all shortest paths to target vertex 
 
     A topological order must have been computed in g. */
-SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex *to, SCEDA_distance_fun dist);
+SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex *to, SCEDA_distance_fun dist, void *dist_data);
 
 /** Compute the shortest paths from a unique source using Dijkstra
     algorithm.
@@ -67,7 +67,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex 
     @param dist = distance function (negative values are truncated)
 
     @return map of all shortest paths from source vertex  */
-SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_distance_fun dist);    
+SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_distance_fun dist, void *dist_data);    
 
 /** Compute the shortest paths from a unique source using Bellman-Ford
     algorithm.
@@ -77,7 +77,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
     @param dist = distance function 
 
     @return map of all shortest paths from source vertex  */
-SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_distance_fun dist);    
+SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_distance_fun dist, void *dist_data, int *has_negative_cycles);    
 
 #endif
 

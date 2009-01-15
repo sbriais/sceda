@@ -437,5 +437,15 @@ int SCEDA_incident_edges_iterator_has_next(SCEDA_IncidentEdgesIterator *iter);
 SCEDA_Edge *SCEDA_incident_edges_iterator_next(SCEDA_IncidentEdgesIterator *iter);
 void SCEDA_incident_edges_iterator_cleanup(SCEDA_IncidentEdgesIterator *iter);
 
+typedef struct {
+  int has_edges;
+  SCEDA_HashSetIterator edges;
+} SCEDA_EdgeClassIterator;
+
+void SCEDA_edge_class_iterator_init(SCEDA_Vertex *v_s, SCEDA_Vertex *v_t, SCEDA_EdgeClassIterator *iter);
+int SCEDA_edge_class_iterator_has_next(SCEDA_EdgeClassIterator *iter);
+SCEDA_Edge *SCEDA_edge_class_iterator_next(SCEDA_EdgeClassIterator *iter);
+void SCEDA_edge_class_iterator_cleanup(SCEDA_EdgeClassIterator *iter);
+
 #endif
 

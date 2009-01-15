@@ -397,3 +397,30 @@ void SCEDA_incident_edges_iterator_cleanup(SCEDA_IncidentEdgesIterator *iter) {
   SCEDA_out_edges_iterator_cleanup(&(iter->out_edges));
   memset(iter, 0, sizeof(SCEDA_IncidentEdgesIterator));
 }
+
+void SCEDA_edge_class_iterator_init(SCEDA_Vertex *v_s, SCEDA_Vertex *v_t, SCEDA_EdgeClassIterator *iter) {
+  SCEDA_HashSet *all_edges = SCEDA_hashmap_get(v_s->out_edges, v_t);
+  if(all_edges != NULL) {
+    iter->has_edges = TRUE;
+    SCEDA_hashset_iterator_init(all_edges, &(iter->edges));
+  } else {
+    iter->has_edges = FALSE;
+  }
+}
+
+int SCEDA_edge_class_iterator_has_next(SCEDA_EdgeClassIterator *iter) {
+  if(iter->has_edges) {
+    return SCEDA_hashset_iterator_has_next(&(iter->edges));
+  } else {
+    return FALSE;
+  }
+}
+SCEDA_Edge *SCEDA_edge_class_iterator_next(SCEDA_EdgeClassIterator *iter) {
+  return SCEDA_hashset_iterator_next(&(iter->edges));
+}
+void SCEDA_edge_class_iterator_cleanup(SCEDA_EdgeClassIterator *iter) {
+  if(iter->has_edges) {
+    SCEDA_hashset_iterator_cleanup(&(iter->edges));
+  }
+  memset(iter, 0, sizeof(SCEDA_EdgeClassIterator));
+}
