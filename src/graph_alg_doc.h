@@ -114,8 +114,8 @@
     \section shortpathdagsec Shortest paths from a source (to a target) in acylic graphs
 
     \code
-    HashMap *graph_shortest_path_from_in_dag(Graph *g, Vertex *from, distance_fun dist, void *dist_data);
-    HashMap *graph_shortest_path_to_in_dag(Graph *g, Vertex *to, distance_fun dist, void *dist_data);
+    HashMap *graph_shortest_path_from_in_dag(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt);
+    HashMap *graph_shortest_path_to_in_dag(Graph *g, Vertex *to, distance_fun dist, void *dist_ctxt);
     \endcode
 
     Computes the shortest paths from a source (resp. to a target) in
@@ -132,7 +132,7 @@
     cost of the shortest path.
 
     \code
-    HashMap *graph_shortest_path_dijkstra(Graph *g, Vertex *from, distance_fun dist, void *dist_data);
+    HashMap *graph_shortest_path_dijkstra(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt);
     \endcode
 
     Computes the shortests paths from a source in a graph, using
@@ -147,7 +147,7 @@
     cost of the shortest path.
 
     \code
-    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist, void *dist_data, int *has_negative_cycles);
+    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt, int *no_negative_cycles);
     \endcode
 
     Computes the shortests paths from a source in a graph, using
@@ -159,6 +159,9 @@
     Return a map that gives for each vertex a PathInfo structure,
     which indicates the previous vertex in the shortest path and the
     cost of the shortest path.
+
+    The result is correct as long as no_negative_cycles is
+    TRUE. Otherwise, there is a cycle of negative weight in the graph.
 
     \section graphalgs_examples Examples
 
