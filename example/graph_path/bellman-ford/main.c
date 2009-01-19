@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 
   SCEDA_Vertex *origin = vA;
   
-  SCEDA_Vertex *cycle;
+  SCEDA_Vertex *cycle = NULL;
 
   SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_bellman_ford(g, origin, (SCEDA_distance_fun)get_distance, NULL, &cycle);
 
