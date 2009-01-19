@@ -102,6 +102,15 @@
     that gives for each vertex, the previous and the next vertex in
     the chain (or NULL if there is none).
 
+    \section sccsec Strongly connected components
+
+    \code 
+    List *graph_strongly_connected_components(Graph *g);
+    \endcode
+
+    Return the list of the strongly connected components of the given
+    graph. A component is encoded as a (hash) set of vertices.
+
     \section maxantichsec Maximum antichain
 
     \code
@@ -111,7 +120,7 @@
     Return a maximum antichain of the given acyclic graph (also know
     as Dilworth decomposition).
     
-    \section shortpathdagsec Shortest paths from a source (to a target) in acylic graphs
+    \section shortpathdagsec Shortest paths from a source (to a target) in graphs
 
     \code
     HashMap *graph_shortest_path_from_in_dag(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt);
@@ -161,11 +170,18 @@
     cost of the shortest path.
 
     The result is correct as long as no_negative_cycles is
-    TRUE. Otherwise, there is a cycle of negative weight in the graph.
+    TRUE. Otherwise, this means that there is a cycle of negative
+    weight in the graph.
 
     \section graphalgs_examples Examples
 
-    The following example illustrates several of these algorithms on a particular graph.
+    \subsection graphalgs_mixed Acyclicity test, transitive closure, maximal antichain
+
+    The following example illustrates these algorithms on a particular graph.
 
     \include "graph_alg/main.c"
+
+    \subsection graphalgs_scc Strongly connected components
+
+    \include "graph_scc/main.c"
  */
