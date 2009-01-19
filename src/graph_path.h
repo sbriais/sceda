@@ -79,10 +79,12 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
     @param from = source of all the paths
     @param dist = distance function 
     @param dist_ctxt = distance function context
-    @param no_negative_cycles = set to FALSE iff there is a cycle of negative weight in the graph
+    @param neg_cycle = if not NULL, then it will point to a vertex
+    belonging to a negative weight cycle accessible from source vertex
+    (if there is one)
 
     @return map of all shortest paths from source vertex  */
-SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_distance_fun dist, void *dist_ctxt, int *no_negative_cycles);    
+SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_distance_fun dist, void *dist_ctxt, SCEDA_Vertex **neg_cycle);    
 
 #endif
 

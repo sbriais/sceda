@@ -45,13 +45,14 @@ int main(int argc, char *argv[]) {
   SCEDA_graph_add_edge(g, vC, vD, new_Integer(3));
   SCEDA_graph_add_edge(g, vC, vA, new_Integer(-2));
 
-  int no_neg_cycle;
 
   SCEDA_Vertex *origin = vA;
+  
+  SCEDA_Vertex *cycle;
 
-  SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_bellman_ford(g, origin, (SCEDA_distance_fun)get_distance, NULL, &no_neg_cycle);
+  SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_bellman_ford(g, origin, (SCEDA_distance_fun)get_distance, NULL, &cycle);
 
-  if(no_neg_cycle) {
+  if(cycle == NULL) {
     fprintf(stdout,"g has no cycle of negative weight.\n");
     
     SCEDA_HashMapIterator paths;
@@ -70,6 +71,7 @@ int main(int argc, char *argv[]) {
 
   } else {
     fprintf(stdout,"a cycle of negative weight has been detected!\n");
+    fprintf(stdout,"%s\n",SCEDA_vertex_get_data(char *, cycle));
   }
 
   SCEDA_hashmap_delete(shortest_paths);

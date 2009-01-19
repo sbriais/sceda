@@ -156,7 +156,7 @@
     cost of the shortest path.
 
     \code
-    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt, int *no_negative_cycles);
+    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt, SCEDA_Vertex **neg_cycle);
     \endcode
 
     Computes the shortests paths from a source in a graph, using
@@ -169,9 +169,11 @@
     which indicates the previous vertex in the shortest path and the
     cost of the shortest path.
 
-    The result is correct as long as no_negative_cycles is
-    TRUE. Otherwise, this means that there is a cycle of negative
-    weight in the graph.
+    Note that if there is negative cycle accessible from source
+    vertex, result is incorrect. To check correctness, give a non null
+    vertex pointer as last parameter. In this case, and if a negative
+    weight cycle exists, *neg_cycle will point to a vertex belonging
+    to such a cycle.
 
     \section graphalgs_examples Examples
 
