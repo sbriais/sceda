@@ -19,8 +19,6 @@ void delete_Integer(Integer *x) {
   free(x);
 }
 
-#define ORDER 4
-
 int main(int argc, char *argv[]) {
   // create a graph whose nodes are labelled by Integer and edges are not labelled
   SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_Integer, NULL);
