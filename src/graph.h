@@ -86,6 +86,9 @@ typedef struct {
   SCEDA_delete_fun delete;
 } SCEDA_Edge;
 
+/** Type of cost functions */
+typedef int (*SCEDA_cost_fun)(SCEDA_Edge *e, void *ctxt);
+
 /** Type of graph */
 typedef struct {
   int counter;

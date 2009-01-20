@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
   
   SCEDA_Vertex *cycle = NULL;
 
-  SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_bellman_ford(g, origin, (SCEDA_distance_fun)get_distance, NULL, &cycle);
+  SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_bellman_ford(g, origin, (SCEDA_cost_fun)get_distance, NULL, &cycle);
 
   if(cycle == NULL) {
     fprintf(stdout,"g has no cycle of negative weight.\n");
