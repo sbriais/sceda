@@ -31,7 +31,7 @@
 static SCEDA_PathInfo *SCEDA_path_info_create(SCEDA_Vertex *source, SCEDA_Vertex *u) {
   SCEDA_PathInfo *info = (SCEDA_PathInfo *)safe_malloc(sizeof(SCEDA_PathInfo));
   info->self = u;
-  info->previous = NULL;
+  info->in_edge = NULL;
   if(u == source) {
     info->distance = 0;
   } else {
@@ -44,7 +44,7 @@ static void SCEDA_path_info_delete(SCEDA_PathInfo *info) {
   free(info);
 }
 
-#define is_infty(info$) (((info$)->previous == NULL) && ((info$)->distance != 0))
+#define is_infty(info$) (((info$)->in_edge == NULL) && ((info$)->distance != 0))
 
 static int SCEDA_path_info_compare(SCEDA_PathInfo *info1, SCEDA_PathInfo *info2) {
   if(is_infty(info1)) {
@@ -68,7 +68,7 @@ static int SCEDA_path_info_compare(SCEDA_PathInfo *info1, SCEDA_PathInfo *info2)
   }
 }
 
-static inline int SCEDA_path_compare(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, int weight) {
+static inline int SCEDA_path_chk_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, int weight) {
   if(is_infty(info_u)) {
     return FALSE;
   }
@@ -79,10 +79,10 @@ static inline int SCEDA_path_compare(SCEDA_PathInfo *info_u, SCEDA_PathInfo *inf
   return FALSE;
 }
 
-static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, int weight) {
-  if(SCEDA_path_compare(info_u, info_v, weight)) {
+static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, int weight, SCEDA_Edge *in) {
+  if(SCEDA_path_chk_relax(info_u, info_v, weight)) {
     info_v->distance = info_u->distance + weight;
-    info_v->previous = info_u->self;
+    info_v->in_edge = in;
     return TRUE;
   }
   return FALSE;
@@ -115,7 +115,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Verte
       SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&out_edges);
       SCEDA_Vertex *v = SCEDA_edge_target(e);
       SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v);
-      SCEDA_path_relax(info_u, info_v, dist(e, ctxt));
+      SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e);
     }
     SCEDA_out_edges_iterator_cleanup(&out_edges);
   }
@@ -150,7 +150,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex 
       SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&in_edges);
       SCEDA_Vertex *v = SCEDA_edge_source(e);
       SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v);
-      SCEDA_path_relax(info_u, info_v, dist(e, ctxt));
+      SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e);
     }
     SCEDA_in_edges_iterator_cleanup(&in_edges);
   }
@@ -191,7 +191,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
 	de = 0;
       }
 
-      if(SCEDA_path_relax(info_u, info_v, de)) {
+      if(SCEDA_path_relax(info_u, info_v, de, e)) {
 	SCEDA_HeapElt *elt = SCEDA_hashmap_get(elts, v);
 	SCEDA_heap_decrease_key(heap, elt);
       }
@@ -230,7 +230,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
       SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u);
       SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v);
       
-      SCEDA_path_relax(info_u, info_v, dist(e, ctxt));
+      SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e);
     }
     SCEDA_edges_iterator_cleanup(&edges);
   }
@@ -246,7 +246,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
       SCEDA_Vertex *v = SCEDA_edge_target(e);
       SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u);
       SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v);
-      if(SCEDA_path_compare(info_u, info_v, dist(e, ctxt))) {
+      if(SCEDA_path_chk_relax(info_u, info_v, dist(e, ctxt))) {
 	*neg_cycle = v;
 	break;
       }
@@ -258,8 +258,8 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
       do {
 	safe_call(SCEDA_hashset_add(cycle, *neg_cycle));
 	SCEDA_PathInfo *info = SCEDA_hashmap_get(paths, *neg_cycle);
-	*neg_cycle = info->previous;
-	safe_ptr(*neg_cycle);
+	safe_ptr(info->in_edge);
+	*neg_cycle = SCEDA_edge_source(info->in_edge);
       } while(!SCEDA_hashset_contains(cycle, *neg_cycle));
       SCEDA_hashset_delete(cycle);
     }
