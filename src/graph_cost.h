@@ -16,16 +16,20 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_GRAPH_MRC_H
-#define __SCEDA_GRAPH_MRC_H
-/** \file graph_mrc.h
-    \brief minimum cost-to-time ratio cycle */
+#ifndef __SCEDA_GRAPH_COST_H
+#define __SCEDA_GRAPH_COST_H
 
 #include "graph.h"
 
-int SCEDA_graph_mrc(SCEDA_Graph *g, 
-		    int (*weight)(SCEDA_Edge *e, void *ctxt), void *w_ctxt, 
-		    int (*time)(SCEDA_Edge *e, void *ctxt), void *t_ctxt, 
-		    int *ratio_num, int *ratio_den);
+/** Type of cost functions */
+#define SCEDA_COST_TYPE double
+#include <float.h>
+#define SCEDA_COST_INFTY DBL_MAX
+
+/* #define SCEDA_COST_TYPE int */
+/* #include <limits.h> */
+/* #define SCEDA_COST_INFTY INT_MAX */
+
+typedef SCEDA_COST_TYPE (*SCEDA_cost_fun)(SCEDA_Edge *e, void *ctxt);
 
 #endif

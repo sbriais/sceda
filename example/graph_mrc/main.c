@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
   SCEDA_graph_add_edge(g, vC, vB, new_CostTime(-5,1));
 
   int p, q;
-  SCEDA_graph_mrc(g, (SCEDA_cost_fun)get_cost, NULL, (SCEDA_cost_fun)get_time, NULL, &p, &q);
+  SCEDA_graph_mrc(g, get_cost, NULL, get_time, NULL, &p, &q);
   fprintf(stdout,"%d / %d\n", p, q);
 
   SCEDA_graph_delete(g);

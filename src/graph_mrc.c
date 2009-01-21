@@ -26,31 +26,27 @@
 #include <stdlib.h>
 
 #undef DEBUG
-//#define DEBUG
+#define DEBUG
 
+#define Rational double
+
+#ifndef Rational
 typedef struct {
   int num;
   int den;
 } Rational;
+#endif
 
 typedef struct {
   SCEDA_Vertex *source;
-  SCEDA_cost_fun weight;
+  int (*weight)(SCEDA_Edge *e, void *ctxt);
   void *w_ctxt;
-  SCEDA_cost_fun time;
+  int (*time)(SCEDA_Edge *e, void *ctxt);
   void *t_ctxt;
   Rational lambda;
 } MRCcontext;
 
-#ifdef DEBUG
-#include <stdio.h>
-
-static void print_rational(FILE *stream, Rational *x) {
-  fprintf(stream,"%d / %d", x->num, x->den);
-}
-#endif
-
-static int mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
+static SCEDA_COST_TYPE mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
   int w, t;
 
   if(SCEDA_edge_source(e) == ctxt->source) {
@@ -61,7 +57,11 @@ static int mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
     t = ctxt->time(e, ctxt->t_ctxt);
   }
 
+#ifndef Rational
   return ctxt->lambda.den * w - ctxt->lambda.num * t;
+#else
+  return w - ctxt->lambda * t;
+#endif
 }
 
 static inline int max(int a, int b) {
@@ -71,6 +71,15 @@ static inline int max(int a, int b) {
     return a;
   }
 }
+
+#ifndef Rational
+#ifdef DEBUG
+#include <stdio.h>
+
+static void print_rational(FILE *stream, Rational *x) {
+  fprintf(stream,"%d / %d", x->num, x->den);
+}
+#endif
 
 static int pgcd(int a, int b) {
   if(b == 0) {
@@ -142,21 +151,80 @@ static inline void rational_inv_int(int n, Rational *x) {
   }
 }
 
+static inline void rational_sub(Rational *x, Rational *y, Rational *z) {
+  z->num = x->num * y->den - x->den * y->num;
+  z->den = x->den * y->den;
+}
+
+static inline int rational_compare(Rational *x, Rational *y) {
+  int q1 = x->num * y->den;
+  int q2 = y->num * x->den;
+  if(q1 < q2) {
+    return -1;
+  } else if(q1 == q2) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+#else
+#ifdef DEBUG
+#include <stdio.h>
+
+static void print_rational(FILE *stream, double *x) {
+  fprintf(stream,"%g", *x);
+}
+#endif
+
+static int rational_norm(double *x) {
+  return 0;
+}
+
+static inline void rational_add(double *x, double *y, double *z) {
+  (*z) = (*x) + (*y);
+}
+
+static inline void rational_div_n(int n, double *x) {
+  (*x) /= n;
+}
+
+static inline void rational_int(int n, double *x) {
+  (*x) = (double)n;
+}
+
+static inline void rational_inv_int(int n, double *x) {
+  (*x) = (1.0) / ((double)n);
+}
+
+static inline void rational_sub(double *x, double *y, double *z) {
+  (*z) = (*x) - (*y);
+}
+
+static inline int rational_compare(double *x, double *y) {
+  if((*x) < (*y)) {
+    return -1;
+  } else if((*x) == (*y)) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+#endif
+
 static inline int small_enough(Rational *min, Rational *max, Rational *delta) {
-  int p = max->num * min->den - min->num * max->den;
-  int q = min->den * max->den;
-
-  int x = p * delta->den;
-  int y = q * delta->num;
-
-  if(x > y) {
+  Rational tmp;
+  rational_sub(max, min, &tmp);
+  if(rational_compare(&tmp, delta) > 0) {
     return FALSE;
   } else {
     return TRUE;
   }
 }
 
-int SCEDA_graph_mrc(SCEDA_Graph *g, SCEDA_cost_fun weight, void *w_ctxt, SCEDA_cost_fun time, void *t_ctxt, int *ratio_num, int *ratio_den) {
+int SCEDA_graph_mrc(SCEDA_Graph *g, 
+		    int (*weight)(SCEDA_Edge *e, void *ctxt), void *w_ctxt, 
+		    int (*time)(SCEDA_Edge *e, void *ctxt), void *t_ctxt, 
+		    int *ratio_num, int *ratio_den) {
   if(SCEDA_graph_is_acyclic(g)) {
     *ratio_num = 0;
     *ratio_den = 0;

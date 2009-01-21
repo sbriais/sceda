@@ -24,11 +24,9 @@
 #include "util.h"
 #include "heap.h"
 
-#include <limits.h>
-
 #include <stdio.h>
 
-#define INFINITY INT_MAX
+#define INFINITY SCEDA_COST_INFTY
 
 static SCEDA_PathInfo *SCEDA_path_info_create(SCEDA_Vertex *source, SCEDA_Vertex *u) {
   SCEDA_PathInfo *info = (SCEDA_PathInfo *)safe_malloc(sizeof(SCEDA_PathInfo));
@@ -70,7 +68,7 @@ static int SCEDA_path_info_compare(SCEDA_PathInfo *info1, SCEDA_PathInfo *info2)
   }
 }
 
-static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, int weight, SCEDA_Edge *in) {
+static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, SCEDA_COST_TYPE weight, SCEDA_Edge *in) {
   if(is_infty(info_u)) {
     return FALSE;
   }

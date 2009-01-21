@@ -11,7 +11,7 @@ SRCH=common.h util.h
 SRCH+=list.h listset.h listmap.h queue.h stack.h
 SRCH+=hashset.h hashmap.h
 SRCH+=treeset.h treemap.h
-SRCH+=graph.h graph_dag.h graph_matching.h graph_antichain.h graph_path.h graph_scc.h graph_mrc.h
+SRCH+=graph.h graph_dag.h graph_matching.h graph_antichain.h graph_path.h graph_scc.h graph_mrc.h graph_cost.h
 SRCH+=pqueue.h
 SRCH+=heap.h
 
@@ -27,7 +27,7 @@ INSTALLH=common.h
 INSTALLH+=list.h listset.h listmap.h queue.h stack.h
 INSTALLH+=hashset.h hashmap.h
 INSTALLH+=treeset.h treemap.h
-INSTALLH+=graph.h graph_dag.h graph_matching.h graph_antichain.h graph_path.h graph_scc.h graph_mrc.h
+INSTALLH+=graph.h graph_dag.h graph_matching.h graph_antichain.h graph_path.h graph_scc.h graph_mrc.h graph_cost.h
 INSTALLH+=pqueue.h
 INSTALLH+=heap.h
 INSTALLLIB=

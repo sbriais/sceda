@@ -23,6 +23,7 @@
 
 #include "graph.h"
 #include "hashmap.h"
+#include "graph_cost.h"
 
 /** PathInfo */
 typedef struct {
@@ -31,7 +32,7 @@ typedef struct {
   SCEDA_Edge *in_edge;
   /** distance from the source of the path: it is infinite (ie there
       is no path) when previous = NULL and distance != 0 */
-  int distance;
+  SCEDA_COST_TYPE distance;
 } SCEDA_PathInfo;
 
 /** Compute the shortest paths in a DAG from a unique source.
