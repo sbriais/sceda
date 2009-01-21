@@ -6,6 +6,9 @@
 #include <SCEDA/list.h>
 #include <SCEDA/graph.h>
 #include <SCEDA/graph_mrc.h>
+#include <SCEDA/graph_path.h>
+
+#include <assert.h>
 
 typedef struct {
   int cost;
@@ -28,7 +31,7 @@ void delete_string(char *s) {
 }
 
 int get_cost(SCEDA_Edge *e, void *ctxt) {
-  return SCEDA_edge_get_data(CostTime *,e)->cost;
+  return -SCEDA_edge_get_data(CostTime *,e)->cost;
 }
 
 int get_time(SCEDA_Edge *e, void *ctxt) {
@@ -45,11 +48,15 @@ int main(int argc, char *argv[]) {
   SCEDA_Vertex *vD = SCEDA_graph_add_vertex(g, strdup("D"));
   SCEDA_Vertex *vE = SCEDA_graph_add_vertex(g, strdup("E"));
 
-  SCEDA_graph_add_edge(g, vA, vB, new_CostTime(5,2));
-  SCEDA_graph_add_edge(g, vB, vC, new_CostTime(3,4));
-  SCEDA_graph_add_edge(g, vB, vD, new_CostTime(2,1));
-  SCEDA_graph_add_edge(g, vC, vD, new_CostTime(3,2));
-  SCEDA_graph_add_edge(g, vC, vA, new_CostTime(1,5));
+  SCEDA_graph_add_edge(g, vA, vB, new_CostTime(3,1));
+  SCEDA_graph_add_edge(g, vB, vC, new_CostTime(10,4));
+  SCEDA_graph_add_edge(g, vC, vD, new_CostTime(5,2));
+  SCEDA_graph_add_edge(g, vD, vA, new_CostTime(1,3));
+  SCEDA_graph_add_edge(g, vB, vE, new_CostTime(3,2));
+  SCEDA_graph_add_edge(g, vE, vC, new_CostTime(1,1));
+  SCEDA_graph_add_edge(g, vA, vC, new_CostTime(9,2));
+  SCEDA_graph_add_edge(g, vC, vA, new_CostTime(0,1));
+  SCEDA_graph_add_edge(g, vC, vB, new_CostTime(-5,1));
 
   int p, q;
   SCEDA_graph_mrc(g, (SCEDA_cost_fun)get_cost, NULL, (SCEDA_cost_fun)get_time, NULL, &p, &q);

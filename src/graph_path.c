@@ -26,6 +26,8 @@
 
 #include <limits.h>
 
+#include <stdio.h>
+
 #define INFINITY INT_MAX
 
 static SCEDA_PathInfo *SCEDA_path_info_create(SCEDA_Vertex *source, SCEDA_Vertex *u) {
@@ -68,19 +70,12 @@ static int SCEDA_path_info_compare(SCEDA_PathInfo *info1, SCEDA_PathInfo *info2)
   }
 }
 
-static inline int SCEDA_path_chk_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, int weight) {
+static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, int weight, SCEDA_Edge *in) {
   if(is_infty(info_u)) {
     return FALSE;
   }
   int du = info_u->distance;
   if((is_infty(info_v)) || (du+weight < info_v->distance)) {
-    return TRUE;
-  } 
-  return FALSE;
-}
-
-static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, int weight, SCEDA_Edge *in) {
-  if(SCEDA_path_chk_relax(info_u, info_v, weight)) {
     info_v->distance = info_u->distance + weight;
     info_v->in_edge = in;
     return TRUE;
@@ -246,8 +241,8 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
       SCEDA_Vertex *v = SCEDA_edge_target(e);
       SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u);
       SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v);
-      if(SCEDA_path_chk_relax(info_u, info_v, dist(e, ctxt))) {
-	*neg_cycle = v;
+      if(SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e)) {
+	*neg_cycle = u;
 	break;
       }
     }

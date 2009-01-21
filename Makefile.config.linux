@@ -5,6 +5,7 @@ CC=gcc
 AR=ar
 
 # C Compiler flags
+# Define UNSAFE to remove all assertions/checks performed by SCEDA
 CFLAGS=-Wall -O3 -DUNSAFE -Werror
 
 # Doxygen command
