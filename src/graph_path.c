@@ -24,8 +24,6 @@
 #include "util.h"
 #include "heap.h"
 
-#include <stdio.h>
-
 #define INFINITY SCEDA_COST_INFTY
 
 static SCEDA_PathInfo *SCEDA_path_info_create(SCEDA_Vertex *source, SCEDA_Vertex *u) {
@@ -72,9 +70,9 @@ static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_
   if(is_infty(info_u)) {
     return FALSE;
   }
-  int du = info_u->distance;
+  SCEDA_COST_TYPE du = info_u->distance;
   if((is_infty(info_v)) || (du+weight < info_v->distance)) {
-    info_v->distance = info_u->distance + weight;
+    info_v->distance = du + weight;
     info_v->in_edge = in;
     return TRUE;
   }

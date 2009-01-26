@@ -28,6 +28,10 @@
 #undef DEBUG
 #define DEBUG
 
+#ifdef DEBUG
+#include <stdio.h>
+#endif
+
 #define Rational double
 
 #ifndef Rational
@@ -57,11 +61,14 @@ static SCEDA_COST_TYPE mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
     t = ctxt->time(e, ctxt->t_ctxt);
   }
 
+  SCEDA_COST_TYPE res;
 #ifndef Rational
-  return ctxt->lambda.den * w - ctxt->lambda.num * t;
+  res = ctxt->lambda.den * w - ctxt->lambda.num * t;
 #else
-  return w - ctxt->lambda * t;
+  res = w - ctxt->lambda * t;
+  //  fprintf(stdout,"w = %d, t = %d => %g\n", w, t, res);
 #endif
+  return res;
 }
 
 static inline int max(int a, int b) {
@@ -74,8 +81,6 @@ static inline int max(int a, int b) {
 
 #ifndef Rational
 #ifdef DEBUG
-#include <stdio.h>
-
 static void print_rational(FILE *stream, Rational *x) {
   fprintf(stream,"%d / %d", x->num, x->den);
 }
@@ -169,8 +174,6 @@ static inline int rational_compare(Rational *x, Rational *y) {
 }
 #else
 #ifdef DEBUG
-#include <stdio.h>
-
 static void print_rational(FILE *stream, double *x) {
   fprintf(stream,"%g", *x);
 }
