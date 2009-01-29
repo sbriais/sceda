@@ -22,10 +22,12 @@
     \brief minimum cost-to-time ratio cycle */
 
 #include "graph.h"
+#include "list.h"
 
 int SCEDA_graph_mrc(SCEDA_Graph *g, 
 		    int (*weight)(SCEDA_Edge *e, void *ctxt), void *w_ctxt, 
 		    int (*time)(SCEDA_Edge *e, void *ctxt), void *t_ctxt, 
-		    int *ratio_num, int *ratio_den);
+		    int *ratio_num, int *ratio_den,
+		    SCEDA_List **min_cycle);
 
 #endif

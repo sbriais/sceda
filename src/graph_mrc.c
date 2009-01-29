@@ -21,7 +21,6 @@
 #include "graph_dag.h"
 #include "graph_mrc.h"
 #include "graph_path.h"
-#include "list.h"
 
 #include <stdlib.h>
 
@@ -227,7 +226,8 @@ static inline int small_enough(Rational *min, Rational *max, Rational *delta) {
 int SCEDA_graph_mrc(SCEDA_Graph *g, 
 		    int (*weight)(SCEDA_Edge *e, void *ctxt), void *w_ctxt, 
 		    int (*time)(SCEDA_Edge *e, void *ctxt), void *t_ctxt, 
-		    int *ratio_num, int *ratio_den) {
+		    int *ratio_num, int *ratio_den,
+		    SCEDA_List **min_cycle) {
   if(SCEDA_graph_is_acyclic(g)) {
     *ratio_num = 0;
     *ratio_den = 0;
@@ -350,6 +350,8 @@ int SCEDA_graph_mrc(SCEDA_Graph *g,
       SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_cost_fun)mrc_cost, &ctxt, &cycle);
       
       safe_ptr(cycle);
+
+      *min_cycle = SCEDA_list_create(NULL);
       
       *ratio_num = 0;
       *ratio_den = 0;
@@ -358,6 +360,7 @@ int SCEDA_graph_mrc(SCEDA_Graph *g,
 	SCEDA_PathInfo *pi_u = SCEDA_hashmap_get(paths, u);
 	SCEDA_Edge *in = pi_u->in_edge;
 	safe_ptr(in);
+	safe_call(SCEDA_list_add(*min_cycle, in));
 	(*ratio_num) += weight(in, w_ctxt);
 	(*ratio_den) += time(in, t_ctxt);
 	u = SCEDA_edge_source(in);
