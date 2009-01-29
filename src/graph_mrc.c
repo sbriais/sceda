@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 #undef DEBUG
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -65,9 +65,12 @@ static SCEDA_COST_TYPE mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
   res = ctxt->lambda.den * w - ctxt->lambda.num * t;
 #else
   res = w - ctxt->lambda * t;
-  //  fprintf(stdout,"w = %d, t = %d => %g\n", w, t, res);
 #endif
   return res;
+}
+
+static int mrc_unit_cost(SCEDA_Edge *e, void *ctxt) {
+  return 1;
 }
 
 static inline int max(int a, int b) {
@@ -284,15 +287,39 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
 
   int n = SCEDA_graph_vcount(g);
 
-  Rational lambda_min;
-  Rational lambda_max;
-  Rational delta;
-
-  rational_int(-n*gamma, &lambda_min);
-  rational_int(n*gamma, &lambda_max);
-  rational_inv_int(n*n*tau*tau, &delta);
-
   {
+    MRCcontext ctxt;
+    ctxt.source = source;
+    ctxt.weight = time;
+    ctxt.w_ctxt = t_ctxt;
+    ctxt.time = mrc_unit_cost;
+    ctxt.t_ctxt = NULL;
+    
+    rational_inv_int(n, &(ctxt.lambda));
+    
+    SCEDA_Vertex *cycle;
+
+#ifdef DEBUG
+    fprintf(stdout,"checking for non negative time cycles\n");
+#endif
+
+    SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_cost_fun)mrc_cost, &ctxt, &cycle);
+    SCEDA_hashmap_delete(paths);
+
+    if(cycle != NULL) {
+      ret_code = -1;
+    }
+  }
+
+  if(ret_code == 0) {  
+    Rational lambda_min;
+    Rational lambda_max;
+    Rational delta;
+    
+    rational_int(-n*gamma, &lambda_min);
+    rational_int(n*gamma, &lambda_max);
+    rational_inv_int(n*n*tau*tau, &delta);
+
     MRCcontext ctxt;
     SCEDA_Vertex *cycle;
     ctxt.source = source;
