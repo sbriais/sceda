@@ -223,11 +223,11 @@ static inline int small_enough(Rational *min, Rational *max, Rational *delta) {
   }
 }
 
-int SCEDA_graph_mrc(SCEDA_Graph *g, 
-		    int (*weight)(SCEDA_Edge *e, void *ctxt), void *w_ctxt, 
-		    int (*time)(SCEDA_Edge *e, void *ctxt), void *t_ctxt, 
-		    int *ratio_num, int *ratio_den,
-		    SCEDA_List **min_cycle) {
+int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g, 
+				    int (*weight)(SCEDA_Edge *e, void *ctxt), void *w_ctxt, 
+				    int (*time)(SCEDA_Edge *e, void *ctxt), void *t_ctxt, 
+				    int *ratio_num, int *ratio_den,
+				    SCEDA_List **min_cycle) {
   if(SCEDA_graph_is_acyclic(g)) {
     *ratio_num = 0;
     *ratio_den = 0;
