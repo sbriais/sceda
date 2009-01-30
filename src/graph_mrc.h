@@ -24,8 +24,21 @@
 #include "graph.h"
 #include "list.h"
 
+/** Compute the minimum ratio cycle of the given graph, ie compute the
+    cycle that minimises the ratio cost/time.
+
+    @param g = graph
+    @param cost = cost function
+    @param c_ctxt = cost function context (closure)
+    @param time = time function
+    @param t_ctxt = time function context (closure)
+    @param ratio_num = numerator of the computed ratio
+    @param ratio_den = denominator of the computed ratio
+    @param min_cycle = list of the edges of a cycle that minimises the ratio
+
+    @return 0 in case of success, -1 otherwise (and then the list is not allocated) */
 int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g, 
-				    int (*weight)(SCEDA_Edge *e, void *ctxt), void *w_ctxt, 
+				    int (*cost)(SCEDA_Edge *e, void *ctxt), void *c_ctxt, 
 				    int (*time)(SCEDA_Edge *e, void *ctxt), void *t_ctxt, 
 				    int *ratio_num, int *ratio_den,
 				    SCEDA_List **min_cycle);

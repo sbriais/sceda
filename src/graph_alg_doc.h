@@ -156,7 +156,7 @@
     cost of the shortest path.
 
     \code
-    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt, SCEDA_Vertex **neg_cycle);
+    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt, Vertex **neg_cycle);
     \endcode
 
     Computes the shortests paths from a source in a graph, using
@@ -175,6 +175,18 @@
     weight cycle exists, *neg_cycle will point to a vertex belonging
     to such a cycle.
 
+    \code
+    int graph_minimum_ratio_cycle(Graph *g, int (*cost)(Edge *e, void *ctxt), void *w_ctxt, int (*time)(Edge *e, void *ctxt), void *t_ctxt, int *ratio_num, int *ratio_den, List **min_cycle);
+    \endcode
+
+    Compute a cycle c that minimises the ratio cost(c)/time(c) and the
+    value of this minimum ratio. This function fails when g is acyclic
+    (beware that indices of a topological order may be modified), or
+    if there is a cycle that has a negative time (ie time(c) <= 0)
+
+    Otherwise, it computes a list of edges belonging to the minimum
+    cycle and its ratio.
+
     \section graphalgs_examples Examples
 
     \subsection graphalgs_mixed Acyclicity test, transitive closure, maximal antichain
@@ -186,4 +198,13 @@
     \subsection graphalgs_scc Strongly connected components
 
     \include "graph_scc/main.c"
+
+    \subsection graphalgs_paths Shortest Paths (Bellman-Ford)
+
+    \include "graph_path/main.c"
+
+    \subsection graphalgs_mrc Minimum Ratio Cycle
+
+    \include "graph_mrc/main.c"
+
  */
