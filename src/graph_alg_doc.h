@@ -176,7 +176,11 @@
     to such a cycle.
 
     \code
-    int graph_minimum_ratio_cycle(Graph *g, int (*cost)(Edge *e, void *ctxt), void *w_ctxt, int (*time)(Edge *e, void *ctxt), void *t_ctxt, int *ratio_num, int *ratio_den, List **min_cycle);
+    int graph_minimum_ratio_cycle(Graph *g, 
+                                  int (*cost)(Edge *e, void *ctxt), void *c_ctxt, 
+				  int (*time)(Edge *e, void *ctxt), void *t_ctxt, 
+				  int *ratio_num, int *ratio_den, 
+				  List **min_cycle);
     \endcode
 
     Compute a cycle c that minimises the ratio cost(c)/time(c) and the
