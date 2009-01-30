@@ -27,7 +27,6 @@
 /** Test whether the given graph is acyclic.
 
     @param g = graph to test 
-    @param sort = TRUE to set indices, FALSE otherwise
 
     @return TRUE if g is acyclic, FALSE otherwise 
 
