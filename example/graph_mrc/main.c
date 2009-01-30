@@ -31,7 +31,7 @@ void delete_string(char *s) {
 }
 
 int get_cost(SCEDA_Edge *e, void *ctxt) {
-  return -SCEDA_edge_get_data(CostTime *,e)->cost;
+  return SCEDA_edge_get_data(CostTime *,e)->cost;
 }
 
 int get_time(SCEDA_Edge *e, void *ctxt) {
@@ -56,11 +56,27 @@ int main(int argc, char *argv[]) {
   SCEDA_graph_add_edge(g, vE, vC, new_CostTime(1,1));
   SCEDA_graph_add_edge(g, vA, vC, new_CostTime(9,2));
   SCEDA_graph_add_edge(g, vC, vA, new_CostTime(0,1));
-  SCEDA_graph_add_edge(g, vC, vB, new_CostTime(-5,1));
+  SCEDA_graph_add_edge(g, vC, vB, new_CostTime(-5,-2));
 
   int p, q;
-  SCEDA_graph_mrc(g, get_cost, NULL, get_time, NULL, &p, &q);
-  fprintf(stdout,"%d / %d\n", p, q);
+  SCEDA_List *cycle;
+  if(SCEDA_graph_minimum_ratio_cycle(g, get_cost, NULL, get_time, NULL, &p, &q, &cycle) == 0) {
+    fprintf(stdout,"Here is a cycle that minimises the ratio, whose value is %d / %d.\n", p, q);
+    SCEDA_ListIterator edges;
+    SCEDA_list_iterator_init(cycle, &edges);
+    while(SCEDA_list_iterator_has_next(&edges)) {
+      SCEDA_Edge *e = SCEDA_list_iterator_next(&edges);
+      SCEDA_Vertex *vs = SCEDA_edge_source(e);
+      SCEDA_Vertex *vt = SCEDA_edge_target(e);
+      fprintf(stdout, "%s -> %s; ", SCEDA_vertex_get_data(char *, vs), SCEDA_vertex_get_data(char *, vt)); 
+    }
+    SCEDA_list_iterator_cleanup(&edges);
+
+    SCEDA_list_delete(cycle);
+    fprintf(stdout,"\n");
+  } else {
+    fprintf(stdout,"Error\n");
+  }
 
   SCEDA_graph_delete(g);
 
