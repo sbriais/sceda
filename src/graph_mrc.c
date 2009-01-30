@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 #undef DEBUG
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -300,7 +300,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     SCEDA_Vertex *cycle;
 
 #ifdef DEBUG
-    fprintf(stdout,"checking for non negative time cycles\n");
+    fprintf(stdout,"checking for negative time cycles\n");
 #endif
 
     SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_cost_fun)mrc_cost, &ctxt, &cycle);
