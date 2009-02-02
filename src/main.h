@@ -10,8 +10,8 @@
     \section ns_sec A word about SCEDA namespace
 
     In order to not pollute C namespace, all SCEDA functions, macros
-    and types are prefixed by the literal "SCEDA_" (or "_SCEDA" or
-    "__SCEDA").
+    and types are prefixed by the literal "SCEDA_" (or "_SCEDA_" or
+    "__SCEDA_").
 
     \section main_sec Description of SCEDA
 
