@@ -86,6 +86,26 @@ typedef struct {
   SCEDA_delete_fun delete;
 } SCEDA_Edge;
 
+/** Create an empty set of edges.
+
+    Edges stored in the set won't be deallocated by hashset_delete.
+
+    Edges stored in the set must all belong to the same graph.
+
+    @return an empty set of edges */
+SCEDA_HashSet *SCEDA_edge_set_create();
+
+/** Create a new map indexed by edges.
+
+    Edges used as index in the map won't be deallocated by hashmap_delete.
+
+    Edges used as index in the map must all belong to the same graph.
+
+    @param delete = delete function for map values
+
+    @return an empty map indexed by edges. */
+SCEDA_HashMap *SCEDA_edge_map_create(SCEDA_delete_fun delete);
+
 /** Type of graph */
 typedef struct {
   int counter;
