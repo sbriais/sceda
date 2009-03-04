@@ -31,7 +31,7 @@ typedef struct {
   /** previous vertex in the path is source of in_edge */
   SCEDA_Edge *in_edge;
   /** distance from the source of the path: it is infinite (ie there
-      is no path) when previous = NULL and distance != 0 */
+      is no path) when in_edge = NULL and distance != 0 */
   SCEDA_COST_TYPE distance;
 } SCEDA_PathInfo;
 
