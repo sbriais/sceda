@@ -38,18 +38,18 @@ typedef struct {
 
 /** Initialise a (hash) set.
 
-    @param set = set
-    @param delete = delete function or NULL
-    @param match = equality function
-    @param hash = hash function */
+    @param[in] set = set
+    @param[in] delete = delete function or NULL
+    @param[in] match = equality function
+    @param[in] hash = hash function */
 void SCEDA_hashset_init(SCEDA_HashSet *set, SCEDA_delete_fun delete, 
-		  SCEDA_match_fun match, SCEDA_hash_fun hash);
+			SCEDA_match_fun match, SCEDA_hash_fun hash);
 
 /** Create a (hash) set, ready for use.
 
-    @param delete = delete function or NULL
-    @param match = equality function
-    @param hash = hash function 
+    @param[in] delete = delete function or NULL
+    @param[in] match = equality function
+    @param[in] hash = hash function 
     
     @return the (hash) set */
 SCEDA_HashSet *SCEDA_hashset_create(SCEDA_delete_fun delete, SCEDA_match_fun match,
@@ -57,54 +57,54 @@ SCEDA_HashSet *SCEDA_hashset_create(SCEDA_delete_fun delete, SCEDA_match_fun mat
 
 /** Clean up a (hash) set.
 
-    @param set = set to clean up */
+    @param[in] set = set to clean up */
 void SCEDA_hashset_cleanup(SCEDA_HashSet *set);
 
 /** Delete a (hash) set.
 
-    @param set = set to delete */
+    @param[in] set = set to delete */
 void SCEDA_hashset_delete(SCEDA_HashSet *set);
 
 /** Clear a (hash) set.
 
-    @param set = set to clear */
+    @param[in] set = set to clear */
 void SCEDA_hashset_clear(SCEDA_HashSet *set);
 
 /** Insert data into a (hash) set in time complexity O(1).
 
-    @param set = set
-    @param data = data to add
+    @param[in] set = set
+    @param[in] data = data to add
 
     @return 0 in case of success, 1 if already present, -1 otherwise */
 int SCEDA_hashset_add(SCEDA_HashSet *set, const void *data);
 
 /** Remove a data from a set in time complexity O(1).
 
-    @param set = set
-    @param data = data to remove (replaced by the actual data)
+    @param[in] set = set
+    @param[in, out] data = data to remove (replaced by the actual data)
 
     @return 0 in case of success, 1 if not in the set, -1 otherwise */
 int SCEDA_hashset_remove(SCEDA_HashSet *set, void **data);
 
 /** Test whether a given data belongs to a set in time complexity O(1).
 
-    @param set = set
-    @param data = data to look for
+    @param[in] set = set
+    @param[in] data = data to look for
 
     @return TRUE if present, FALSE otherwise */
 int SCEDA_hashset_contains(SCEDA_HashSet *set, const void *data);
 
 /** Look up for a data in a set in time complexity O(1).
 
-    @param set = set
-    @param data = data to look for (replaced by the actual data)
+    @param[in] set = set
+    @param[in, out] data = data to look for (replaced by the actual data)
 
     @return 0 if found, -1 otherwise */
 int SCEDA_hashset_lookup(SCEDA_HashSet *set, void **data);
 
 /** Size of the (hash) set in time complexity O(1).
 
-    @param set = set
+    @param[in] set = set
     
     @return size of the set 
 
@@ -113,7 +113,7 @@ int SCEDA_hashset_lookup(SCEDA_HashSet *set, void **data);
 
 /** Test whether the (hash) set is empty in time complexity O(1).
 
-    @param set = set 
+    @param[in] set = set 
 
     @return TRUE if empty, FALSE otherwise 
 
@@ -129,8 +129,8 @@ typedef struct {
 
 /** Initialise a (hash) set iterator.
 
-    @param set = set
-    @param iter = set iterator 
+    @param[in] set = set
+    @param[in] iter = set iterator 
 
     \hideinitializer */
 #define SCEDA_hashset_iterator_init(set$, iter$) \
@@ -141,7 +141,7 @@ typedef struct {
 
 /** Test whether there is a next data in the set iterator. 
     
-    @param iter = set iterator
+    @param[in] iter = set iterator
     
     @return TRUE if there is a "next" data, FALSE otherwise 
 
@@ -159,7 +159,7 @@ typedef struct {
 
 /** Return the next data of a set iterator. 
     
-    @param iter = set iterator
+    @param[in] iter = set iterator
 
     @return the "next" data 
 
@@ -168,7 +168,7 @@ typedef struct {
 
 /** Clean up a (hash) set iterator.
 
-    @param iter = set iterator 
+    @param[in] iter = set iterator 
 
     \hideinitializer */
 #define SCEDA_hashset_iterator_cleanup(iter$)             \

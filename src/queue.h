@@ -53,8 +53,8 @@ typedef SCEDA_List SCEDA_Queue;
 
 /** Enqueue an element. 
     
-    @param queue = queue
-    @param data = data to enqueue
+    @param[in] queue = queue
+    @param[in] data = data to enqueue
 
     @return 0 in case of success, -1 otherwise 
 
@@ -65,8 +65,8 @@ typedef SCEDA_List SCEDA_Queue;
 
 /** Dequeue an element.
 
-    @param queue = queue
-    @param data = dequeued data
+    @param[in] queue = queue
+    @param[out] data = dequeued data
 
     @return 0 in case of success, -1 otherwise 
 
@@ -86,7 +86,7 @@ typedef SCEDA_List SCEDA_Queue;
 /** Return the top element of the queue or NULL. 
 
     @param type = type of queue elements
-    @param queue = queue 
+    @param[in] queue = queue 
 
     @return top element of the queue or NULL if queue is empty 
 

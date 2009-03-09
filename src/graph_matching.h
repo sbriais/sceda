@@ -27,9 +27,9 @@
 /** Compute a maximum matching in the bipartite graph G.
     Edges are assumed to go from X to Y.
 
-    @param g = bipartite graph
-    @param x_vert = first set of the bipartition
-    @param y_vert = second set of the bipartition
+    @param[in] g = bipartite graph
+    @param[in] x_vert = first set of the bipartition
+    @param[in] y_vert = second set of the bipartition
 
     @return a map which give for each vertex of X or Y its spouse in the other set. */
 SCEDA_HashMap *SCEDA_graph_maximum_bipartite_matching(SCEDA_Graph *g, SCEDA_List *x_vert, SCEDA_List *y_vert);

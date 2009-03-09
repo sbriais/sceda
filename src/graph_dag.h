@@ -26,7 +26,7 @@
 
 /** Test whether the given graph is acyclic.
 
-    @param g = graph to test 
+    @param[in] g = graph to test 
 
     @return TRUE if g is acyclic, FALSE otherwise 
 
@@ -35,7 +35,7 @@ int SCEDA_graph_is_acyclic(SCEDA_Graph *g);
 
 /** Compute a topological order of the given graph. 
 
-    @param g = graph 
+    @param[in] g = graph 
 
     @return 0 in case of success (ie g is a DAG) and -1 otherwise 
 
@@ -45,7 +45,7 @@ int SCEDA_graph_compute_topological_order(SCEDA_Graph *g);
 
 /** Compute the transitive closure of the given DAG. 
 
-    @param g = initial graph
+    @param[in] g = initial graph
 
     @return the transitive closure of g if g is a DAG. 
 

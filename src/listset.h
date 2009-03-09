@@ -31,15 +31,15 @@ typedef struct {
 
 /** Initialise a (list) set.
     
-    @param set = set to initialise
-    @param delete = function to delete data in the set or NULL
-    @param match = equality function */
+    @param[in] set = set to initialise
+    @param[in] delete = function to delete data in the set or NULL
+    @param[in] match = equality function */
 void SCEDA_listset_init(SCEDA_ListSet *set, SCEDA_delete_fun delete, SCEDA_match_fun match);
 
 /** Create a new (list) set, ready for use.
 
-    @param delete = function to delete data in the set or NULL
-    @param match = equality function
+    @param[in] delete = function to delete data in the set or NULL
+    @param[in] match = equality function
 
     @return the (list) set */
 SCEDA_ListSet *SCEDA_listset_create(SCEDA_delete_fun delete, SCEDA_match_fun match);
@@ -47,23 +47,23 @@ SCEDA_ListSet *SCEDA_listset_create(SCEDA_delete_fun delete, SCEDA_match_fun mat
 /** Clean up all the elements of a (list) set.
     The set is uninitialised.
 
-    @param set = set to clean up */
+    @param[in] set = set to clean up */
 void SCEDA_listset_cleanup(SCEDA_ListSet *set);
 
 /** Delete a (list) set.
 
-    @param set = set to delete */
+    @param[in] set = set to delete */
 void SCEDA_listset_delete(SCEDA_ListSet *set);
 
 /** Clear a (list) set.
 
-    @param set = set to clear */
+    @param[in] set = set to clear */
 void SCEDA_listset_clear(SCEDA_ListSet *set);
 
 /** Insert data in a set in time complexity O(|set|).
 
-    @param set = set
-    @param data = data to insert
+    @param[in] set = set
+    @param[in] data = data to insert
 
     @return 0 if success, 1 if already in set, -1 otherwise. */
 int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
@@ -72,8 +72,8 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
 
 /** Remove data from a set in time complexity O(|set|).
 
-    @param set = set
-    @param data = data to remove (will be replaced by the actual data)
+    @param[in] set = set
+    @param[in, out] data = data to remove (will be replaced by the actual data)
 
     @return 0 if success, 1 if not in the set, -1 otherwise. 
 
@@ -86,8 +86,8 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
 
 /** Test whether a given data is in the set in time complexity O(|set|).
 
-    @param set = set
-    @param data = data to look for
+    @param[in] set = set
+    @param[in] data = data to look for
     
     @return TRUE if present, FALSE otherwise 
 
@@ -98,8 +98,8 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
 
 /** Look up for a data in the set in time complexity O(|set|).
 
-    @param set = set
-    @param data = data to look for (will be replaced by the actual data)
+    @param[in] set = set
+    @param[in, out] data = data to look for (will be replaced by the actual data)
 
     @return 0 if found, -1 otherwise 
 
@@ -110,14 +110,14 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
 
 /** Return cardinal of the set in time complexity O(1).
 
-    @param set = set 
+    @param[in] set = set 
 
     \hideinitializer */
 #define SCEDA_listset_size(set$) (SCEDA_list_size(SCEDA_listset_elements(set$)))
 
 /** Test whether the given set is empty in time complexity O(1).
 
-    @param set = set
+    @param[in] set = set
 
     @return TRUE if empty, FALSE otherwise 
 
@@ -126,7 +126,7 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
 
 /** Return the list of elements in the set. 
     
-    @param set = set
+    @param[in] set = set
 
     @return the list of elements
     
@@ -138,8 +138,8 @@ typedef SCEDA_ListIterator SCEDA_ListSetIterator;
 
 /** Initialise a (list) set iterator.
 
-    @param set = set
-    @param iter = set iterator 
+    @param[in] set = set
+    @param[in] iter = set iterator 
 
     \hideinitializer */
 #define SCEDA_listset_iterator_init(set$, iter$) (SCEDA_list_iterator_init(SCEDA_listset_elements(set$), iter$))

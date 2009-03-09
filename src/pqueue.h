@@ -34,40 +34,40 @@ typedef struct {
 
 /** Initialise a priority queue.
     
-    @param pqueue = priority queue to initialise
-    @param delete = delete function or NULL
-    @param compare = comparison function
+    @param[in] pqueue = priority queue to initialise
+    @param[in] delete = delete function or NULL
+    @param[in] compare = comparison function
  */
 void SCEDA_pqueue_init(SCEDA_PQueue *pqueue, SCEDA_delete_fun delete, SCEDA_compare_fun compare);
 
 /** Create a new priority queue, ready for use.
 
-    @param delete = delete function
-    @param compare = comparison function
+    @param[in] delete = delete function
+    @param[in] compare = comparison function
 
     @return the priority queue */
 SCEDA_PQueue *SCEDA_pqueue_create(SCEDA_delete_fun delete, SCEDA_compare_fun compare);
 
 /** Clean up a priority queue.
 
-    @param pqueue = priority queue to clean up */
+    @param[in] pqueue = priority queue to clean up */
 void SCEDA_pqueue_cleanup(SCEDA_PQueue *pqueue);
 
 /** Delete a priority queue.
 
-    @param pqueue = priority queue to delete */
+    @param[in] pqueue = priority queue to delete */
 void SCEDA_pqueue_delete(SCEDA_PQueue *pqueue);
 
 /** Clear a priority queue.
 
-    @param pqueue = priority queue to clear */
+    @param[in] pqueue = priority queue to clear */
 void SCEDA_pqueue_clear(SCEDA_PQueue *pqueue);
 
 /** Insert an element in the priority queue in time complexity
     O(log|pqueue|).
 
-    @param pqueue = priority queue
-    @param data = data to insert
+    @param[in] pqueue = priority queue
+    @param[in] data = data to insert
 
     @return 0 in case of success, -1 otherwise */
 int SCEDA_pqueue_insert(SCEDA_PQueue *pqueue, const void *data);
@@ -75,8 +75,8 @@ int SCEDA_pqueue_insert(SCEDA_PQueue *pqueue, const void *data);
 /** Extract the minimum element of the priority queue in time
     complexity O(log|pqueue|).
 
-    @param pqueue = priority queue
-    @param data = dequeued data
+    @param[in] pqueue = priority queue
+    @param[out] data = dequeued data
 
     @return 0 in case of success, -1 otherwise */
 int SCEDA_pqueue_extract(SCEDA_PQueue *pqueue, void **data);
@@ -84,15 +84,15 @@ int SCEDA_pqueue_extract(SCEDA_PQueue *pqueue, void **data);
 /** Return the minimum element in the priority queue in time
     complexity O(1)
     
-    @param pqueue = priority queue
-    @param data = minimum element of the priority queue (filled by the function)
+    @param[in] pqueue = priority queue
+    @param[out] data = minimum element of the priority queue (filled by the function)
 
     @return 0 in case of success, -1 otherwise */
 int SCEDA_pqueue_min(SCEDA_PQueue *pqueue, void **data);
 
 /** Return the size of the priority queue in time complexity O(1)
 
-    @param pqueue = priority queue
+    @param[in] pqueue = priority queue
 
     @return the size of the priority queue 
 
@@ -101,7 +101,7 @@ int SCEDA_pqueue_min(SCEDA_PQueue *pqueue, void **data);
 
 /** Test whether a priority queue is empty.
 
-    @param pqueue = priority queue
+    @param[in] pqueue = priority queue
     
     @return TRUE if queue is empty, FALSE otherwise 
 

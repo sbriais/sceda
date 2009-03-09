@@ -53,8 +53,8 @@ typedef SCEDA_List SCEDA_Stack;
 
 /** Push an element onto the stack.
 
-    @param stack = stack
-    @param data = data to push
+    @param[in] stack = stack
+    @param[in] data = data to push
 
     @return 0 in case of success, -1 otherwise. 
 
@@ -63,8 +63,8 @@ typedef SCEDA_List SCEDA_Stack;
 
 /** Pop an element from the stack.
 
-    @param stack = stack
-    @param data = popped data
+    @param[in] stack = stack
+    @param[out] data = popped data
 
     @return 0 in case of success, -1 otherwise 
 
@@ -84,7 +84,7 @@ typedef SCEDA_List SCEDA_Stack;
 /** Return the top element of the stack or NULL.
 
     @param type = type of elements in the stack
-    @param stack = stack
+    @param[in] stack = stack
 
     @return top element or NULL if stack is empty 
 

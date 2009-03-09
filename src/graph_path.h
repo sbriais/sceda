@@ -37,10 +37,10 @@ typedef struct {
 
 /** Compute the shortest paths in a DAG from a unique source.
 
-    @param g = graph (must be a DAG)
-    @param from = source of all the paths
-    @param dist = distance function
-    @param ctxt = distance function context
+    @param[in] g = graph (must be a DAG)
+    @param[in] from = source of all the paths
+    @param[in] dist = distance function
+    @param[in] ctxt = distance function context
 
     @return map of all shortest paths from source vertex 
 
@@ -49,10 +49,10 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Verte
 
 /** Compute the shortest paths in a DAG to a unique target.
 
-    @param g = graph (must be a DAG)
-    @param to = target of all the paths
-    @param dist = distance function
-    @param ctxt = distance function context
+    @param[in] g = graph (must be a DAG)
+    @param[in] to = target of all the paths
+    @param[in] dist = distance function
+    @param[in] ctxt = distance function context
 
     @return map of all shortest paths to target vertex 
 
@@ -62,10 +62,10 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex 
 /** Compute the shortest paths from a unique source using Dijkstra
     algorithm.
 
-    @param g = graph
-    @param from = source of all the paths
-    @param dist = distance function (negative values are truncated)
-    @param ctxt = distance function context
+    @param[in] g = graph
+    @param[in] from = source of all the paths
+    @param[in] dist = distance function (negative values are truncated)
+    @param[in] ctxt = distance function context
 
     @return map of all shortest paths from source vertex  */
 SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_cost_fun dist, void *ctxt);    
@@ -73,11 +73,11 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
 /** Compute the shortest paths from a unique source using Bellman-Ford
     algorithm.
 
-    @param g = graph
-    @param from = source of all the paths
-    @param dist = distance function 
-    @param ctxt = distance function context
-    @param neg_cycle = if not NULL, then it will point to a vertex
+    @param[in] g = graph
+    @param[in] from = source of all the paths
+    @param[in] dist = distance function 
+    @param[in] ctxt = distance function context
+    @param[out] neg_cycle = if not NULL, then it will point to a vertex
     belonging to a negative weight cycle accessible from source vertex
     (if there is one)
 

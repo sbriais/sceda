@@ -42,69 +42,69 @@ typedef struct {
 
 /** Initialise a (tree) set.
 
-    @param set = set
-    @param delete = delete function or NULL
-    @param compare = comparison function */
+    @param[in] set = set
+    @param[in] delete = delete function or NULL
+    @param[in] compare = comparison function */
 void SCEDA_treeset_init(SCEDA_TreeSet *set, SCEDA_delete_fun delete, SCEDA_compare_fun compare);
 
 /** Create a (tree) set, ready for use.
 
-    @param delete = delete function or NULL
-    @param compare = comparison function 
+    @param[in] delete = delete function or NULL
+    @param[in] compare = comparison function 
     
     @return the (tree) set */
 SCEDA_TreeSet *SCEDA_treeset_create(SCEDA_delete_fun delete, SCEDA_compare_fun compare);
 
 /** Clean up a (tree) set.
 
-    @param set = set to clean up */
+    @param[in] set = set to clean up */
 void SCEDA_treeset_cleanup(SCEDA_TreeSet *set);
 
 /** Delete a (tree) set.
 
-    @param set = set to delete */
+    @param[in] set = set to delete */
 void SCEDA_treeset_delete(SCEDA_TreeSet *set);
 
 /** Clear a (tree) set.
 
-    @param set = set to clear */
+    @param[in] set = set to clear */
 void SCEDA_treeset_clear(SCEDA_TreeSet *set);
 
 /** Insert data into a (tree) set in time complexity O(log|set|).
 
-    @param set = set
-    @param data = data to add
+    @param[in] set = set
+    @param[in] data = data to add
 
     @return 0 in case of success, 1 if already present, -1 otherwise */
 int SCEDA_treeset_add(SCEDA_TreeSet *set, const void *data);
 
 /** Remove a data from a set in time complexity O(log|set|).
 
-    @param set = set
-    @param data = data to remove (replaced by the actual data)
+    @param[in] set = set
+    @param[in, out] data = data to remove (replaced by the actual data)
 
     @return 0 in case of success, 1 if not in the set, -1 otherwise */
 int SCEDA_treeset_remove(SCEDA_TreeSet *set, void **data);
 
 /** Test whether a given data belongs to a set in time complexity O(log|set|).
 
-    @param set = set
-    @param data = data to look for
+    @param[in] set = set
+    @param[in] data = data to look for
 
     @return TRUE if present, FALSE otherwise */
 int SCEDA_treeset_contains(SCEDA_TreeSet *set, const void *data);
 
 /** Look up for a data in a set in time complexity O(log|set|).
 
-    @param set = set
-    @param data = data to look for (replaced by the actual data)
+    @param[in] set = set
+    @param[in, out] data = data to look for (replaced by the actual data)
 
     @return 0 if found, -1 otherwise */
 int SCEDA_treeset_lookup(SCEDA_TreeSet *set, void **data);
 
 /** Size of the (tree) set in time complexity O(1).
 
-    @param set = set
+    @param[in] set = set
     
     @return size of the set 
 
@@ -113,7 +113,7 @@ int SCEDA_treeset_lookup(SCEDA_TreeSet *set, void **data);
 
 /** Test whether the (tree) set is empty in time complexity O(1).
 
-    @param set = set 
+    @param[in] set = set 
 
     @return TRUE if empty, FALSE otherwise 
 
@@ -131,27 +131,27 @@ typedef struct {
 /** Initialise a (tree) set iterator.
     Elements are visited in ascending order.
 
-    @param set = set
-    @param iter = tree set iterator */
+    @param[in] set = set
+    @param[in] iter = tree set iterator */
 void SCEDA_treeset_iterator_init(SCEDA_TreeSet *set, SCEDA_TreeSetIterator *iter);
 
 /** Test whether there is a next data in the set iterator. 
     
-    @param iter = set iterator
+    @param[in] iter = set iterator
     
     @return TRUE if there is a "next" data, FALSE otherwise */
 int SCEDA_treeset_iterator_has_next(SCEDA_TreeSetIterator *iter);
 
 /** Return the next data of the set iterator. 
     
-    @param iter = set iterator
+    @param[in] iter = set iterator
 
     @return the "next" data */
 void *SCEDA_treeset_iterator_next(SCEDA_TreeSetIterator *iter);
 
 /** Clean up the (tree) set iterator.
 
-    @param iter = set iterator 
+    @param[in] iter = set iterator 
 
     \hideinitializer */
 #define SCEDA_treeset_iterator_cleanup(iter$) (memset(iter$, 0, sizeof(SCEDA_TreeSetIterator)))

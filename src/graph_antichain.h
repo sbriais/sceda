@@ -27,10 +27,10 @@
 
 /** Compute a minimum chain cover of the given DAG
 
-    @param gf = graph (must be a DAG)
-    @param prev_in_chain = map allocated and computed by the function. It
+    @param[in] gf = graph (must be a DAG)
+    @param[out] prev_in_chain = map allocated and computed by the function. It
     gives for each vertex its predecessor in the chain (or NULL).
-    @param next_in_chain = map allocated and computed by the function. It
+    @param[out] next_in_chain = map allocated and computed by the function. It
     gives for each vertex its successor in the chain (or NULL). 
 
     @return the number of chains 
@@ -40,7 +40,7 @@ int SCEDA_graph_minimum_chain_cover(SCEDA_Graph *gf, SCEDA_HashMap **prev_in_cha
 
 /** Compute a maximum antichain in the given DAG 
 
-    @param g = graph (must be a DAG)
+    @param[in] g = graph (must be a DAG)
 
     @return list of vertices in a maximum antichain */
 SCEDA_List *SCEDA_graph_maximum_antichain(SCEDA_Graph *g);

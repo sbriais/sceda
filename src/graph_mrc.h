@@ -27,14 +27,14 @@
 /** Compute the minimum ratio cycle of the given graph, ie compute the
     cycle that minimises the ratio cost/time.
 
-    @param g = graph
-    @param cost = cost function
-    @param c_ctxt = cost function context (closure)
-    @param time = time function
-    @param t_ctxt = time function context (closure)
-    @param ratio_num = numerator of the computed ratio
-    @param ratio_den = denominator of the computed ratio
-    @param min_cycle = list of the edges of a cycle that minimises the ratio
+    @param[in] g = graph
+    @param[in] cost = cost function
+    @param[in] c_ctxt = cost function context (closure)
+    @param[in] time = time function
+    @param[in] t_ctxt = time function context (closure)
+    @param[out] ratio_num = numerator of the computed ratio
+    @param[out] ratio_den = denominator of the computed ratio
+    @param[out] min_cycle = list of the edges of a cycle that minimises the ratio
 
     @return 0 in case of success, -1 otherwise (and then the list is not allocated) */
 int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g, 

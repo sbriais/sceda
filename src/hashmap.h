@@ -39,20 +39,20 @@ typedef struct {
 
 /** Initialise a (hash) map.
 
-    @param map = map
-    @param delete_key = delete function for keys or NULL
-    @param delete_value = delete function for values or NULL
-    @param match_key = equality function on keys
-    @param hash_key = hash function for keys */
+    @param[in] map = map
+    @param[in] delete_key = delete function for keys or NULL
+    @param[in] delete_value = delete function for values or NULL
+    @param[in] match_key = equality function on keys
+    @param[in] hash_key = hash function for keys */
 void SCEDA_hashmap_init(SCEDA_HashMap *map, SCEDA_delete_fun delete_key, SCEDA_delete_fun delete_value,
 		  SCEDA_match_fun match_key, SCEDA_hash_fun hash_key);
 
 /** Create a (hash) map, ready for use.
 
-    @param delete_key = delete function for keys or NULL
-    @param delete_value = delete function for values or NULL
-    @param match_key = equality function on keys
-    @param hash_key = hash function for keys
+    @param[in] delete_key = delete function for keys or NULL
+    @param[in] delete_value = delete function for values or NULL
+    @param[in] match_key = equality function on keys
+    @param[in] hash_key = hash function for keys
     
     @return the (hash) map */
 SCEDA_HashMap *SCEDA_hashmap_create(SCEDA_delete_fun delete_key, SCEDA_delete_fun delete_value, 
@@ -60,66 +60,66 @@ SCEDA_HashMap *SCEDA_hashmap_create(SCEDA_delete_fun delete_key, SCEDA_delete_fu
 
 /** Clean up a (hash) map.
 
-    @param map = map to delete */
+    @param[in] map = map to delete */
 void SCEDA_hashmap_cleanup(SCEDA_HashMap *map);
 
 /** Delete a (hash) map.
 
-    @param map = map to delete */
+    @param[in] map = map to delete */
 void SCEDA_hashmap_delete(SCEDA_HashMap *map);
 
 /** Clear a (hash) map.
     
-    @param map = map to clear */
+    @param[in] map = map to clear */
 void SCEDA_hashmap_clear(SCEDA_HashMap *map);
 
 /** Add (or replace) a binding in the map in time complexity O(1).
 
-    @param map = map
-    @param key = key to be bound
-    @param value = value to bind to key
-    @param old_value = old value bound to key (set by function if not NULL)
+    @param[in] map = map
+    @param[in] key = key to be bound
+    @param[in] value = value to bind to key
+    @param[out] old_value = old value bound to key (set by function if not NULL)
 
     @return 0 if new binding, 1 if binding was replaced, -1 otherwise */
 int SCEDA_hashmap_put(SCEDA_HashMap *map, const void *key, const void *value, void **old_value);
 
 /** Remove a binding in the map in time complexity O(1).
 
-    @param map = map
-    @param key = key to remove (replaced by the actual key)
-    @param value = value removed (replaced by the actual value)
+    @param[in] map = map
+    @param[in, out] key = key to remove (replaced by the actual key)
+    @param[out] value = value removed (replaced by the actual value)
 
     @return 0 in case of success, 1 if key was unbound, -1 otherwise */
 int SCEDA_hashmap_remove(SCEDA_HashMap *map, void **key, void **value);
 
 /** Test whether the given key is bound in the map in time complexity O(1).
 
-    @param map = map
-    @param key = key
+    @param[in] map = map
+    @param[in] key = key
 
     @return TRUE if key is bound to a value, FALSE otherwise */
 int SCEDA_hashmap_contains_key(SCEDA_HashMap *map, const void *key);
 
 /** Return the value bound to the given key or NULL in time complexity O(1).
 
-    @param map = map
-    @param key = key
+    @param[in] map = map
+    @param[in] key = key
 
     @return the value bound to the key or NULL if the key was unbound */
 void *SCEDA_hashmap_get(SCEDA_HashMap *map, const void *key);
 
 /** Look up for a binding in a map in time complexity O(1).
 
-    @param map = map
-    @param key = key to look for (replaced by the actual key)
-    @param value = value bound to key (filled by the function)
+    @param[in] map = map
+    @param[in, out] key = key to look for (replaced by the actual key)
+    @param[out] value = value bound to key (filled by the function)
 
     @return 0 if found, -1 otherwise */
 int SCEDA_hashmap_lookup(SCEDA_HashMap *map, void **key, void **value);
 
 /** Size of the (hash) map in time complexity O(1).
 
-    @param map = map
+    @param[in] map = map
     
     @return size of the map 
 
@@ -128,7 +128,7 @@ int SCEDA_hashmap_lookup(SCEDA_HashMap *map, void **key, void **value);
 
 /** Test whether the (hash) map is empty in time complexity O(1).
 
-    @param map = map 
+    @param[in] map = map 
 
     @return TRUE if empty, FALSE otherwise 
 
@@ -144,8 +144,8 @@ typedef struct {
 
 /** Initialise a (hash) map iterator.
 
-    @param map = map
-    @param iter = map iterator 
+    @param[in] map = map
+    @param[in] iter = map iterator 
 
     \hideinitializer */
 #define SCEDA_hashmap_iterator_init(map$, iter$) \
@@ -156,7 +156,7 @@ typedef struct {
 
 /** Test whether there is a next data in the map iterator. 
     
-    @param iter = map iterator
+    @param[in] iter = map iterator
     
     @return TRUE if there is a "next" data, FALSE otherwise 
 
@@ -172,8 +172,8 @@ typedef struct {
 
 /** Return the next data of the map iterator. 
     
-    @param iter = map iterator
-    @param key = corresponding key (filled by the iterator)
+    @param[in] iter = map iterator
+    @param[out] key = corresponding key (filled by the iterator)
 
     @return the "next" data 
 
@@ -182,7 +182,7 @@ typedef struct {
 
 /** Clean up a (hash) map iterator.
 
-    @param iter = map iterator 
+    @param[in] iter = map iterator 
 
     \hideinitializer */
 #define SCEDA_hashmap_iterator_cleanup(iter$)             \
