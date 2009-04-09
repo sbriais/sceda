@@ -30,7 +30,9 @@
 
 #define boxed_delete free
 
-#define boxed_value(x$) (*(x$))
+#define boxed_set(x$, v$) (*(x$))=(v$)
+
+#define boxed_get(x$) (*(x$))
 
 #endif
 
