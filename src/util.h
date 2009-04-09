@@ -46,7 +46,7 @@
 #include <stdio.h>
 
 #define fail(msg) \
-  ({ fprintf(stderr, "FATAL ERROR: %s\n", msg); \
+  ({ fprintf(stderr, "FATAL ERROR: %s (file = %s, line = %d)\n", msg, __FILE__, __LINE__); \
      exit(1); })
 
 #define safe_malloc(size) \
