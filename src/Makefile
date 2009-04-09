@@ -1,17 +1,38 @@
 include ../Makefile.config
 
+# sets and maps
 SRCC=list.c listset.c listmap.c
 SRCC+=hashset.c hashmap.c
 SRCC+=treeset.c treemap.c
-SRCC+=graph.c graph_dag.c graph_matching.c graph_antichain.c graph_path.c graph_scc.c graph_mrc.c
+# graphs
+SRCC+=graph.c 
+SRCC+=graph_dag.c 
+SRCC+=graph_matching.c 
+SRCC+=graph_antichain.c 
+SRCC+=graph_path.c
+SRCC+=graph_scc.c 
+SRCC+=graph_mrc.c
+SRCC+=graph_flow.c
+# heaps
 SRCC+=pqueue.c
 SRCC+=heap.c
  
 SRCH=common.h util.h
+# sets and maps
 SRCH+=list.h listset.h listmap.h queue.h stack.h
 SRCH+=hashset.h hashmap.h
 SRCH+=treeset.h treemap.h
-SRCH+=graph.h graph_dag.h graph_matching.h graph_antichain.h graph_path.h graph_scc.h graph_mrc.h graph_dist.h
+# graphs
+SRCH+=graph.h
+SRCH+=graph_dag.h 
+SRCH+=graph_matching.h
+SRCH+=graph_antichain.h 
+SRCH+=graph_path.h
+SRCH+=graph_scc.h 
+SRCH+=graph_mrc.h 
+SRCH+=graph_dist.h
+SRCH+=graph_flow.h
+# heaps
 SRCH+=pqueue.h
 SRCH+=heap.h
 
@@ -24,10 +45,21 @@ OBJS=$(SRCC:.c=.o)
 
 DISTFILES=Makefile $(SRCC) $(SRCH) $(DOCH)
 INSTALLH=common.h 
+# sets and maps
 INSTALLH+=list.h listset.h listmap.h queue.h stack.h
 INSTALLH+=hashset.h hashmap.h
 INSTALLH+=treeset.h treemap.h
-INSTALLH+=graph.h graph_dag.h graph_matching.h graph_antichain.h graph_path.h graph_scc.h graph_mrc.h graph_dist.h
+# graphs
+INSTALLH+=graph.h 
+INSTALLH+=graph_dag.h 
+INSTALLH+=graph_matching.h
+INSTALLH+=graph_antichain.h
+INSTALLH+=graph_path.h
+INSTALLH+=graph_scc.h
+INSTALLH+=graph_mrc.h
+INSTALLH+=graph_dist.h
+INSTALLH+=graph_flow.h
+# heaps
 INSTALLH+=pqueue.h
 INSTALLH+=heap.h
 INSTALLLIB=
