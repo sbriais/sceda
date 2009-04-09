@@ -175,8 +175,8 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
       SCEDA_in_edges_iterator_cleanup(&edges);
     }
 
+    // if u is still exceeding, increase its height
     if(boxed_get(ex_u) > 0) {
-      // if u is still exceeding, increase its height
       boxed_set(h_u, boxed_get(h_u) + 1);
       safe_call(SCEDA_queue_enqueue(todo, u));
     }
