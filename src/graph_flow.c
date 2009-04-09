@@ -89,7 +89,6 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
   }
 
   /* Preflow */
-
   while(!SCEDA_queue_is_empty(todo)) {
     SCEDA_Vertex *u;
     safe_call(SCEDA_queue_dequeue(todo, (void **)&u));
