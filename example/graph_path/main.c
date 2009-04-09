@@ -25,7 +25,7 @@ void delete_string(char *s) {
   free(s);
 }
 
-SCEDA_COST_TYPE get_distance(SCEDA_Edge *e, void *ctxt) {
+SCEDA_DIST_TYPE get_distance(SCEDA_Edge *e, void *ctxt) {
   return SCEDA_edge_get_data(Integer *,e)->value;
 }
 

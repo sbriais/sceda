@@ -24,7 +24,7 @@
 #include "util.h"
 #include "heap.h"
 
-#define INFINITY SCEDA_COST_INFTY
+#define INFINITY SCEDA_DIST_INFTY
 
 static SCEDA_PathInfo *SCEDA_path_info_create(SCEDA_Vertex *source, SCEDA_Vertex *u) {
   SCEDA_PathInfo *info = (SCEDA_PathInfo *)safe_malloc(sizeof(SCEDA_PathInfo));
@@ -66,11 +66,11 @@ static int SCEDA_path_info_compare(SCEDA_PathInfo *info1, SCEDA_PathInfo *info2)
   }
 }
 
-static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, SCEDA_COST_TYPE weight, SCEDA_Edge *in) {
+static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, SCEDA_DIST_TYPE weight, SCEDA_Edge *in) {
   if(is_infty(info_u)) {
     return FALSE;
   }
-  SCEDA_COST_TYPE du = info_u->distance;
+  SCEDA_DIST_TYPE du = info_u->distance;
   if((is_infty(info_v)) || (du+weight < info_v->distance)) {
     info_v->distance = du + weight;
     info_v->in_edge = in;
@@ -79,7 +79,7 @@ static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_
   return FALSE;
 }
 
-SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_cost_fun dist, void *ctxt) {
+SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt) {
   SCEDA_HashMap *paths = SCEDA_vertex_map_create((SCEDA_delete_fun)SCEDA_path_info_delete);
 
   int n = SCEDA_graph_vcount(g);
@@ -114,7 +114,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Verte
   return paths;
 }
 
-SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex *to, SCEDA_cost_fun dist, void *ctxt) {
+SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex *to, SCEDA_dist_fun dist, void *ctxt) {
   SCEDA_HashMap *paths = SCEDA_vertex_map_create((SCEDA_delete_fun)SCEDA_path_info_delete);
 
   int n = SCEDA_graph_vcount(g);
@@ -149,7 +149,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex 
   return paths;
 }
 
-SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_cost_fun dist, void *ctxt) {
+SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt) {
   SCEDA_HashMap *paths = SCEDA_vertex_map_create((SCEDA_delete_fun)SCEDA_path_info_delete);
   SCEDA_HashMap *elts = SCEDA_vertex_map_create(NULL);
   SCEDA_Heap *heap = SCEDA_heap_create(NULL, (SCEDA_compare_fun)SCEDA_path_info_compare);
@@ -196,7 +196,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
   return paths;
 }
 
-SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_cost_fun dist, void *ctxt, SCEDA_Vertex **neg_cycle) {
+SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt, SCEDA_Vertex **neg_cycle) {
   SCEDA_HashMap *paths = SCEDA_vertex_map_create((SCEDA_delete_fun)SCEDA_path_info_delete);
 
   int n = SCEDA_graph_vcount(g);

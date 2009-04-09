@@ -16,20 +16,20 @@
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCEDA_GRAPH_COST_H
-#define __SCEDA_GRAPH_COST_H
+#ifndef __SCEDA_GRAPH_DIST_H
+#define __SCEDA_GRAPH_DIST_H
 
 #include "graph.h"
 
 /** Type of cost functions */
-#define SCEDA_COST_TYPE double
+#define SCEDA_DIST_TYPE double
 #include <float.h>
-#define SCEDA_COST_INFTY DBL_MAX
+#define SCEDA_DIST_INFTY DBL_MAX
 
-/* #define SCEDA_COST_TYPE int */
+/* #define SCEDA_DIST_TYPE int */
 /* #include <limits.h> */
-/* #define SCEDA_COST_INFTY INT_MAX */
+/* #define SCEDA_DIST_INFTY INT_MAX */
 
-typedef SCEDA_COST_TYPE (*SCEDA_cost_fun)(SCEDA_Edge *e, void *ctxt);
+typedef SCEDA_DIST_TYPE (*SCEDA_dist_fun)(SCEDA_Edge *e, void *ctxt);
 
 #endif

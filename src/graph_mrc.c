@@ -49,7 +49,7 @@ typedef struct {
   Rational lambda;
 } MRCcontext;
 
-static SCEDA_COST_TYPE mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
+static SCEDA_DIST_TYPE mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
   int w, t;
 
   if(SCEDA_edge_source(e) == ctxt->source) {
@@ -60,7 +60,7 @@ static SCEDA_COST_TYPE mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
     t = ctxt->time(e, ctxt->t_ctxt);
   }
 
-  SCEDA_COST_TYPE res;
+  SCEDA_DIST_TYPE res;
 #ifndef Rational
   res = ctxt->lambda.den * w - ctxt->lambda.num * t;
 #else
@@ -303,7 +303,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     fprintf(stdout,"checking for negative time cycles\n");
 #endif
 
-    SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_cost_fun)mrc_cost, &ctxt, &cycle);
+    SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_dist_fun)mrc_cost, &ctxt, &cycle);
     SCEDA_hashmap_delete(paths);
 
     if(cycle != NULL) {
@@ -350,7 +350,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
       print_rational(stdout,&(ctxt.lambda));
       fprintf(stdout,"\n");
 #endif
-      SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_cost_fun)mrc_cost, &ctxt, &cycle);
+      SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_dist_fun)mrc_cost, &ctxt, &cycle);
       SCEDA_hashmap_delete(paths);
       
       if(cycle != NULL) {
@@ -374,7 +374,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
       print_rational(stdout,&(ctxt.lambda));
       fprintf(stdout,"\n");
 #endif
-      SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_cost_fun)mrc_cost, &ctxt, &cycle);
+      SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_dist_fun)mrc_cost, &ctxt, &cycle);
       
       safe_ptr(cycle);
 
