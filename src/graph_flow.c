@@ -109,7 +109,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
 	boxed(int) fe = SCEDA_hashmap_get(flow, e);
 	// residual_capacity(u,v) = capacity(u,v) - flow(u,v) 
 	int rc = capacity(e, c_ctxt) - boxed_get(fe);
-	if(rc == 0) {
+	if(rc <= 0) {
 	  continue;
 	}
 	SCEDA_Vertex *v = SCEDA_edge_target(e);
@@ -148,7 +148,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
       while(SCEDA_in_edges_iterator_has_next(&edges)) {
 	SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&edges);
 	boxed(int) fe = SCEDA_hashmap_get(flow, e);
-	if(boxed_get(fe) == 0) {
+	if(boxed_get(fe) <= 0) {
 	  continue;
 	}
 	SCEDA_Vertex *v = SCEDA_edge_source(e);
