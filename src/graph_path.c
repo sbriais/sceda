@@ -66,12 +66,17 @@ static int SCEDA_path_info_compare(SCEDA_PathInfo *info1, SCEDA_PathInfo *info2)
   }
 }
 
+#include <stdio.h>
+
 static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_v, SCEDA_DIST_TYPE weight, SCEDA_Edge *in) {
   if(is_infty(info_u)) {
     return FALSE;
   }
   SCEDA_DIST_TYPE du = info_u->distance;
   if((is_infty(info_v)) || (du+weight < info_v->distance)) {
+    if(!is_infty(info_v)) {
+      fprintf(stderr,"%f + %f = %f < %f\n",du,weight,du+weight,info_v->distance);
+    }
     info_v->distance = du + weight;
     info_v->in_edge = in;
     return TRUE;
@@ -197,6 +202,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
 }
 
 SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt, SCEDA_Vertex **neg_cycle) {
+  fprintf(stderr,"-> Bellman-Ford\n");
   SCEDA_HashMap *paths = SCEDA_vertex_map_create((SCEDA_delete_fun)SCEDA_path_info_delete);
 
   int n = SCEDA_graph_vcount(g);
@@ -256,5 +262,6 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
     }
   }
 
+  fprintf(stderr,"<- Bellman-Ford\n");
   return paths;
 }
