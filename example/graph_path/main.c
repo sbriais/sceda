@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
       SCEDA_Vertex *u;
       SCEDA_PathInfo *pu = SCEDA_hashmap_iterator_next(&paths, &u);
       if(pu->in_edge != NULL) {
-	fprintf(stdout,"distance to %s = %g.\n", SCEDA_vertex_get_data(char *, u), pu->distance);
+	fprintf(stdout,"distance to %s = %Lf.\n", SCEDA_vertex_get_data(char *, u), pu->distance);
       } else if(pu->self == origin) {
       } else {
 	fprintf(stdout,"%s is not reachable.\n", SCEDA_vertex_get_data(char *, u));
