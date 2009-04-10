@@ -75,7 +75,7 @@ static inline int SCEDA_path_relax(SCEDA_PathInfo *info_u, SCEDA_PathInfo *info_
   SCEDA_DIST_TYPE du = info_u->distance;
   if((is_infty(info_v)) || (du+weight < info_v->distance)) {
     if(!is_infty(info_v)) {
-      fprintf(stderr,"%f + %f = %f < %f\n",du,weight,du+weight,info_v->distance);
+      fprintf(stderr,"%Lf + %Lf = %Lf < %Lf\n",du,weight,du+weight,info_v->distance);
     }
     info_v->distance = du + weight;
     info_v->in_edge = in;

@@ -58,9 +58,12 @@ int main(int argc, char *argv[]) {
   SCEDA_graph_add_edge(g, vC, vA, new_CostTime(0,1));
   SCEDA_graph_add_edge(g, vC, vB, new_CostTime(-5,-2));
 
+  fprintf(stderr,"here\n");
+
   int p, q;
   SCEDA_List *cycle;
   if(SCEDA_graph_minimum_ratio_cycle(g, get_cost, NULL, get_time, NULL, &p, &q, &cycle) == 0) {
+    fprintf(stderr,"there\n");
     fprintf(stdout,"Here is a cycle that minimises the ratio, whose value is %d / %d.\n", p, q);
     SCEDA_ListIterator edges;
     SCEDA_list_iterator_init(cycle, &edges);

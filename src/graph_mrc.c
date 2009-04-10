@@ -31,7 +31,7 @@
 #include <stdio.h>
 #endif
 
-#define Rational double
+#define Rational long double
 
 #ifndef Rational
 typedef struct {
@@ -176,36 +176,36 @@ static inline int rational_compare(Rational *x, Rational *y) {
 }
 #else
 #ifdef DEBUG
-static void print_rational(FILE *stream, double *x) {
+static void print_rational(FILE *stream, long double *x) {
   fprintf(stream,"%g", *x);
 }
 #endif
 
-static int rational_norm(double *x) {
+static int rational_norm(long double *x) {
   return 0;
 }
 
-static inline void rational_add(double *x, double *y, double *z) {
+static inline void rational_add(long double *x, long double *y, long double *z) {
   (*z) = (*x) + (*y);
 }
 
-static inline void rational_div_n(int n, double *x) {
+static inline void rational_div_n(int n, long double *x) {
   (*x) /= n;
 }
 
-static inline void rational_int(int n, double *x) {
-  (*x) = (double)n;
+static inline void rational_int(int n, long double *x) {
+  (*x) = (long double)n;
 }
 
-static inline void rational_inv_int(int n, double *x) {
-  (*x) = (1.0) / ((double)n);
+static inline void rational_inv_int(int n, long double *x) {
+  (*x) = (1.0) / ((long double)n);
 }
 
-static inline void rational_sub(double *x, double *y, double *z) {
+static inline void rational_sub(long double *x, long double *y, long double *z) {
   (*z) = (*x) - (*y);
 }
 
-static inline int rational_compare(double *x, double *y) {
+static inline int rational_compare(long double *x, long double *y) {
   if((*x) < (*y)) {
     return -1;
   } else if((*x) == (*y)) {

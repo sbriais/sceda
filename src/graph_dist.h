@@ -22,7 +22,7 @@
 #include "graph.h"
 
 /** Type of cost functions */
-#define SCEDA_DIST_TYPE double
+#define SCEDA_DIST_TYPE long double
 #include <float.h>
 #define SCEDA_DIST_INFTY DBL_MAX
 
