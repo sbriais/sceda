@@ -32,7 +32,7 @@ $(PROJECT): $(SRCH) $(OBJS) Makefile
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
 
 clean:
-	rm -f *~ $(OBJS) $(PROJECT)
+	rm -f *~ $(OBJS) $(PROJECT) .depend
 
 .depend: $(SRCC)
 	$(CC) $(CPPFLAGS) -MM $(SRCC) > .depend
