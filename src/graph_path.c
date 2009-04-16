@@ -23,6 +23,7 @@
 #include "common.h"
 #include "util.h"
 #include "heap.h"
+#include "queue.h"
 
 #define INFINITY SCEDA_DIST_INFTY
 
@@ -199,8 +200,72 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
   return paths;
 }
 
+/* SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt, SCEDA_Vertex **neg_cycle) { */
+/*   //  fprintf(stderr,"-> Bellman-Ford\n"); */
+/*   SCEDA_HashMap *paths = SCEDA_vertex_map_create((SCEDA_delete_fun)SCEDA_path_info_delete); */
+
+/*   int n = SCEDA_graph_vcount(g); */
+
+/*   SCEDA_VerticesIterator g_vertice; */
+/*   SCEDA_vertices_iterator_init(g, &g_vertice); */
+/*   while(SCEDA_vertices_iterator_has_next(&g_vertice)) { */
+/*     SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&g_vertice); */
+/*     SCEDA_PathInfo *info = SCEDA_path_info_create(from, v); */
+/*     SCEDA_hashmap_put(paths, v, info, NULL); */
+/*   } */
+/*   SCEDA_vertices_iterator_cleanup(&g_vertice); */
+
+/*   int i; */
+/*   for(i = 1; i < n; i++) { */
+/*     SCEDA_EdgesIterator edges; */
+/*     SCEDA_edges_iterator_init(g, &edges); */
+/*     while(SCEDA_edges_iterator_has_next(&edges)) { */
+/*       SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges); */
+/*       SCEDA_Vertex *u = SCEDA_edge_source(e); */
+/*       SCEDA_Vertex *v = SCEDA_edge_target(e); */
+/*       SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u); */
+/*       SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v); */
+      
+/*       SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e); */
+/*     } */
+/*     SCEDA_edges_iterator_cleanup(&edges); */
+/*   } */
+
+/*   if(neg_cycle != NULL) { */
+/*     *neg_cycle = NULL; */
+
+/*     SCEDA_EdgesIterator edges; */
+/*     SCEDA_edges_iterator_init(g, &edges); */
+/*     while(SCEDA_edges_iterator_has_next(&edges)) { */
+/*       SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges); */
+/*       SCEDA_Vertex *u = SCEDA_edge_source(e); */
+/*       SCEDA_Vertex *v = SCEDA_edge_target(e); */
+/*       SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u); */
+/*       SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v); */
+/*       if(SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e)) { */
+/* 	*neg_cycle = u; */
+/* 	break; */
+/*       } */
+/*     } */
+/*     SCEDA_edges_iterator_cleanup(&edges); */
+
+/*     if(*neg_cycle != NULL) { */
+/*       SCEDA_HashSet *cycle = SCEDA_vertex_set_create(); */
+/*       do { */
+/* 	safe_call(SCEDA_hashset_add(cycle, *neg_cycle)); */
+/* 	SCEDA_PathInfo *info = SCEDA_hashmap_get(paths, *neg_cycle); */
+/* 	safe_ptr(info->in_edge); */
+/* 	*neg_cycle = SCEDA_edge_source(info->in_edge); */
+/*       } while(!SCEDA_hashset_contains(cycle, *neg_cycle)); */
+/*       SCEDA_hashset_delete(cycle); */
+/*     } */
+/*   } */
+
+/*   //  fprintf(stderr,"<- Bellman-Ford\n"); */
+/*   return paths; */
+/* } */
+
 SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt, SCEDA_Vertex **neg_cycle) {
-  //  fprintf(stderr,"-> Bellman-Ford\n");
   SCEDA_HashMap *paths = SCEDA_vertex_map_create((SCEDA_delete_fun)SCEDA_path_info_delete);
 
   int n = SCEDA_graph_vcount(g);
@@ -214,52 +279,60 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
   }
   SCEDA_vertices_iterator_cleanup(&g_vertice);
 
-  int i;
-  for(i = 1; i < n; i++) {
-    SCEDA_EdgesIterator edges;
-    SCEDA_edges_iterator_init(g, &edges);
-    while(SCEDA_edges_iterator_has_next(&edges)) {
-      SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges);
-      SCEDA_Vertex *u = SCEDA_edge_source(e);
-      SCEDA_Vertex *v = SCEDA_edge_target(e);
-      SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u);
-      SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v);
-      
-      SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e);
+  SCEDA_HashSet *in_queue = SCEDA_vertex_set_create();
+
+  SCEDA_Queue *queue = SCEDA_queue_create(NULL);
+  safe_call(SCEDA_queue_enqueue(queue, from));
+  safe_call(SCEDA_queue_enqueue(queue, NULL));
+  safe_call(SCEDA_hashset_add(in_queue, from));
+
+  int i = 0;
+  while((i < n) && (!SCEDA_queue_is_empty(queue))) {
+    SCEDA_Vertex *u;
+    safe_call(SCEDA_queue_dequeue(queue, (void **)&u));
+    if(u == NULL) {
+      i++;
+      if(i < n) {
+	safe_call(SCEDA_queue_enqueue(queue, NULL));
+      }
+      continue;
     }
-    SCEDA_edges_iterator_cleanup(&edges);
+    safe_call(SCEDA_hashset_remove(in_queue, (void **)&u));
+
+    SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u);
+    
+    SCEDA_OutEdgesIterator out_edges;
+    SCEDA_out_edges_iterator_init(u, &out_edges);
+    while(SCEDA_out_edges_iterator_has_next(&out_edges)) {
+      SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&out_edges);
+      SCEDA_Vertex *v = SCEDA_edge_target(e);
+      SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v);
+      if(SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e)) {
+	if(!SCEDA_hashset_contains(in_queue, v)) {
+	  safe_call(SCEDA_queue_enqueue(queue, v));
+	  safe_call(SCEDA_hashset_add(in_queue, v));
+	}
+      }
+    }
+    SCEDA_out_edges_iterator_cleanup(&out_edges);
   }
 
   if(neg_cycle != NULL) {
     *neg_cycle = NULL;
-
-    SCEDA_EdgesIterator edges;
-    SCEDA_edges_iterator_init(g, &edges);
-    while(SCEDA_edges_iterator_has_next(&edges)) {
-      SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges);
-      SCEDA_Vertex *u = SCEDA_edge_source(e);
-      SCEDA_Vertex *v = SCEDA_edge_target(e);
-      SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u);
-      SCEDA_PathInfo *info_v = SCEDA_hashmap_get(paths, v);
-      if(SCEDA_path_relax(info_u, info_v, dist(e, ctxt), e)) {
-	*neg_cycle = u;
-	break;
-      }
-    }
-    SCEDA_edges_iterator_cleanup(&edges);
-
-    if(*neg_cycle != NULL) {
-      SCEDA_HashSet *cycle = SCEDA_vertex_set_create();
-      do {
-	safe_call(SCEDA_hashset_add(cycle, *neg_cycle));
-	SCEDA_PathInfo *info = SCEDA_hashmap_get(paths, *neg_cycle);
-	safe_ptr(info->in_edge);
-	*neg_cycle = SCEDA_edge_source(info->in_edge);
-      } while(!SCEDA_hashset_contains(cycle, *neg_cycle));
-      SCEDA_hashset_delete(cycle);
-    }
   }
 
-  //  fprintf(stderr,"<- Bellman-Ford\n");
-  return paths;
+  if((i < n) || (SCEDA_queue_is_empty(queue))) {
+    SCEDA_queue_delete(queue);
+    SCEDA_hashset_delete(in_queue);
+    return paths;
+  } else {
+    SCEDA_Vertex *cycle;
+    safe_call(SCEDA_queue_dequeue(queue, (void **)&cycle));
+    if(neg_cycle != NULL) {
+      *neg_cycle = cycle;
+    }
+    SCEDA_queue_delete(queue);
+    SCEDA_hashset_delete(in_queue);
+    return paths;
+  }
 }
