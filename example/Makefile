@@ -1,5 +1,5 @@
 SUBDIRS=eratosthene
-SUBDIRS+=graph graph_alg graph_path graph_flow graph_mrc graph_scc
+SUBDIRS+=graph graph_alg graph_path graph_flow graph_mcf graph_mrc graph_scc
 SUBDIRS+=hashmap treemap listmap 
 SUBDIRS+=listset hashset treeset 
 SUBDIRS+=heap pqueue 

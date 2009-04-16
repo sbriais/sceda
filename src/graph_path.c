@@ -326,11 +326,17 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
     SCEDA_hashset_delete(in_queue);
     return paths;
   } else {
-    SCEDA_Vertex *cycle;
-    safe_call(SCEDA_queue_dequeue(queue, (void **)&cycle));
-    safe_ptr(cycle);
     if(neg_cycle != NULL) {
-      *neg_cycle = cycle;
+      safe_call(SCEDA_queue_dequeue(queue, (void **)neg_cycle));
+      
+      SCEDA_HashSet *cycle = SCEDA_vertex_set_create();
+      do {
+	safe_call(SCEDA_hashset_add(cycle, *neg_cycle));
+	SCEDA_PathInfo *info = SCEDA_hashmap_get(paths, *neg_cycle);
+	safe_ptr(info->in_edge);
+	*neg_cycle = SCEDA_edge_source(info->in_edge);
+      } while(!SCEDA_hashset_contains(cycle, *neg_cycle));
+      SCEDA_hashset_delete(cycle);
     }
     SCEDA_queue_delete(queue);
     SCEDA_hashset_delete(in_queue);
