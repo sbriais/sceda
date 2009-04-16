@@ -328,6 +328,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
   } else {
     SCEDA_Vertex *cycle;
     safe_call(SCEDA_queue_dequeue(queue, (void **)&cycle));
+    safe_ptr(cycle);
     if(neg_cycle != NULL) {
       *neg_cycle = cycle;
     }
