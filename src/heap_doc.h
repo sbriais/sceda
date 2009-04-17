@@ -26,14 +26,14 @@
     \section heapapi API
 
     \code
-    void heap_init(Heap *heap, delete_fun delete, compare_fun compare);
-    Heap *heap_create(delete_fun delete, compare_fun compare);
+    void heap_init(Heap *heap, delete_fun delete_value, delete_fun delete_key, compare_fun compare_key);
+    Heap *heap_create(delete_fun delete_value, delete_fun delete_key, compare_fun compare_key);
     \endcode
 
     Initialise or create a Fibonacci heap. The delete function
-    provided is used (when not NULL) to delete elements upon heap
-    clean up/delete. The comparison function compares the priority of
-    the elements.
+    provided are used (when not NULL) to delete values/keys upon heap
+    clean up/delete. The comparison function compares the priority key
+    of the elements.
 
     \code
     void heap_cleanup(Heap *heap);
@@ -41,7 +41,7 @@
     \endcode
 
     Clean up or delete a Fibonacci heap. Delete all the elements in
-    the heap according to the delete function given at initialisation
+    the heap according to the delete functions given at initialisation
     or creation.
 
     \code
@@ -51,7 +51,7 @@
     Remove all the elements of a Fibonacci heap.
 
     \code
-    HeapElt *heap_insert(Heap *heap, const void *data);
+    HeapElt *heap_insert(Heap *heap, const void *value, const void *key);
     \endcode
 
     Insert a new element in a Fibonacci heap in time O(1).  
@@ -60,14 +60,14 @@
     afterwards.
 
     \code
-    int heap_extract(Heap *heap, void **data);
+    int heap_extract(Heap *heap, void **data, void **key);
     \endcode
 
     Extract the minimum element of a Fibonacci heap in amortized time
     O(log|heap|).
 
     \code
-    int heap_min(Heap *heap, void **data);
+    int heap_min(Heap *heap, void **data, void **key);
     \endcode
 
     Get the minimum element of a Fibonacci heap in time O(1).
@@ -79,6 +79,9 @@
     Merge the content of two Fibonacci heaps. The two source heaps are
     reinitialised to an empty state. The resulting heap contains both
     elements of heap1 and heap2.
+
+    Beware that heap1 and heap2 must have been initialised the same
+    way.
 
     \code
     void heap_decrease_key(Heap *heap, HeapElt *elt);
@@ -101,21 +104,21 @@
     has really increased.
 
     \code
-    void *heap_change_key(Heap *heap, HeapElt *elt, const void *data);
+    void *heap_change_key(Heap *heap, HeapElt *elt, const void *key);
     \endcode
 
-    Change the data (key) of a heap element. If the key decreases, the
-    amortized time is O(1), otherwise it is O(log|heap|).
+    Change the priority key of a heap element. If the key decreases,
+    the amortized time is O(1), otherwise it is O(log|heap|).
 
     Return the old key of the modified element.
 
     \code
-    void *heap_remove(Heap *heap, HeapElt *elt);
+    int heap_remove(Heap *heap, HeapElt *elt, void **value, void **key);
     \endcode
 
     Remove an element from a Fibonacci heap in amortized time O(log|heap|).
     
-    Return the key of the removed element.
+    Return the value and the key of the removed element.
 
     \code
     int heap_size(Heap *heap);
@@ -128,12 +131,6 @@
     \endcode
 
     Test whether the given Fibonacci heap is empty.
-
-    \code
-    type heap_data(type, HeapElt *elt);
-    \endcode
-
-    Return the key (data field) of heap element.
 
     \section heap_examples Example
 
