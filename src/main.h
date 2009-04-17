@@ -25,7 +25,7 @@
 
     \section license_sec License
 
-    (c) 2008 Sebastien Briais
+    (c) 2008-2009 Sebastien Briais
 
     SCEDA is free software: you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public License
