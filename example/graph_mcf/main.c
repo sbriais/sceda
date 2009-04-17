@@ -38,7 +38,7 @@ int get_flow(SCEDA_Edge *e, void *ctxt) {
 }
 
 int main(int argc, char *argv[]) {
-  // create a graph whose nodes are labelled by Integer and edges are not labelled
+  // create a graph whose nodes are labelled by strings and edges are labelled by FlowCost structure
   SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_FlowCost);
 
   SCEDA_Vertex *vS = SCEDA_graph_add_vertex(g, strdup("S"));
@@ -57,7 +57,14 @@ int main(int argc, char *argv[]) {
 
   SCEDA_Vertex *vT = SCEDA_graph_add_vertex(g, strdup("T"));
 
-  // CLRS p 640
+  // We encode the following assignment problem:
+  //     B1 B2 B3 B4 B5
+  //  A1  7  8  7 15  4
+  //  A2  7  9 17 14 10
+  //  A3  9  6 12  6  7
+  //  A4  7  6 14  6 10
+  //  A5  9  6 12 10  6
+
   SCEDA_graph_add_edge(g, vS, vA1, new_FlowCost(1,0));
   SCEDA_graph_add_edge(g, vS, vA2, new_FlowCost(1,0));
   SCEDA_graph_add_edge(g, vS, vA3, new_FlowCost(1,0));
@@ -101,7 +108,6 @@ int main(int argc, char *argv[]) {
   SCEDA_graph_add_edge(g, vA5, vB5, new_FlowCost(1,6));
 
   SCEDA_HashMap *flow = SCEDA_graph_min_cost_max_flow(g, vS, vT, get_flow, NULL, get_cost, NULL);
-  //  SCEDA_HashMap *flow = SCEDA_graph_max_flow(g, vS, vT, get_flow, NULL);
 
   {
     int cost = 0;

@@ -1,6 +1,6 @@
 /*
    This file is part of SCEDA.
-   (c) 2008 Sebastien Briais
+   (c) 2008-2009 Sebastien Briais
    
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
@@ -27,7 +27,7 @@
     int graph_is_acyclic(Graph *g);
     \endcode
 
-    Test whether the given graph in O(|V|+|E|).
+    Test whether the given graph is acyclic in O(|V|+|E|).
 
     Vertices in g are modified as follows: if g is acyclic, vertice of
     g are indexed according to a topological order of the graph. These
@@ -84,7 +84,7 @@
     A graph (V,E) is bipartite if there exists a partition of \f$ V =
     X \cup Y \f$ such that each edge goes from X to Y.
 
-    It return a vertex map that gives for each vertex its spouse in
+    It returns a vertex map that gives for each vertex its spouse in
     a maximum matching.
 
     \section mincoversec Minimum chain cover
@@ -120,11 +120,11 @@
     Return a maximum antichain of the given acyclic graph (also know
     as Dilworth decomposition).
     
-    \section shortpathdagsec Shortest paths from a source (to a target) in graphs
+    \section shortpathsec Shortest paths from a source (to a target) in graphs
 
     \code
-    HashMap *graph_shortest_path_from_in_dag(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt);
-    HashMap *graph_shortest_path_to_in_dag(Graph *g, Vertex *to, distance_fun dist, void *dist_ctxt);
+    HashMap *graph_shortest_path_from_in_dag(Graph *g, Vertex *from, int_edge_fun dist, void *dist_ctxt);
+    HashMap *graph_shortest_path_to_in_dag(Graph *g, Vertex *to, int_edge_fun dist, void *dist_ctxt);
     \endcode
 
     Computes the shortest paths from a source (resp. to a target) in
@@ -141,7 +141,7 @@
     cost of the shortest path.
 
     \code
-    HashMap *graph_shortest_path_dijkstra(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt);
+    HashMap *graph_shortest_path_dijkstra(Graph *g, Vertex *from, int_edge_fun dist, void *dist_ctxt);
     \endcode
 
     Computes the shortests paths from a source in a graph, using
@@ -156,7 +156,7 @@
     cost of the shortest path.
 
     \code
-    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, distance_fun dist, void *dist_ctxt, Vertex **neg_cycle);
+    HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, int_edge_fun dist, void *dist_ctxt, int *has_neg_cycle);
     \endcode
 
     Computes the shortests paths from a source in a graph, using
@@ -170,15 +170,15 @@
     cost of the shortest path.
 
     Note that if there is negative cycle accessible from source
-    vertex, result is incorrect. To check correctness, give a non null
-    vertex pointer as last parameter. In this case, and if a negative
-    weight cycle exists, *neg_cycle will point to a vertex belonging
-    to such a cycle.
+    vertex, result is incorrect. The variable has_neg_cycle is set to
+    TRUE of a negative cycle has been detected and to FALSE otherwise.
+
+    \section mrcsec Minimum Cost to Time Ratio Cycle
 
     \code
     int graph_minimum_ratio_cycle(Graph *g, 
-                                  int (*cost)(Edge *e, void *ctxt), void *c_ctxt, 
-				  int (*time)(Edge *e, void *ctxt), void *t_ctxt, 
+                                  int_edge_fun cost, void *c_ctxt, 
+				  int_edge_fun time, void *t_ctxt, 
 				  int *ratio_num, int *ratio_den, 
 				  List **min_cycle);
     \endcode
@@ -191,11 +191,39 @@
     Otherwise, it computes a list of edges belonging to the minimum
     cycle and its ratio.
 
+    \section flowsec Network Flows
+
+    \code
+    HashMap *graph_max_flow(Graph *g, Vertex *s, Vertex *t, 
+                            int_edge_fun capacity, void *cap_ctxt);
+    \endcode
+    
+    Compute a maximal flow in the directed network.
+
+    \code
+    HashMap *graph_min_cost_max_flow(Graph *g, Vertex *s, Vertex *t, 
+                                     int_edge_fun capacity, void *cap_ctxt,
+				     int_edge_fun cost, void *cost_ctxt);
+    \endcode
+
+    Compute a maximal flow of minimum cost in the directed network.
+
+    \section negcycsec Negative Cycles Detection
+
+    \code
+    List *graph_neg_cycle_int(Graph *g, int_edge_fun cost, void *ctxt);
+    List *graph_neg_cycle_long_double(Graph *g, long_double_edge_fun cost, void *ctxt);
+    \endcode
+
+    Compute a (possibly empty) list of edges belonging to a negative
+    cost cycle in the graph.
+
     \section graphalgs_examples Examples
 
     \subsection graphalgs_mixed Acyclicity test, transitive closure, maximal antichain
 
-    The following example illustrates these algorithms on a particular graph.
+    The following example illustrates these algorithms on a particular
+    graph.
 
     \include "graph_alg/main.c"
 
@@ -210,5 +238,15 @@
     \subsection graphalgs_mrc Minimum Ratio Cycle
 
     \include "graph_mrc/main.c"
+
+    \subsection graphalgs_maxflow Maximal Flow
+
+    \include "graph_flow/main.c"
+
+    \subsection graphalgs_mincostmaxflow Minimum Cost Maximal Flow
+
+    \include "graph_mcf/main.c"
+
+    \subsection graphalgs_negcycle Negative Cycle Detection
 
  */

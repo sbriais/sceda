@@ -18,12 +18,36 @@
 */
 #ifndef __SCEDA_GRAPH_FLOW_H
 #define __SCEDA_GRAPH_FLOW_H
+/** \file graph_flow.h
+    \brief Network Flows algorithms */
 
 #include "graph.h"
 #include "hashmap.h"
 
+/** Compute a maximal flow in the directed network.
+
+    @param[in] g = network
+    @param[in] s = source
+    @param[in] t = sink
+    @param[in] capacity = capacity function
+    @param[in] c_ctxt = capacity function context
+    
+    @return a map that tells the amount of flow along each edge (ie
+    key = edge, data = int *) */
 SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, SCEDA_int_edge_fun capacity, void *c_ctxt);
 
+/** Compute a maximal flow of minimum cost in the directed network.
+
+    @param[in] g = network
+    @param[in] s = source
+    @param[in] t = sink
+    @param[in] capacity = capacity function
+    @param[in] cap_ctxt = capacity function context
+    @param[in] cost = cost function
+    @param[in] cost_ctxt = cost function context 
+   
+    @return a map that tells the amount of flow along each edge (ie
+    key = edge, data = int *) */
 SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, SCEDA_int_edge_fun capacity, void *cap_ctxt, SCEDA_int_edge_fun cost, void *cost_ctxt);
 
 #endif

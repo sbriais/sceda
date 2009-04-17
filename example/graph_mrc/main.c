@@ -39,7 +39,7 @@ int get_time(SCEDA_Edge *e, void *ctxt) {
 }
 
 int main(int argc, char *argv[]) {
-  // create a graph whose nodes are labelled by Integer and edges are not labelled
+  // create a graph whose nodes are labelled by strings and edges are labelled by CostTime structures
   SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_CostTime);
  
   SCEDA_Vertex *vA = SCEDA_graph_add_vertex(g, strdup("A"));
