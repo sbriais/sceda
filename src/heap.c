@@ -23,9 +23,9 @@
 
 //#define SCEDA_heap_max_degree(n) (32)
 
-#define heap_elt_data(x$) ((x$)->data)
-#define heap_elt_priority(x$) ((x$)->priority)
-#define compare_heap_elt(heap$, x$, y$) ((heap$)->compare_priority(heap_elt_priority(x$), heap_elt_priority(y$)))
+#define heap_elt_value(x$) ((x$)->value)
+#define heap_elt_key(x$) ((x$)->key)
+#define compare_heap_elt(heap$, x$, y$) ((heap$)->compare_key(heap_elt_key(x$), heap_elt_key(y$)))
 
 static inline int SCEDA_heap_max_degree(unsigned int n) {
   int res = 0;
@@ -80,19 +80,19 @@ static inline void remove_child(SCEDA_HeapElt *parent, SCEDA_HeapElt *elt) {
 }
 
 void SCEDA_heap_init(SCEDA_Heap *heap, 
-		     SCEDA_delete_fun delete_data, SCEDA_delete_fun delete_priority, 
-		     SCEDA_compare_fun compare_priority) {
+		     SCEDA_delete_fun delete_value, SCEDA_delete_fun delete_key, 
+		     SCEDA_compare_fun compare_key) {
   heap->min = NULL;
   heap->size = 0;
-  heap->delete_data = delete_data;
-  heap->delete_priority = delete_priority;
-  heap->compare_priority = compare_priority;
+  heap->delete_value = delete_value;
+  heap->delete_key = delete_key;
+  heap->compare_key = compare_key;
 }
 
-SCEDA_Heap *SCEDA_heap_create(SCEDA_delete_fun delete_data, SCEDA_delete_fun delete_priority, 
-			      SCEDA_compare_fun compare_priority) {
+SCEDA_Heap *SCEDA_heap_create(SCEDA_delete_fun delete_value, SCEDA_delete_fun delete_key, 
+			      SCEDA_compare_fun compare_key) {
   SCEDA_Heap *heap = (SCEDA_Heap *)safe_malloc(sizeof(SCEDA_Heap));
-  SCEDA_heap_init(heap, delete_data, delete_priority, compare_priority);
+  SCEDA_heap_init(heap, delete_value, delete_key, compare_key);
   return heap;
 }
 
@@ -102,11 +102,11 @@ static void SCEDA_heap_cleanup_aux(SCEDA_Heap *heap, SCEDA_HeapElt *elt) {
     remove_child(elt, child);
     SCEDA_heap_cleanup_aux(heap, child);
   }
-  if(heap->delete_data != NULL) {
-    heap->delete_data(heap_elt_data(elt));
+  if(heap->delete_value != NULL) {
+    heap->delete_value(heap_elt_value(elt));
   }
-  if(heap->delete_priority != NULL) {
-    heap->delete_priority(heap_elt_priority(elt));
+  if(heap->delete_key != NULL) {
+    heap->delete_key(heap_elt_key(elt));
   }
   free(elt);
 }
@@ -126,11 +126,11 @@ void SCEDA_heap_delete(SCEDA_Heap *heap) {
 }
 
 void SCEDA_heap_clear(SCEDA_Heap *heap) {
-  SCEDA_delete_fun delete_data = heap->delete_data;
-  SCEDA_delete_fun delete_priority = heap->delete_priority;
-  SCEDA_compare_fun compare_priority = heap->compare_priority;
+  SCEDA_delete_fun delete_value = heap->delete_value;
+  SCEDA_delete_fun delete_key = heap->delete_key;
+  SCEDA_compare_fun compare_key = heap->compare_key;
   SCEDA_heap_cleanup(heap);
-  SCEDA_heap_init(heap, delete_data, delete_priority, compare_priority);
+  SCEDA_heap_init(heap, delete_value, delete_key, compare_key);
 }
 
 static void SCEDA_heap_insert_elt(SCEDA_Heap *heap, SCEDA_HeapElt *elt) {
@@ -148,10 +148,10 @@ static void SCEDA_heap_insert_elt(SCEDA_Heap *heap, SCEDA_HeapElt *elt) {
   heap->size++;
 }
 
-SCEDA_HeapElt *SCEDA_heap_insert(SCEDA_Heap *heap, const void *data, const void *priority) {
+SCEDA_HeapElt *SCEDA_heap_insert(SCEDA_Heap *heap, const void *value, const void *key) {
   SCEDA_HeapElt *elt = (SCEDA_HeapElt *)safe_malloc(sizeof(SCEDA_HeapElt));
-  elt->data = (void *)data;
-  elt->priority = (void *)priority;
+  elt->value = (void *)value;
+  elt->key = (void *)key;
 
   SCEDA_heap_insert_elt(heap, elt);
 
@@ -159,7 +159,7 @@ SCEDA_HeapElt *SCEDA_heap_insert(SCEDA_Heap *heap, const void *data, const void 
 }
 
 SCEDA_Heap *SCEDA_heap_union(SCEDA_Heap *heap1, SCEDA_Heap *heap2) {
-  SCEDA_Heap *heap = SCEDA_heap_create(heap1->delete_data, heap1->delete_priority, heap1->compare_priority);
+  SCEDA_Heap *heap = SCEDA_heap_create(heap1->delete_value, heap1->delete_key, heap1->compare_key);
 
   heap->size = heap1->size + heap2->size;
 
@@ -177,8 +177,8 @@ SCEDA_Heap *SCEDA_heap_union(SCEDA_Heap *heap1, SCEDA_Heap *heap2) {
     }
   }
 
-  SCEDA_heap_init(heap1, heap->delete_data, heap->delete_priority, heap->compare_priority);
-  SCEDA_heap_init(heap2, heap->delete_data, heap->delete_priority, heap->compare_priority);
+  SCEDA_heap_init(heap1, heap->delete_value, heap->delete_key, heap->compare_key);
+  SCEDA_heap_init(heap2, heap->delete_value, heap->delete_key, heap->compare_key);
 
   return heap;
 }
@@ -258,13 +258,13 @@ static SCEDA_HeapElt *SCEDA_heap_extract_elt(SCEDA_Heap *heap) {
   return z;
 }
 
-int SCEDA_heap_extract(SCEDA_Heap *heap, void **data, void **priority) {
+int SCEDA_heap_extract(SCEDA_Heap *heap, void **value, void **key) {
   if(SCEDA_heap_is_empty(heap)) {
     return -1;
   }
   SCEDA_HeapElt *elt = SCEDA_heap_extract_elt(heap);
-  *data = heap_elt_data(elt);
-  *priority = heap_elt_priority(elt);
+  *value = heap_elt_value(elt);
+  *key = heap_elt_key(elt);
   free(elt);
   return 0;
 }
@@ -297,10 +297,10 @@ static SCEDA_HeapElt *SCEDA_heap_remove_elt(SCEDA_Heap *heap, SCEDA_HeapElt *x) 
   return SCEDA_heap_extract_elt(heap);
 }
 
-int SCEDA_heap_remove(SCEDA_Heap *heap, SCEDA_HeapElt *x, void **data, void **priority) {
+int SCEDA_heap_remove(SCEDA_Heap *heap, SCEDA_HeapElt *x, void **value, void **key) {
   SCEDA_heap_remove_elt(heap, x);
-  *data = heap_elt_data(x);
-  *priority = heap_elt_priority(x);
+  *value = heap_elt_value(x);
+  *key = heap_elt_key(x);
   free(x);
   return 0;
 }
@@ -321,24 +321,24 @@ void SCEDA_heap_increase_key(SCEDA_Heap *heap, SCEDA_HeapElt *x) {
   SCEDA_heap_insert_elt(heap, x);
 }
 
-void *SCEDA_heap_change_key(SCEDA_Heap *heap, SCEDA_HeapElt *x, const void *priority) {
-  void *old_priority = heap_elt_priority(x);
-  x->priority = (void *)priority;
+void *SCEDA_heap_change_key(SCEDA_Heap *heap, SCEDA_HeapElt *x, const void *key) {
+  void *old_key = heap_elt_key(x);
+  x->key = (void *)key;
 
-  if(heap->compare_priority(priority, old_priority) <= 0) {
+  if(heap->compare_key(key, old_key) <= 0) {
     SCEDA_heap_decrease_key(heap, x);
   } else {
     SCEDA_heap_increase_key(heap, x);
   }
 
-  return old_priority;
+  return old_key;
 }
 
-int SCEDA_heap_min(SCEDA_Heap *heap, void **data, void **priority) {
+int SCEDA_heap_min(SCEDA_Heap *heap, void **value, void **key) {
   if(SCEDA_heap_is_empty(heap)) {
     return -1;
   }
-  *data = heap_elt_data(heap->min);
-  *priority = heap_elt_priority(heap->min);
+  *value = heap_elt_value(heap->min);
+  *key = heap_elt_key(heap->min);
   return 0;
 }
