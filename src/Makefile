@@ -59,7 +59,6 @@ INSTALLH+=graph_path.h
 INSTALLH+=graph_negcycle.h
 INSTALLH+=graph_scc.h
 INSTALLH+=graph_mrc.h
-INSTALLH+=graph_dist.h
 INSTALLH+=graph_flow.h
 # heaps
 INSTALLH+=pqueue.h
