@@ -22,7 +22,7 @@
 #include "queue.h"
 
 SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t,
-				    SCEDA_int_dist_fun capacity, void *c_ctxt) {
+				    SCEDA_int_edge_fun capacity, void *c_ctxt) {
   if(s == t) {
     return NULL;
   }
@@ -193,8 +193,8 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
 }
 
 static int SCEDA_augment_flow_along_neg_cycle(SCEDA_Graph *g, 
-					      SCEDA_int_dist_fun capacity, void *cap_ctxt, 
-					      SCEDA_int_dist_fun cost, void *cost_ctxt, 
+					      SCEDA_int_edge_fun capacity, void *cap_ctxt, 
+					      SCEDA_int_edge_fun cost, void *cost_ctxt, 
 					      SCEDA_HashMap *flow) {
   int n = SCEDA_graph_vcount(g);
 
@@ -369,8 +369,8 @@ static int SCEDA_augment_flow_along_neg_cycle(SCEDA_Graph *g,
 }
 
 SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, 
-					     SCEDA_int_dist_fun capacity, void *cap_ctxt, 
-					     SCEDA_int_dist_fun cost, void *cost_ctxt) {
+					     SCEDA_int_edge_fun capacity, void *cap_ctxt, 
+					     SCEDA_int_edge_fun cost, void *cost_ctxt) {
   if(s == t) {
     return NULL;
   }

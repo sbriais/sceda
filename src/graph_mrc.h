@@ -22,7 +22,6 @@
     \brief minimum cost-to-time ratio cycle */
 
 #include "graph.h"
-#include "graph_dist.h"
 #include "list.h"
 
 /** Compute the minimum ratio cycle of the given graph, ie compute the
@@ -39,8 +38,8 @@
 
     @return 0 in case of success, -1 otherwise (and then the list is not allocated) */
 int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g, 
-				    SCEDA_int_dist_fun cost, void *c_ctxt, 
-				    SCEDA_int_dist_fun time, void *t_ctxt, 
+				    SCEDA_int_edge_fun cost, void *c_ctxt, 
+				    SCEDA_int_edge_fun time, void *t_ctxt, 
 				    int *ratio_num, int *ratio_den,
 				    SCEDA_List **min_cycle);
 

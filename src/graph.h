@@ -86,6 +86,10 @@ typedef struct {
   SCEDA_delete_fun delete;
 } SCEDA_Edge;
 
+/** Type of closures that take an edge and return a "cost" */
+typedef int (*SCEDA_int_edge_fun)(SCEDA_Edge *e, void *ctxt);
+typedef long double (*SCEDA_long_double_edge_fun)(SCEDA_Edge *e, void *ctxt);
+
 /** Create an empty set of edges.
 
     Edges stored in the set won't be deallocated by hashset_delete.

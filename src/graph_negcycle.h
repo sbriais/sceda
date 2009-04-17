@@ -22,12 +22,11 @@
     \brief shortest path algorithms */
 
 #include "graph.h"
-#include "graph_dist.h"
 #include "list.h"
 
-SCEDA_List *SCEDA_graph_neg_cycle_int(SCEDA_Graph *g, SCEDA_int_dist_fun cost, void *c_ctxt);
+SCEDA_List *SCEDA_graph_neg_cycle_int(SCEDA_Graph *g, SCEDA_int_edge_fun cost, void *c_ctxt);
 
-SCEDA_List *SCEDA_graph_neg_cycle_long_double(SCEDA_Graph *g, SCEDA_long_double_dist_fun cost, void *c_ctxt);
+SCEDA_List *SCEDA_graph_neg_cycle_long_double(SCEDA_Graph *g, SCEDA_long_double_edge_fun cost, void *c_ctxt);
 
 #endif
 

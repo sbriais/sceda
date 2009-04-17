@@ -31,12 +31,10 @@
 #include <stdio.h>
 #endif
 
-#include "graph_dist.h"
-
 typedef struct {
-  SCEDA_int_dist_fun weight;
+  SCEDA_int_edge_fun weight;
   void *w_ctxt;
-  SCEDA_int_dist_fun time;
+  SCEDA_int_edge_fun time;
   void *t_ctxt;
   long double lambda;
 } MRCcontext;
@@ -107,8 +105,8 @@ static inline int small_enough(long double *min, long double *max, long double *
 }
 
 int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g, 
-				    SCEDA_int_dist_fun weight, void *w_ctxt, 
-				    SCEDA_int_dist_fun time, void *t_ctxt, 
+				    SCEDA_int_edge_fun weight, void *w_ctxt, 
+				    SCEDA_int_edge_fun time, void *t_ctxt, 
 				    int *ratio_num, int *ratio_den,
 				    SCEDA_List **min_cycle) {
   if(SCEDA_graph_is_acyclic(g)) {
@@ -162,7 +160,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     fprintf(stdout,"checking for negative time cycles\n");
 #endif
 
-    SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_dist_fun)mrc_cost, &ctxt);
+    SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_edge_fun)mrc_cost, &ctxt);
 
     if(!SCEDA_list_is_empty(cycle)) {
       ret_code = -1;
@@ -209,7 +207,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
       fprintf(stdout,"\n");
 #endif
       
-      SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_dist_fun)mrc_cost, &ctxt);
+      SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_edge_fun)mrc_cost, &ctxt);
       
       if(!SCEDA_list_is_empty(cycle)) {
 	lambda_max = ctxt.lambda;
@@ -235,7 +233,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
       fprintf(stdout,"\n");
 #endif
 
-      *min_cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_dist_fun)mrc_cost, &ctxt);
+      *min_cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_edge_fun)mrc_cost, &ctxt);
 
       *ratio_num = 0;
       *ratio_den = 0;

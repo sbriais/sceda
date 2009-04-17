@@ -32,7 +32,6 @@ SRCH+=graph_path.h
 SRCH+=graph_negcycle.h
 SRCH+=graph_scc.h 
 SRCH+=graph_mrc.h 
-SRCH+=graph_dist.h
 SRCH+=graph_flow.h
 # heaps
 SRCH+=pqueue.h

@@ -32,7 +32,7 @@
 #define SCEDA_DIST_TYPE int
 #include <limits.h>
 #define SCEDA_DIST_INFTY INT_MAX
-#define SCEDA_dist_fun SCEDA_int_dist_fun
+#define SCEDA_dist_fun SCEDA_int_edge_fun
 
 #define INFINITY SCEDA_DIST_INFTY
 
