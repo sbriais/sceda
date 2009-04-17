@@ -21,7 +21,8 @@
 #include "boxed.h"
 #include "queue.h"
 
-SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, int (*capacity)(SCEDA_Edge *e, void *ctxt), void *c_ctxt) {
+SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t,
+				    SCEDA_int_dist_fun capacity, void *c_ctxt) {
   if(s == t) {
     return NULL;
   }
@@ -191,9 +192,10 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
   return flow;
 }
 
-#include <stdio.h>
-
-static int SCEDA_augment_flow_along_neg_cycle(SCEDA_Graph *g, int (*capacity)(SCEDA_Edge *e, void *ctxt), void *cap_ctxt, int (*cost)(SCEDA_Edge *e, void *ctxt), void *cost_ctxt, SCEDA_HashMap *flow) {
+static int SCEDA_augment_flow_along_neg_cycle(SCEDA_Graph *g, 
+					      SCEDA_int_dist_fun capacity, void *cap_ctxt, 
+					      SCEDA_int_dist_fun cost, void *cost_ctxt, 
+					      SCEDA_HashMap *flow) {
   int n = SCEDA_graph_vcount(g);
 
   SCEDA_HashMap *incoming_edges = SCEDA_vertex_map_create(NULL);
@@ -366,7 +368,9 @@ static int SCEDA_augment_flow_along_neg_cycle(SCEDA_Graph *g, int (*capacity)(SC
   return TRUE;
 }
 
-SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, int (*capacity)(SCEDA_Edge *e, void *ctxt), void *cap_ctxt, int (*cost)(SCEDA_Edge *e, void *ctxt), void *cost_ctxt) {
+SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, 
+					     SCEDA_int_dist_fun capacity, void *cap_ctxt, 
+					     SCEDA_int_dist_fun cost, void *cost_ctxt) {
   if(s == t) {
     return NULL;
   }

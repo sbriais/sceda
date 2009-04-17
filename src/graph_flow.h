@@ -20,10 +20,11 @@
 #define __SCEDA_GRAPH_FLOW_H
 
 #include "graph.h"
+#include "graph_dist.h"
 #include "hashmap.h"
 
-SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, int (*capacity)(SCEDA_Edge *e, void *ctxt), void *c_ctxt);
+SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, SCEDA_int_dist_fun capacity, void *c_ctxt);
 
-SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, int (*capacity)(SCEDA_Edge *e, void *ctxt), void *cap_ctxt, int (*cost)(SCEDA_Edge *e, void *ctxt), void *cost_ctxt);
+SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, SCEDA_int_dist_fun capacity, void *cap_ctxt, SCEDA_int_dist_fun cost, void *cost_ctxt);
 
 #endif

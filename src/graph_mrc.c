@@ -34,9 +34,9 @@
 #include "graph_dist.h"
 
 typedef struct {
-  int (*weight)(SCEDA_Edge *e, void *ctxt);
+  SCEDA_int_dist_fun weight;
   void *w_ctxt;
-  int (*time)(SCEDA_Edge *e, void *ctxt);
+  SCEDA_int_dist_fun time;
   void *t_ctxt;
   long double lambda;
 } MRCcontext;
@@ -107,8 +107,8 @@ static inline int small_enough(long double *min, long double *max, long double *
 }
 
 int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g, 
-				    int (*weight)(SCEDA_Edge *e, void *ctxt), void *w_ctxt, 
-				    int (*time)(SCEDA_Edge *e, void *ctxt), void *t_ctxt, 
+				    SCEDA_int_dist_fun weight, void *w_ctxt, 
+				    SCEDA_int_dist_fun time, void *t_ctxt, 
 				    int *ratio_num, int *ratio_den,
 				    SCEDA_List **min_cycle) {
   if(SCEDA_graph_is_acyclic(g)) {
