@@ -32,29 +32,36 @@ typedef struct _SCEDA_HeapElt {
   int degree;
   int marked;
   void *data;
+  void *priority;
 } SCEDA_HeapElt;
 
 typedef struct {
   SCEDA_HeapElt *min;
   int size;
-  SCEDA_delete_fun delete;
-  SCEDA_compare_fun compare;
+  SCEDA_delete_fun delete_data;
+  SCEDA_delete_fun delete_priority;
+  SCEDA_compare_fun compare_priority;
 } SCEDA_Heap;
 
 /** Initialise a Fibonacci heap.
 
     @param[in] heap = heap to initialise
-    @param[in] delete = delete function
-    @param[in] compare = compare function */
-void SCEDA_heap_init(SCEDA_Heap *heap, SCEDA_delete_fun delete, SCEDA_compare_fun compare);
+    @param[in] delete_data = delete data function
+    @param[in] delete_priority = delete priority function
+    @param[in] compare_priority = compare priority function */
+void SCEDA_heap_init(SCEDA_Heap *heap, 
+		     SCEDA_delete_fun delete_data, SCEDA_delete_fun delete_priority, 
+		     SCEDA_compare_fun compare_priority);
 
 /** Create a Fibonacci heap.
 
-    @param[in] delete = delete function
-    @param[in] compare = compare function 
+    @param[in] delete_data = delete data function
+    @param[in] delete_priority = delete priority function
+    @param[in] compare_priority = compare priority function 
 
     @return a Fibonacci heap */
-SCEDA_Heap *SCEDA_heap_create(SCEDA_delete_fun delete, SCEDA_compare_fun compare);
+SCEDA_Heap *SCEDA_heap_create(SCEDA_delete_fun delete_data, SCEDA_delete_fun delete_priority, 
+			      SCEDA_compare_fun compare_priority);
 
 /** Clean up a Fibonacci heap.
 
@@ -77,7 +84,7 @@ void SCEDA_heap_clear(SCEDA_Heap *heap);
     @param[in] data = data to insert
 
     @return a heap element (for direct access) */
-SCEDA_HeapElt *SCEDA_heap_insert(SCEDA_Heap *heap, const void *data);
+SCEDA_HeapElt *SCEDA_heap_insert(SCEDA_Heap *heap, const void *data, const void *priority);
 
 /** Merge two Fibonacci heap in time complexity O(1).
 
@@ -91,10 +98,11 @@ SCEDA_Heap *SCEDA_heap_union(SCEDA_Heap *heap1, SCEDA_Heap *heap2);
 /** Extract the minimum element of a Fibonacci heap in amortized time O(log|heap|).
 
     @param[in] heap = heap
-    @param[out] data = minimum element extracted
+    @param[out] data = data of extracted element
+    @param[out] priority = priority of extracted element 
 
     @return 0 in case of success, -1 otherwise */
-int SCEDA_heap_extract(SCEDA_Heap *heap, void **data);
+int SCEDA_heap_extract(SCEDA_Heap *heap, void **data, void **priority);
 
 /** Reflect the decrease of the key of a heap element, in amortized
     time O(1).
@@ -110,22 +118,24 @@ void SCEDA_heap_decrease_key(SCEDA_Heap *heap, SCEDA_HeapElt *x);
     @param[in] x = heap element whose key has increased */
 void SCEDA_heap_increase_key(SCEDA_Heap *heap, SCEDA_HeapElt *x);
 
-/** Modify the key of a heap element.
+/** Modify the priority of a heap element.
 
     @param[in] heap = heap
     @param[in] elt = heap element
-    @param[in] data = new data 
+    @param[in] priority = new data 
 
-    @return the old data */
-void *SCEDA_heap_change_key(SCEDA_Heap *heap, SCEDA_HeapElt *elt, const void *data);
+    @return the old priority */
+void *SCEDA_heap_change_key(SCEDA_Heap *heap, SCEDA_HeapElt *elt, const void *priority);
 
 /** Remove an element from a Fibonacci heap, in amortized time O(log|heap|).
 
     @param[in] heap = heap
     @param[in] elt = heap element to remove
+    @param[out] data = data of removed element
+    @param[out] priority = priority of removed element
 
-    @return the data associated to the element */
-void *SCEDA_heap_remove(SCEDA_Heap *heap, SCEDA_HeapElt *elt);
+    @return 0 in case of success, -1 otherwise */
+int SCEDA_heap_remove(SCEDA_Heap *heap, SCEDA_HeapElt *elt, void **data, void **priority);
 
 /** Return the size of a heap.
 
@@ -148,17 +158,10 @@ void *SCEDA_heap_remove(SCEDA_Heap *heap, SCEDA_HeapElt *elt);
 /** Return the minimum element of a heap in time complexity O(1).
 
     @param[in] heap = heap
-    @param[out] data = minimum element of the heap (filled by the function)
+    @param[out] data = data of minimum element
+    @param[out] priority = priority of minimum element
 
     @return 0 in case of success, -1 otherwise */
-int SCEDA_heap_min(SCEDA_Heap *heap, void **data);
-
-/** Access the data field of a heap element.
-
-    @param type = type of the data field (for cast)
-    @param[in] elt = heap element
-
-    @return the data field of the element */
-#define SCEDA_heap_data(type$, elt$) ((type$)((elt$)->data))
+int SCEDA_heap_min(SCEDA_Heap *heap, void **data, void **priority);
 
 #endif

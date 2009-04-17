@@ -152,8 +152,8 @@
     algorithm, negative values are truncated to zero.
 
     Return a map that gives for each vertex a PathInfo structure,
-    which indicates the previous vertex in the shortest path and the
-    cost of the shortest path.
+    which indicates the incoming edge in the shortest path and the
+    cost of the shortest path (from the source).
 
     \code
     HashMap *graph_shortest_path_bellman_ford(Graph *g, Vertex *from, int_edge_fun dist, void *dist_ctxt, int *has_neg_cycle);
@@ -231,7 +231,7 @@
 
     \include "graph_scc/main.c"
 
-    \subsection graphalgs_paths Shortest Paths (Bellman-Ford)
+    \subsection graphalgs_paths Shortest Paths (Bellman-Ford & Dijkstra)
 
     \include "graph_path/main.c"
 

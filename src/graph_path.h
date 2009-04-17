@@ -26,9 +26,7 @@
 
 /** PathInfo */
 typedef struct {
-  /** identity of the vertex */
-  SCEDA_Vertex *self;
-  /** incoming edge that leads to the vertex */
+  /** incoming edge in the path to the vertex */
   SCEDA_Edge *in_edge;
   /** distance from the source of the path: it is infinite (ie there
       is no path) when in_edge = NULL and distance != 0 */

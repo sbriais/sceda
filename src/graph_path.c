@@ -38,7 +38,6 @@
 
 static SCEDA_PathInfo *SCEDA_path_info_create(SCEDA_Vertex *source, SCEDA_Vertex *u) {
   SCEDA_PathInfo *info = (SCEDA_PathInfo *)safe_malloc(sizeof(SCEDA_PathInfo));
-  info->self = u;
   info->in_edge = NULL;
   if(u == source) {
     info->distance = 0;
@@ -165,7 +164,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex 
 SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt) {
   SCEDA_HashMap *paths = SCEDA_vertex_map_create((SCEDA_delete_fun)SCEDA_path_info_delete);
   SCEDA_HashMap *elts = SCEDA_vertex_map_create(NULL);
-  SCEDA_Heap *heap = SCEDA_heap_create(NULL, (SCEDA_compare_fun)SCEDA_path_info_compare);
+  SCEDA_Heap *heap = SCEDA_heap_create(NULL, NULL, (SCEDA_compare_fun)SCEDA_path_info_compare);
 
   SCEDA_VerticesIterator g_vertice;
   SCEDA_vertices_iterator_init(g, &g_vertice);
@@ -173,15 +172,15 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
     SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&g_vertice);
     SCEDA_PathInfo *info = SCEDA_path_info_create(from, v);
     SCEDA_hashmap_put(paths, v, info, NULL);
-    SCEDA_HeapElt *elt = SCEDA_heap_insert(heap, info);
+    SCEDA_HeapElt *elt = SCEDA_heap_insert(heap, v, info);
     SCEDA_hashmap_put(elts, v, elt, NULL);
   }
   SCEDA_vertices_iterator_cleanup(&g_vertice);
 
   while(!SCEDA_heap_is_empty(heap)) {
+    SCEDA_Vertex *u;
     SCEDA_PathInfo *info_u;
-    SCEDA_heap_extract(heap, (void **)&info_u);
-    SCEDA_Vertex *u = info_u->self;
+    SCEDA_heap_extract(heap, (void **)&u, (void **)&info_u);
 
     SCEDA_OutEdgesIterator out_edges;
     SCEDA_out_edges_iterator_init(u, &out_edges);

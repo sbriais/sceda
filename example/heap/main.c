@@ -5,26 +5,27 @@
 #include <SCEDA/heap.h>
 
 typedef struct {
-  char *name;
-  int priority;
-} Task;
+  int value;
+} Integer;
 
-Task *new_Task(const char *name, int prio) {
-  Task *x = malloc(sizeof(Task));
-  x->name = strdup(name);
-  x->priority = prio;
+Integer *new_Integer(int n) {
+  Integer *x = malloc(sizeof(Integer));
+  x->value = n;
   return x;
 }
 
-void delete_Task(Task *x) {
-  free(x->name);
+void delete_Integer(Integer *x) {
   free(x);
 }
 
-int compare_Task(Task *x, Task *y) {
-  if(x->priority < y->priority) {
+void delete_string(char *s) {
+  free(s);
+}
+
+int compare_Integer(Integer *x, Integer *y) {
+  if(x->value < y->value) {
     return -1;
-  } else if(x->priority == y->priority) {
+  } else if(x->value == y->value) {
     return 0;
   } else {
     return 1;
@@ -33,18 +34,20 @@ int compare_Task(Task *x, Task *y) {
 
 int main(int argc, char *argv[]) {
   // create a priority queue
-  SCEDA_Heap *heap = SCEDA_heap_create((SCEDA_delete_fun)delete_Task, (SCEDA_compare_fun)compare_Task);
+  SCEDA_Heap *heap = SCEDA_heap_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_Integer,(SCEDA_compare_fun)compare_Integer);
       
-  SCEDA_heap_insert(heap, new_Task("free", 4));
-  SCEDA_heap_insert(heap, new_Task("cleanup", 3));
-  SCEDA_heap_insert(heap, new_Task("alloc",1));
-  SCEDA_heap_insert(heap, new_Task("init", 2));
+  SCEDA_heap_insert(heap, strdup("free"), new_Integer(4));
+  SCEDA_heap_insert(heap, strdup("cleanup"), new_Integer(3));
+  SCEDA_heap_insert(heap, strdup("alloc"), new_Integer(1));
+  SCEDA_heap_insert(heap, strdup("init"), new_Integer(2));
 
   while(!SCEDA_heap_is_empty(heap)) {
-    Task *t;
-    SCEDA_heap_extract(heap, (void **)&t);
-    fprintf(stdout,"%s of priority %d\n", t->name, t->priority);
-    delete_Task(t);
+    char *name;
+    Integer *priority;
+    SCEDA_heap_extract(heap, (void **)&name, (void **)&priority);
+    fprintf(stdout,"%s of priority %d\n", name, priority->value);
+    delete_string(name);
+    delete_Integer(priority);
   }
 
   // delete the priority queue
