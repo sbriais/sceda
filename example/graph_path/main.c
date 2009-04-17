@@ -25,7 +25,7 @@ void delete_string(char *s) {
   free(s);
 }
 
-SCEDA_DIST_TYPE get_distance(SCEDA_Edge *e, void *ctxt) {
+int get_distance(SCEDA_Edge *e, void *ctxt) {
   return SCEDA_edge_get_data(Integer *,e)->value;
 }
 
@@ -47,11 +47,11 @@ int main(int argc, char *argv[]) {
 
   SCEDA_Vertex *origin = vA;
   
-  SCEDA_Vertex *cycle = NULL;
+  int has_neg_cycle;
 
-  SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_bellman_ford(g, origin, get_distance, NULL, &cycle);
+  SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_bellman_ford(g, origin, get_distance, NULL, &has_neg_cycle);
 
-  if(cycle == NULL) {
+  if(!has_neg_cycle) {
     fprintf(stdout,"g has no cycle of negative weight.\n");
     
     SCEDA_HashMapIterator paths;
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
       SCEDA_Vertex *u;
       SCEDA_PathInfo *pu = SCEDA_hashmap_iterator_next(&paths, &u);
       if(pu->in_edge != NULL) {
-	fprintf(stdout,"distance to %s = %Lf.\n", SCEDA_vertex_get_data(char *, u), pu->distance);
+	fprintf(stdout,"distance to %s = %d.\n", SCEDA_vertex_get_data(char *, u), pu->distance);
       } else if(pu->self == origin) {
       } else {
 	fprintf(stdout,"%s is not reachable.\n", SCEDA_vertex_get_data(char *, u));
@@ -70,7 +70,6 @@ int main(int argc, char *argv[]) {
 
   } else {
     fprintf(stdout,"a cycle of negative weight has been detected!\n");
-    fprintf(stdout,"%s\n",SCEDA_vertex_get_data(char *, cycle));
   }
 
   SCEDA_hashmap_delete(shortest_paths);

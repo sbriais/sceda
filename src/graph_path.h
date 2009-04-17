@@ -32,7 +32,7 @@ typedef struct {
   SCEDA_Edge *in_edge;
   /** distance from the source of the path: it is infinite (ie there
       is no path) when in_edge = NULL and distance != 0 */
-  SCEDA_DIST_TYPE distance;
+  int distance;
 } SCEDA_PathInfo;
 
 /** Compute the shortest paths in a DAG from a unique source.
@@ -45,7 +45,7 @@ typedef struct {
     @return map of all shortest paths from source vertex 
 
     A topological order must have been computed in g. */
-SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt);
+SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_int_dist_fun dist, void *ctxt);
 
 /** Compute the shortest paths in a DAG to a unique target.
 
@@ -57,7 +57,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Verte
     @return map of all shortest paths to target vertex 
 
     A topological order must have been computed in g. */
-SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex *to, SCEDA_dist_fun dist, void *ctxt);
+SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex *to, SCEDA_int_dist_fun dist, void *ctxt);
 
 /** Compute the shortest paths from a unique source using Dijkstra
     algorithm.
@@ -68,7 +68,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex 
     @param[in] ctxt = distance function context
 
     @return map of all shortest paths from source vertex  */
-SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt);    
+SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_int_dist_fun dist, void *ctxt);    
 
 /** Compute the shortest paths from a unique source using Bellman-Ford
     algorithm.
@@ -77,12 +77,10 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *
     @param[in] from = source of all the paths
     @param[in] dist = distance function 
     @param[in] ctxt = distance function context
-    @param[out] neg_cycle = if not NULL, then it will point to a vertex
-    belonging to a negative weight cycle accessible from source vertex
-    (if there is one)
+    @param[out] has_neg_cycle = set to TRUE if a negative cycle has been detected, FALSE otherwise
 
     @return map of all shortest paths from source vertex  */
-SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_dist_fun dist, void *ctxt, SCEDA_Vertex **neg_cycle);    
+SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_int_dist_fun dist, void *ctxt, int *has_neg_cycle);    
 
 #endif
 

@@ -307,6 +307,7 @@ static int SCEDA_augment_flow_along_neg_cycle(SCEDA_Graph *g, int (*capacity)(SC
     do {
       safe_call(SCEDA_hashset_add(cycle_elts, cycle));
       SCEDA_Edge *e = SCEDA_hashmap_get(incoming_edges, cycle);
+      safe_ptr(e);
       boxed(int) rev_e = SCEDA_hashmap_get(reversed, cycle);
       if(boxed_get(rev_e)) {
 	cycle = SCEDA_edge_target(e);

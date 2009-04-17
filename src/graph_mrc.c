@@ -20,7 +20,7 @@
 #include "util.h"
 #include "graph_dag.h"
 #include "graph_mrc.h"
-#include "graph_path.h"
+#include "graph_negcycle.h"
 
 #include <stdlib.h>
 
@@ -31,41 +31,24 @@
 #include <stdio.h>
 #endif
 
-#define Rational long double
-
-#ifndef Rational
-typedef struct {
-  int num;
-  int den;
-} Rational;
-#endif
+#include "graph_dist.h"
 
 typedef struct {
-  SCEDA_Vertex *source;
   int (*weight)(SCEDA_Edge *e, void *ctxt);
   void *w_ctxt;
   int (*time)(SCEDA_Edge *e, void *ctxt);
   void *t_ctxt;
-  Rational lambda;
+  long double lambda;
 } MRCcontext;
 
-static SCEDA_DIST_TYPE mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
+static long double mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
   int w, t;
 
-  if(SCEDA_edge_source(e) == ctxt->source) {
-    w = 0;
-    t = 0;
-  } else {
-    w = ctxt->weight(e, ctxt->w_ctxt);
-    t = ctxt->time(e, ctxt->t_ctxt);
-  }
+  w = ctxt->weight(e, ctxt->w_ctxt);
+  t = ctxt->time(e, ctxt->t_ctxt);
 
-  SCEDA_DIST_TYPE res;
-#ifndef Rational
-  res = ctxt->lambda.den * w - ctxt->lambda.num * t;
-#else
+  long double res;
   res = w - ctxt->lambda * t;
-#endif
   return res;
 }
 
@@ -73,111 +56,9 @@ static int mrc_unit_cost(SCEDA_Edge *e, void *ctxt) {
   return 1;
 }
 
-static inline int max(int a, int b) {
-  if(a < b) {
-    return b;
-  } else {
-    return a;
-  }
-}
-
-#ifndef Rational
-#ifdef DEBUG
-static void print_rational(FILE *stream, Rational *x) {
-  fprintf(stream,"%d / %d", x->num, x->den);
-}
-#endif
-
-static int pgcd(int a, int b) {
-  if(b == 0) {
-    return a;
-  } else {
-    return pgcd(b, a % b);
-  }
-}
-
-static int rational_norm(Rational *x) {
-#ifdef DEBUG
-  fprintf(stdout,"normalize ");
-  print_rational(stdout,x);
-#endif
-  int eps;
-  if(((x->den < 0) && (x->num > 0)) || ((x->den > 0) && (x->num < 0))) { 
-    eps = -1;
-  } else {
-    eps = 1;
-  }
-  if(x->den < 0) {
-    x->den = -x->den;
-  }
-  if(x->num < 0) {
-    x->num = -x->num;
-  }
-
-  int d = pgcd(x->num, x->den);
-  x->num = x->num / d;
-  x->den = x->den / d;
-
-  if(eps == -1) {
-    x->num = -x->num;
-  }
-#ifdef DEBUG
-  fprintf(stdout," -> ");
-  print_rational(stdout, x);
-  fprintf(stdout,"\n");
-#endif
-
-  if(x->den <= 0) {
-    return -1;
-  } else {
-    return 0;
-  }
-}
-
-static inline void rational_add(Rational *x, Rational *y, Rational *z) {
-  z->num = x->num * y->den + x->den * y->num;
-  z->den = x->den * y->den;
-}
-
-static inline void rational_div_n(int n, Rational *x) {
-  x->den = n*x->den;
-}
-
-static inline void rational_int(int n, Rational *x) {
-  x->num = n;
-  x->den = 1;
-}
-
-static inline void rational_inv_int(int n, Rational *x) {
-  if(n < 0) {
-    x->num = -1;
-    x->den = -n;
-  } else {
-    x->num = 1;
-    x->den = n;
-  }
-}
-
-static inline void rational_sub(Rational *x, Rational *y, Rational *z) {
-  z->num = x->num * y->den - x->den * y->num;
-  z->den = x->den * y->den;
-}
-
-static inline int rational_compare(Rational *x, Rational *y) {
-  int q1 = x->num * y->den;
-  int q2 = y->num * x->den;
-  if(q1 < q2) {
-    return -1;
-  } else if(q1 == q2) {
-    return 0;
-  } else {
-    return 1;
-  }
-}
-#else
 #ifdef DEBUG
 static void print_rational(FILE *stream, long double *x) {
-  fprintf(stream,"%g", *x);
+  fprintf(stream,"%Lf", *x);
 }
 #endif
 
@@ -214,10 +95,9 @@ static inline int rational_compare(long double *x, long double *y) {
     return 1;
   }
 }
-#endif
 
-static inline int small_enough(Rational *min, Rational *max, Rational *delta) {
-  Rational tmp;
+static inline int small_enough(long double *min, long double *max, long double *delta) {
+  long double tmp;
   rational_sub(max, min, &tmp);
   if(rational_compare(&tmp, delta) > 0) {
     return FALSE;
@@ -239,22 +119,6 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
 
   int ret_code = 0;
 
-  // add a source to the graph
-  SCEDA_List *added_edges = SCEDA_list_create(NULL);
-  SCEDA_Vertex *source = SCEDA_graph_add_vertex(g, NULL);
-  {
-    SCEDA_VerticesIterator vertices;
-    SCEDA_vertices_iterator_init(g, &vertices);
-    while(SCEDA_vertices_iterator_has_next(&vertices)) {
-      SCEDA_Vertex *u = SCEDA_vertices_iterator_next(&vertices);
-      if(u != source) {
-	SCEDA_Edge *e = SCEDA_graph_add_edge(g, source, u, NULL);
-	safe_call(SCEDA_list_add(added_edges, e));
-      }
-    }
-    SCEDA_vertices_iterator_cleanup(&vertices);
-  }
-
   int gamma = 0;
   int tau = 0;
   
@@ -264,21 +128,19 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     SCEDA_edges_iterator_init(g, &edges);
     while(SCEDA_edges_iterator_has_next(&edges)) {
       SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges);
-      if(SCEDA_edge_source(e) != source) {
-	int w, t;
-	w = abs(weight(e, w_ctxt));
-	t = abs(time(e, t_ctxt));
-	if(first) {
-	  gamma = w;
+      int w, t;
+      w = abs(weight(e, w_ctxt));
+      t = abs(time(e, t_ctxt));
+      if(first) {
+	gamma = w;
+	tau = t;
+	first = FALSE;
+      } else {
+	if(t > tau) {
 	  tau = t;
-	  first = FALSE;
-	} else {
-	  if(t > tau) {
-	    tau = t;
-	  }
-	  if(w > gamma) {
-	    gamma = w;
-	  }
+	}
+	if(w > gamma) {
+	  gamma = w;
 	}
       }
     }
@@ -289,7 +151,6 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
 
   {
     MRCcontext ctxt;
-    ctxt.source = source;
     ctxt.weight = time;
     ctxt.w_ctxt = t_ctxt;
     ctxt.time = mrc_unit_cost;
@@ -297,32 +158,29 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     
     rational_inv_int(n, &(ctxt.lambda));
     
-    SCEDA_Vertex *cycle;
-
 #ifdef DEBUG
     fprintf(stdout,"checking for negative time cycles\n");
 #endif
 
-    SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_dist_fun)mrc_cost, &ctxt, &cycle);
-    SCEDA_hashmap_delete(paths);
+    SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_dist_fun)mrc_cost, &ctxt);
 
-    if(cycle != NULL) {
+    if(!SCEDA_list_is_empty(cycle)) {
       ret_code = -1;
     }
+    
+    SCEDA_list_delete(cycle);
   }
 
   if(ret_code == 0) {  
-    Rational lambda_min;
-    Rational lambda_max;
-    Rational delta;
+    long double lambda_min;
+    long double lambda_max;
+    long double delta;
     
     rational_int(-n*gamma, &lambda_min);
     rational_int(n*gamma, &lambda_max);
     rational_inv_int(n*n*tau*tau, &delta);
 
     MRCcontext ctxt;
-    SCEDA_Vertex *cycle;
-    ctxt.source = source;
     ctxt.weight = weight;
     ctxt.w_ctxt = w_ctxt;
     ctxt.time = time;
@@ -350,14 +208,16 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
       print_rational(stdout,&(ctxt.lambda));
       fprintf(stdout,"\n");
 #endif
-      SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_dist_fun)mrc_cost, &ctxt, &cycle);
-      SCEDA_hashmap_delete(paths);
       
-      if(cycle != NULL) {
+      SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_dist_fun)mrc_cost, &ctxt);
+      
+      if(!SCEDA_list_is_empty(cycle)) {
 	lambda_max = ctxt.lambda;
       } else {
 	lambda_min = ctxt.lambda;
       }
+
+      SCEDA_list_delete(cycle);
     }
 
     if(ret_code == 0) {
@@ -374,45 +234,21 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
       print_rational(stdout,&(ctxt.lambda));
       fprintf(stdout,"\n");
 #endif
-      SCEDA_HashMap *paths = SCEDA_graph_shortest_path_bellman_ford(g, source, (SCEDA_dist_fun)mrc_cost, &ctxt, &cycle);
-      
-      safe_ptr(cycle);
 
-      *min_cycle = SCEDA_list_create(NULL);
-      
+      *min_cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_dist_fun)mrc_cost, &ctxt);
+
       *ratio_num = 0;
       *ratio_den = 0;
-      SCEDA_Vertex *u = cycle;
-      do {
-	SCEDA_PathInfo *pi_u = SCEDA_hashmap_get(paths, u);
-	SCEDA_Edge *in = pi_u->in_edge;
-	safe_ptr(in);
-	safe_call(SCEDA_list_add(*min_cycle, in));
-	(*ratio_num) += weight(in, w_ctxt);
-	(*ratio_den) += time(in, t_ctxt);
-	u = SCEDA_edge_source(in);
-      } while(u != cycle);
-      
-      SCEDA_hashmap_delete(paths);
+      SCEDA_ListIterator cycle_elts;
+      SCEDA_list_iterator_init(*min_cycle, &cycle_elts);
+      while(SCEDA_list_iterator_has_next(&cycle_elts)) {
+	SCEDA_Edge *e = SCEDA_list_iterator_next(&cycle_elts);
+	(*ratio_num) += weight(e, w_ctxt);
+	(*ratio_den) += time(e, t_ctxt);
+      }
+      SCEDA_list_iterator_cleanup(&cycle_elts);
     }
   }
-
-  // restore the graph
-  {
-    SCEDA_ListIterator edges;
-    SCEDA_list_iterator_init(added_edges, &edges);
-    while(SCEDA_list_iterator_has_next(&edges)) {
-      SCEDA_Edge *e = SCEDA_list_iterator_next(&edges);
-      void *data;
-      safe_call(SCEDA_graph_remove_edge(g, e, &data));
-    }
-    SCEDA_list_iterator_cleanup(&edges);
-  }
-
-  SCEDA_list_delete(added_edges);  
-
-  void *data;
-  safe_call(SCEDA_graph_remove_vertex(g, source, &data));
 
   return ret_code;
 }
