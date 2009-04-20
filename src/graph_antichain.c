@@ -228,3 +228,13 @@ SCEDA_List *SCEDA_graph_maximum_antichain(SCEDA_Graph *g) {
   SCEDA_graph_delete(gf);
   return result;
 }
+
+int SCEDA_graph_width(SCEDA_Graph *g) {
+  SCEDA_HashMap *prev_in_chain;
+  SCEDA_HashMap *next_in_chain;
+  safe_call(SCEDA_graph_compute_topological_order(g));
+  int count = SCEDA_graph_minimum_chain_cover(g, &prev_in_chain, &next_in_chain);
+  SCEDA_hashmap_delete(prev_in_chain);
+  SCEDA_hashmap_delete(next_in_chain);
+  return count;
+}

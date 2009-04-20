@@ -45,4 +45,11 @@ int SCEDA_graph_minimum_chain_cover(SCEDA_Graph *gf, SCEDA_HashMap **prev_in_cha
     @return list of vertices in a maximum antichain */
 SCEDA_List *SCEDA_graph_maximum_antichain(SCEDA_Graph *g);
 
+/** Compute the width of the given DAG
+
+    @param[in] g = graph (must be a DAG)
+
+    @return the width of g */
+int SCEDA_graph_width(SCEDA_Graph *g);
+
 #endif
