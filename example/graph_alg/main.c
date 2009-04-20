@@ -5,6 +5,7 @@
 #include <SCEDA/graph.h>
 #include <SCEDA/graph_dag.h>
 #include <SCEDA/graph_antichain.h>
+#include <SCEDA/graph_traversal.h>
 
 typedef struct {
   int value;
@@ -73,6 +74,47 @@ int main(int argc, char *argv[]) {
       }
       SCEDA_vertices_iterator_cleanup(&vert);
   }
+
+  {
+    // iterate over all vertices
+    SCEDA_VerticesIterator vert;
+    SCEDA_vertices_iterator_init(g, &vert);
+    while(SCEDA_vertices_iterator_has_next(&vert)) {
+      SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vert);
+      Integer *vlab = SCEDA_vertex_get_data(Integer *, v);
+      fprintf(stdout,"Vertex labelled by %d.\n", vlab->value);
+      
+      {
+	fprintf(stdout,"BFS: ");
+	// make a bfs from the current vertex
+	SCEDA_BFSIterator desc;
+	SCEDA_bfs_iterator_init(v, &desc);
+	while(SCEDA_bfs_iterator_has_next(&desc)) {
+	  SCEDA_Vertex *w = SCEDA_bfs_iterator_next(&desc);
+	  Integer *wlab = SCEDA_vertex_get_data(Integer *, w);
+	  fprintf(stdout,"%d ", wlab->value);
+	}
+	SCEDA_bfs_iterator_cleanup(&desc);
+	fprintf(stdout,"\n");
+      }
+
+      {
+	fprintf(stdout,"DFS: ");
+	// make a dfs from the current vertex
+	SCEDA_DFSIterator desc;
+	SCEDA_dfs_iterator_init(v, &desc);
+	while(SCEDA_dfs_iterator_has_next(&desc)) {
+	  SCEDA_Vertex *w = SCEDA_dfs_iterator_next(&desc);
+	  Integer *wlab = SCEDA_vertex_get_data(Integer *, w);
+	  fprintf(stdout,"%d ", wlab->value);
+	}
+	SCEDA_dfs_iterator_cleanup(&desc);
+	fprintf(stdout,"\n");
+      }
+    }
+    SCEDA_vertices_iterator_cleanup(&vert);
+  }
+
   
   if(!SCEDA_graph_is_acyclic(g)) {
     fprintf(stderr,"error: the graph is not acyclic\n");

@@ -6,6 +6,7 @@ SRCC+=hashset.c hashmap.c
 SRCC+=treeset.c treemap.c
 # graphs
 SRCC+=graph.c 
+SRCC+=graph_traversal.c
 SRCC+=graph_dag.c 
 SRCC+=graph_matching.c 
 SRCC+=graph_antichain.c 
@@ -25,6 +26,7 @@ SRCH+=hashset.h hashmap.h
 SRCH+=treeset.h treemap.h
 # graphs
 SRCH+=graph.h
+SRCH+=graph_traversal.h
 SRCH+=graph_dag.h 
 SRCH+=graph_matching.h
 SRCH+=graph_antichain.h 
@@ -52,6 +54,7 @@ INSTALLH+=hashset.h hashmap.h
 INSTALLH+=treeset.h treemap.h
 # graphs
 INSTALLH+=graph.h 
+INSTALLH+=graph_traversal.h
 INSTALLH+=graph_dag.h 
 INSTALLH+=graph_matching.h
 INSTALLH+=graph_antichain.h
