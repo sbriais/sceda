@@ -72,7 +72,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
     SCEDA_edges_iterator_cleanup(&edges);
   }
 
-  SCEDA_Queue *todo = SCEDA_queue_create(NULL);
+  SCEDA_List *todo = SCEDA_list_create(NULL);
   {
     SCEDA_VerticesIterator vertices;
     SCEDA_vertices_iterator_init(g, &vertices);
@@ -83,16 +83,16 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
       }
       boxed(int) ex_v = SCEDA_hashmap_get(excess, v);
       if(boxed_get(ex_v) > 0) {
-	safe_call(SCEDA_queue_enqueue(todo, v));
+	safe_call(SCEDA_list_ins_next(todo, NULL, v));
       }
     }
     SCEDA_vertices_iterator_cleanup(&vertices);
   }
 
   /* Preflow */
-  while(!SCEDA_queue_is_empty(todo)) {
+  while(!SCEDA_list_is_empty(todo)) {
     SCEDA_Vertex *u;
-    safe_call(SCEDA_queue_dequeue(todo, (void **)&u));
+    safe_call(SCEDA_list_rem_next(todo, NULL, (void **)&u));
     if(u == t) {
       continue;
     }
@@ -120,7 +120,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
 	  if(boxed_get(ex_v) == 0) {
 	    // v was not exceeding (hence not in the queue)
 	    // but will be exceeding now
-	    safe_call(SCEDA_queue_enqueue(todo, v));
+	    safe_call(SCEDA_list_ins_next(todo, SCEDA_list_tail(todo), v));
 	  }
 	  // amount of flow to push 
 	  int push = boxed_get(ex_u);
@@ -156,7 +156,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
 	if(boxed_get(h_v) < boxed_get(h_u)) {
 	  boxed(int) ex_v = SCEDA_hashmap_get(excess, v);
 	  if(boxed_get(ex_v) == 0) {
-	    safe_call(SCEDA_queue_enqueue(todo, v));
+	    safe_call(SCEDA_list_ins_next(todo, SCEDA_list_tail(todo), v));
 	  }
 	  int push = boxed_get(ex_u);
 	  if(push > boxed_get(fe)) {
@@ -178,13 +178,13 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
     // if u is still exceeding, increase its height
     if(boxed_get(ex_u) > 0) {
       boxed_set(h_u, boxed_get(h_u) + 1);
-      safe_call(SCEDA_queue_enqueue(todo, u));
+      safe_call(SCEDA_list_ins_next(todo, NULL, u));
     }
   }
 
   /* Finished */
 
-  SCEDA_queue_delete(todo);
+  SCEDA_list_delete(todo);
 
   SCEDA_hashmap_delete(height);
   SCEDA_hashmap_delete(excess);
