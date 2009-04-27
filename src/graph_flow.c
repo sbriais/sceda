@@ -89,7 +89,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
     SCEDA_vertices_iterator_cleanup(&vertices);
   }
 
-  /* Preflow */
+  /* Preflow (relabel to front) */
   while(!SCEDA_queue_is_empty(todo)) {
     SCEDA_Vertex *u;
     safe_call(SCEDA_queue_dequeue(todo, (void **)&u));
@@ -111,7 +111,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
 	while(SCEDA_out_edges_iterator_has_next(&edges)) {
 	  SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&edges);
 	  boxed(int) fe = SCEDA_hashmap_get(flow, e);
-	  // residual_capacity(u,v) = capacity(u,v) - flow(u,v) 
+	  /* residual_capacity(u,v) = capacity(u,v) - flow(u,v) */
 	  int rc = capacity(e, c_ctxt) - boxed_get(fe);
 	  if(rc <= 0) {
 	    continue;
@@ -119,7 +119,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
 	  SCEDA_Vertex *v = SCEDA_edge_target(e);
 	  boxed(int) h_v = SCEDA_hashmap_get(height, v);
 	  if(boxed_get(h_v) < boxed_get(h_u)) {
-	    // h(u) = h(v) + 1 so we can push
+	    /* h(u) = h(v) + 1 so we can push */
 	    boxed(int) ex_v = SCEDA_hashmap_get(excess, v);
 	    if(boxed_get(ex_v) == 0) {
 	      /* v was not exceeding (hence not in the queue)
