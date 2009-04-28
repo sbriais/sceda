@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 
   //  SCEDA_graph_add_edge(g, vA, vB, new_Integer(1));
   SCEDA_graph_add_edge(g, vB, vC, new_Integer(2));
-  //  SCEDA_graph_add_edge(g, vB, vC, new_Integer(-4));
+  SCEDA_graph_add_edge(g, vB, vC, new_Integer(-4));
   SCEDA_graph_add_edge(g, vC, vD, new_Integer(3));
   SCEDA_graph_add_edge(g, vD, vE, new_Integer(4));
   SCEDA_graph_add_edge(g, vE, vB, new_Integer(5));
@@ -67,6 +67,8 @@ int main(int argc, char *argv[]) {
     fprintf(stdout," of mean cost = %d/%d\n", cost, SCEDA_list_size(mean_cycle));
 
     SCEDA_list_delete(mean_cycle);
+  } else {
+    fprintf(stdout,"No Cycle.\n");
   }
 
   SCEDA_graph_delete(g);

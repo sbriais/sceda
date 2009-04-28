@@ -24,10 +24,6 @@
 int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g, 
 				   SCEDA_int_edge_fun cost, void *c_ctxt, 
 				   SCEDA_List **min_cycle) {
-  if(SCEDA_graph_is_acyclic(g)) {
-    return -1;
-  }
-
   int n = SCEDA_graph_vcount(g);
 
   SCEDA_HashMap *dist[n+1];
@@ -138,9 +134,7 @@ int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g,
     SCEDA_vertices_iterator_cleanup(&vertices);
   }
 
-  safe_ptr(mu_v);
-
-  {
+  if(mu_v != NULL ) {
     SCEDA_HashSet *in_cycle = SCEDA_vertex_set_create();
     SCEDA_Vertex *cycle = mu_v;
     int k = n;
@@ -178,5 +172,9 @@ int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g,
     }
   }
 
-  return 0;
+  if(mu_v != NULL) {
+    return 0;
+  } else {
+    return -1;
+  }
 }
