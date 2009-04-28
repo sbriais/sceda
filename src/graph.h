@@ -229,6 +229,11 @@ int SCEDA_graph_remove_edge(SCEDA_Graph *g, SCEDA_Edge *e, void **data);
     \hideinitializer */
 #define SCEDA_edge_target(edge$) ((edge$)->target)
 
+#define SCEDA_edge_opposite(edge$, v$) \
+  ({ SCEDA_Edge *_edge = (edge$); \
+     SCEDA_Vertex *_v = (v$); \
+     (SCEDA_edge_source(_edge) != _v)?(SCEDA_edge_source(_edge)):(SCEDA_edge_target(_edge)); })
+
 /** Return out degree, ie number of successors, of a vertex.
 
     @param[in] vertex = vertex
