@@ -18,6 +18,8 @@
 */
 #ifndef __SCEDA_GRAPH_MEANCYCLE_H
 #define __SCEDA_GRAPH_MEANCYCLE_H
+/** \file graph_meancycle.h
+    \brief minimum mean cycle */
 
 #include "graph.h"
 #include "list.h"

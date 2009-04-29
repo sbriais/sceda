@@ -191,6 +191,20 @@
     Otherwise, it computes a list of edges belonging to the minimum
     cycle and its ratio.
 
+    It is an implementation of Lawler's algorithm.
+
+    \section meansec Minimum Mean Cycle
+
+    \code
+    int graph_minimum_mean_cycle(Graph *g, 
+                                 int_edge_fun cost, void *c_ctxt, 
+				 List **min_cycle);
+    \endcode
+
+    Compute a cycle that has a minimum mean cost.
+
+    It is an implementation of Karp's algorithm.
+
     \section flowsec Network Flows
 
     \code
@@ -198,7 +212,9 @@
                             int_edge_fun capacity, void *cap_ctxt);
     \endcode
     
-    Compute a maximal flow in the directed network.
+    Compute a maximum flow in the directed network. 
+
+    It is an implementation of the preflow relabel to front method.
 
     \code
     HashMap *graph_min_cost_max_flow(Graph *g, Vertex *s, Vertex *t, 
@@ -206,7 +222,10 @@
 				     int_edge_fun cost, void *cost_ctxt);
     \endcode
 
-    Compute a maximal flow of minimum cost in the directed network.
+    Compute a maximum flow of minimum cost in the directed
+    network. 
+
+    It is an implementation of the mean cycle cancelling method.
 
     \section negcycsec Negative Cycles Detection
 
@@ -217,6 +236,8 @@
 
     Compute a (possibly empty) list of edges belonging to a negative
     cost cycle in the graph.
+
+    The implementation is based upon Bellman-Ford algorithm.
 
     \section graphalgs_examples Examples
 
@@ -239,11 +260,15 @@
 
     \include "graph_mrc/main.c"
 
-    \subsection graphalgs_maxflow Maximal Flow
+    \subsection graphalgs_mean Minimum Mean Cycle
+
+    \include "graph_meancycle/main.c"
+
+    \subsection graphalgs_maxflow Maximum Flow
 
     \include "graph_flow/main.c"
 
-    \subsection graphalgs_mincostmaxflow Minimum Cost Maximal Flow
+    \subsection graphalgs_mincostmaxflow Minimum Cost Maximum Flow
 
     \include "graph_mcf/main.c"
 

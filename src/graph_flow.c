@@ -374,7 +374,253 @@ static int SCEDA_augment_flow_along_neg_cycle_bellman_ford(SCEDA_Graph *g,
   return TRUE;
 }
 
-#define SCEDA_augment_flow_along_neg_cycle SCEDA_augment_flow_along_neg_cycle_bellman_ford
+static int SCEDA_augment_flow_along_neg_cycle_karp(SCEDA_Graph *g, 
+						   SCEDA_int_edge_fun capacity, void *cap_ctxt, 
+						   SCEDA_int_edge_fun cost, void *cost_ctxt, 
+						   SCEDA_HashMap *flow) {
+  int n = SCEDA_graph_vcount(g);
+
+  SCEDA_HashMap *dist[n+1];
+  SCEDA_HashMap *incoming_edge[n+1];
+  SCEDA_HashMap *reversed[n+1]; 
+
+  {
+    int i;
+    for(i = 0; i < n+1; i++) {
+      dist[i] = SCEDA_vertex_map_create((SCEDA_delete_fun)boxed_delete);
+      incoming_edge[i] = SCEDA_vertex_map_create(NULL);
+      reversed[i] = SCEDA_vertex_map_create((SCEDA_delete_fun)boxed_delete);
+    }
+  }
+  
+  /** This is an adaptation of Karp mean cycle algorithm */
+  /** that works on the residual graph */
+
+  /* initialisation */
+  /* dist[0] = distance from "virtual source" to each vertex in exactly one (virtual) edge */
+  {
+    SCEDA_VerticesIterator vertices;
+    SCEDA_vertices_iterator_init(g, &vertices);
+    while(SCEDA_vertices_iterator_has_next(&vertices)) {
+      SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
+      SCEDA_hashmap_put(dist[0], v, boxed_create(int, 0), NULL);
+    }
+    SCEDA_vertices_iterator_cleanup(&vertices);
+  }
+
+  {
+    int i;
+    for(i = 1; i < n+1; i++) {
+      SCEDA_VerticesIterator vertices;
+      SCEDA_vertices_iterator_init(g, &vertices);
+      while(SCEDA_vertices_iterator_has_next(&vertices)) {
+	SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
+	
+	boxed(int) dv = boxed_create(int, 0);
+	SCEDA_Edge *in_v = NULL;
+	int rev = FALSE;
+
+	/** Iterate over input edges in the residual graph */
+	{
+	  /** First iterate over the reversed output edges with phi > 0 */
+	  SCEDA_OutEdgesIterator out_edges;
+	  SCEDA_out_edges_iterator_init(v, &out_edges);
+	  while(SCEDA_out_edges_iterator_has_next(&out_edges)) {
+	    SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&out_edges);
+	    /* Check residual capacity */
+	    boxed(int) fe = SCEDA_hashmap_get(flow, e);
+	    if(boxed_get(fe) <= 0) {
+	      continue;
+	    }
+
+	    SCEDA_Vertex *u = SCEDA_edge_target(e);
+
+	    boxed(int) du = SCEDA_hashmap_get(dist[i-1], u);
+	    if(du == NULL) {
+	      continue;
+	    }
+
+	    int ce = -cost(e, cost_ctxt);
+
+	    if((in_v == NULL) || (boxed_get(du) + ce < boxed_get(dv))) {
+	      in_v = e;
+	      rev = TRUE;
+	      boxed_set(dv, boxed_get(du) + ce);
+	    }
+	  }
+	  SCEDA_out_edges_iterator_cleanup(&out_edges);
+	  
+	  /** Then iterate over the input edges with rc > 0 */
+	  SCEDA_InEdgesIterator in_edges;
+	  SCEDA_in_edges_iterator_init(v, &in_edges);
+	  while(SCEDA_in_edges_iterator_has_next(&in_edges)) {
+	    SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&in_edges);
+	    /* Check residual capacity */
+	    boxed(int) fe = SCEDA_hashmap_get(flow, e);
+	    int rc = capacity(e, cap_ctxt) - boxed_get(fe);
+	    if(rc <= 0) {
+	      continue;
+	    }
+	    
+	    SCEDA_Vertex *u = SCEDA_edge_source(e);
+	    
+	    boxed(int) du = SCEDA_hashmap_get(dist[i-1],u);
+	    if(du == NULL) {
+	      continue;
+	    }
+	    
+	    int ce = cost(e, cost_ctxt);
+	    
+	    if((in_v == NULL) || (boxed_get(du) + ce < boxed_get(dv))) {
+	      in_v = e;
+	      rev = FALSE;
+	      boxed_set(dv, boxed_get(du) + ce);
+	    }
+	  }
+	  SCEDA_in_edges_iterator_cleanup(&in_edges);
+	}
+
+	if(in_v != NULL) {
+	  SCEDA_hashmap_put(dist[i], v, dv, NULL);
+	  SCEDA_hashmap_put(incoming_edge[i], v, in_v, NULL);
+	  SCEDA_hashmap_put(reversed[i], v, boxed_create(int, rev), NULL);
+	} else {
+	  boxed_delete(dv);
+	}
+      }
+      SCEDA_vertices_iterator_cleanup(&vertices);
+    }
+  }
+
+  SCEDA_Vertex *mu_v = NULL;
+  int mu_num = 0;
+  int mu_den = 0;
+
+  {
+    SCEDA_VerticesIterator vertices;
+    SCEDA_vertices_iterator_init(g, &vertices);
+    while(SCEDA_vertices_iterator_has_next(&vertices)) {
+      SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
+
+      boxed(int) dv_n = SCEDA_hashmap_get(dist[n], v);
+      if(dv_n == NULL) {
+	continue;
+      }
+
+      int num_max = 0;
+      int den_max = 0;
+
+      int k;
+      for(k = 0; k < n; k++) {
+	boxed(int) dv_k = SCEDA_hashmap_get(dist[k], v);
+	if(dv_k == NULL) {
+	  continue;
+	}
+
+	int num = boxed_get(dv_n) - boxed_get(dv_k);
+	int den = n-k; /* actually (n+1) - (k+1) */
+
+	if((den_max == 0) || (num_max * den < den_max * num)) {
+	  num_max = num;
+	  den_max = den;
+	} 
+      }
+
+      if((mu_v == NULL) || (num_max * mu_den < den_max * mu_num)) {
+	mu_v = v;
+	mu_num = num_max;
+	mu_den = den_max;
+      }
+    }
+    SCEDA_vertices_iterator_cleanup(&vertices);
+  }
+
+  /** Is there a cycle of negative min mean cost ? */
+  if((mu_v != NULL) && (mu_num < 0)) {
+    SCEDA_HashSet *in_cycle = SCEDA_vertex_set_create();
+    SCEDA_Vertex *cycle = mu_v;
+    int k = n;
+    do {
+      SCEDA_hashset_add(in_cycle, cycle);
+      SCEDA_Edge *e = SCEDA_hashmap_get(incoming_edge[k], cycle);
+      boxed(int) rev = SCEDA_hashmap_get(reversed[k], cycle);
+      safe_ptr(e);
+      if(boxed_get(rev)) {
+	cycle = SCEDA_edge_target(e);
+      } else {
+	cycle = SCEDA_edge_source(e);
+      }
+      k--;
+    } while(!SCEDA_hashset_contains(in_cycle, cycle));
+    SCEDA_hashset_delete(in_cycle);
+    
+    SCEDA_Vertex *v = mu_v;
+    k = n;
+    while(v != cycle) {
+      SCEDA_Edge *e = SCEDA_hashmap_get(incoming_edge[k], v);
+      boxed(int) rev = SCEDA_hashmap_get(reversed[k], v);
+      if(boxed_get(rev)) {
+	v = SCEDA_edge_target(e);
+      } else {
+	v = SCEDA_edge_source(e);
+      }
+      k--;
+    }
+    
+    int kcycle = k;
+    int min_flow = -1;
+    do {
+      SCEDA_Edge *e = SCEDA_hashmap_get(incoming_edge[k], v);
+      boxed(int) rev = SCEDA_hashmap_get(reversed[k], v);
+      boxed(int) fe = SCEDA_hashmap_get(flow, e);
+      int rc;
+      if(boxed_get(rev)) {
+	v = SCEDA_edge_target(e);
+	rc = boxed_get(fe);
+      } else {
+	v = SCEDA_edge_source(e);
+	rc = capacity(e, cap_ctxt) - boxed_get(fe);
+      }
+      if((min_flow == -1) || (rc < min_flow)) {
+	min_flow = rc;
+      }
+      k--;
+    } while(v != cycle);
+
+    k = kcycle;
+    do {
+      SCEDA_Edge *e = SCEDA_hashmap_get(incoming_edge[k], v);
+      boxed(int) rev = SCEDA_hashmap_get(reversed[k], v);
+      boxed(int) fe = SCEDA_hashmap_get(flow, e);
+      if(boxed_get(rev)) {
+	v = SCEDA_edge_target(e);
+	boxed_set(fe, boxed_get(fe) - min_flow);
+      } else {
+	v = SCEDA_edge_source(e);
+	boxed_set(fe, boxed_get(fe) + min_flow);
+      }
+      k--;
+    } while(v != cycle);
+  }
+
+  {
+    int i;
+    for(i = 0; i < n+1; i++) {
+      SCEDA_hashmap_delete(dist[i]);
+      SCEDA_hashmap_delete(incoming_edge[i]);
+      SCEDA_hashmap_delete(reversed[i]);
+    }
+  }
+
+  if((mu_v != NULL) && (mu_num < 0)) {
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
+
+// #define SCEDA_augment_flow_along_neg_cycle SCEDA_augment_flow_along_neg_cycle_bellman_ford
+#define SCEDA_augment_flow_along_neg_cycle SCEDA_augment_flow_along_neg_cycle_karp
 
 SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, 
 					     SCEDA_int_edge_fun capacity, void *cap_ctxt, 
