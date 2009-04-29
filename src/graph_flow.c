@@ -198,10 +198,10 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
   return flow;
 }
 
-static int SCEDA_augment_flow_along_neg_cycle(SCEDA_Graph *g, 
-					      SCEDA_int_edge_fun capacity, void *cap_ctxt, 
-					      SCEDA_int_edge_fun cost, void *cost_ctxt, 
-					      SCEDA_HashMap *flow) {
+static int SCEDA_augment_flow_along_neg_cycle_bellman_ford(SCEDA_Graph *g, 
+							   SCEDA_int_edge_fun capacity, void *cap_ctxt, 
+							   SCEDA_int_edge_fun cost, void *cost_ctxt, 
+							   SCEDA_HashMap *flow) {
   int n = SCEDA_graph_vcount(g);
 
   SCEDA_HashMap *incoming_edges = SCEDA_vertex_map_create(NULL);
@@ -373,6 +373,8 @@ static int SCEDA_augment_flow_along_neg_cycle(SCEDA_Graph *g,
 
   return TRUE;
 }
+
+#define SCEDA_augment_flow_along_neg_cycle SCEDA_augment_flow_along_neg_cycle_bellman_ford
 
 SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, 
 					     SCEDA_int_edge_fun capacity, void *cap_ctxt, 
