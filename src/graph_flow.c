@@ -654,6 +654,7 @@ static int SCEDA_FF_cap(SCEDA_Edge *e, FFCtxt *ctxt) {
   }
 }
 
+/** Important: supply is called exactly once per vertex, before modification of its neighborhood */
 SCEDA_HashMap *SCEDA_graph_feasible_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun capacity, void *cap_ctxt,
 					 SCEDA_int_vertex_fun supply, void *sup_ctxt) {
@@ -736,15 +737,34 @@ typedef struct {
   void *lcap_ctxt;
   SCEDA_int_edge_fun ucap;
   void *ucap_ctxt;
+  SCEDA_int_vertex_fun supply;
+  void *sup_ctxt;
 } MCFCtxt;
 
 static int SCEDA_MCF_cap(SCEDA_Edge *e, MCFCtxt *ctxt) {
   return ctxt->ucap(e, ctxt->ucap_ctxt) - ctxt->lcap(e, ctxt->lcap_ctxt);
 }
 
-static int SCEDA_MCF_supply(SCEDA_Vertex *v, SCEDA_HashMap *supply) {
-  boxed(int) sup = SCEDA_hashmap_get(supply, v);
-  return boxed_get(sup);
+static int SCEDA_MCF_supply(SCEDA_Vertex *v, MCFCtxt *ctxt) {
+  int sup = ctxt->supply(v, ctxt->sup_ctxt);
+
+  SCEDA_OutEdgesIterator out_edges;
+  SCEDA_out_edges_iterator_init(v, &out_edges);
+  while(SCEDA_out_edges_iterator_has_next(&out_edges)) {
+    SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&out_edges);
+    sup -= ctxt->lcap(e, ctxt->lcap_ctxt);
+  }
+  SCEDA_out_edges_iterator_cleanup(&out_edges);
+  
+  SCEDA_InEdgesIterator in_edges;
+  SCEDA_in_edges_iterator_init(v, &in_edges);
+  while(SCEDA_in_edges_iterator_has_next(&in_edges)) {
+    SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&in_edges);
+    sup += ctxt->lcap(e, ctxt->lcap_ctxt);
+  }
+  SCEDA_in_edges_iterator_cleanup(&in_edges);
+  
+  return sup;
 }
 
 SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
@@ -752,50 +772,15 @@ SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun ucap, void *ucap_ctxt,
 					 SCEDA_int_vertex_fun supply, void *sup_ctxt,
 					 SCEDA_int_edge_fun cost, void *cost_ctxt) {
-
-  SCEDA_HashMap *supply_map = SCEDA_vertex_map_create((SCEDA_delete_fun)boxed_delete);
-
-  {
-    SCEDA_VerticesIterator vertices;
-    SCEDA_vertices_iterator_init(g, &vertices);
-    while(SCEDA_vertices_iterator_has_next(&vertices)) {
-      SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
-      int sup = supply(v, sup_ctxt);
-
-      {
-	SCEDA_OutEdgesIterator out_edges;
-	SCEDA_out_edges_iterator_init(v, &out_edges);
-	while(SCEDA_out_edges_iterator_has_next(&out_edges)) {
-	  SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&out_edges);
-	  sup -= lcap(e, lcap_ctxt);
-	}
-	SCEDA_out_edges_iterator_cleanup(&out_edges);
-      }
-
-      {
-	SCEDA_InEdgesIterator in_edges;
-	SCEDA_in_edges_iterator_init(v, &in_edges);
-	while(SCEDA_in_edges_iterator_has_next(&in_edges)) {
-	  SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&in_edges);
-	  sup += lcap(e, lcap_ctxt);
-	}
-	SCEDA_in_edges_iterator_cleanup(&in_edges);
-      }
-
-      safe_call(SCEDA_hashmap_put(supply_map, v, boxed_create(int, sup), NULL));
-    }
-    SCEDA_vertices_iterator_cleanup(&vertices);
-  }
-
   MCFCtxt ctxt;
   ctxt.lcap = lcap;
   ctxt.lcap_ctxt = lcap_ctxt;
   ctxt.ucap = ucap;
   ctxt.ucap_ctxt = ucap_ctxt;
+  ctxt.supply = supply;
+  ctxt.sup_ctxt = sup_ctxt;
 
-  SCEDA_HashMap *flow = SCEDA_graph_feasible_flow(g, (SCEDA_int_edge_fun)SCEDA_MCF_cap, (void *)&ctxt, (SCEDA_int_vertex_fun)SCEDA_MCF_supply, (void *)supply_map);
-
-  SCEDA_hashmap_delete(supply_map);
+  SCEDA_HashMap *flow = SCEDA_graph_feasible_flow(g, (SCEDA_int_edge_fun)SCEDA_MCF_cap, (void *)&ctxt, (SCEDA_int_vertex_fun)SCEDA_MCF_supply, (void *)&ctxt);
 
   if(flow != NULL) {
     while(SCEDA_augment_flow_along_neg_cycle(g, (SCEDA_int_edge_fun)SCEDA_MCF_cap, (void *)&ctxt, cost, cost_ctxt, flow)) {
