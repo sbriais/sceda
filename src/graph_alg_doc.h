@@ -227,6 +227,25 @@
 
     It is an implementation of the mean cycle cancelling method.
 
+    \code
+    HashMap *graph_feasible_flow(Graph *g, 
+                                 int_edge_fun capacity, void *cap_ctxt, 
+				 int_vertex_fun supply, void *sup_ctxt);
+    \endcode
+
+    Compute a maximum flow that satisfies the supply constraint, if one exists.
+
+    \code
+    HashMap *graph_min_cost_flow(Graph *g,
+				 int_edge_fun lcap, void *lcap_ctxt,
+				 int_edge_fun ucap, void *ucap_ctxt,
+				 int_vertex_fun supply, void *sup_ctxt,
+				 int_edge_fun cost, void *cost_ctxt);
+    \endcode
+
+    Compute a minimum cost flow that satisfies the capacity and supply
+    constraints, if one exists.
+
     \section negcycsec Negative Cycles Detection
 
     \code
@@ -268,7 +287,7 @@
 
     \include "graph_flow/main.c"
 
-    \subsection graphalgs_mincostmaxflow Minimum Cost Maximum Flow
+    \subsection graphalgs_mincostmaxflow Minimum Cost Flow
 
     \include "graph_mcf/main.c"
 

@@ -32,7 +32,7 @@
     @param[in] capacity = capacity function
     @param[in] c_ctxt = capacity function context
     
-    @return a map that tells the amount of flow along each edge */
+    @return a map that tells the amount of flow along each edge or NULL in case of error */
 SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, 
 				    SCEDA_Vertex *s, SCEDA_Vertex *t, 
 				    SCEDA_int_edge_fun capacity, void *c_ctxt);
@@ -47,16 +47,38 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g,
     @param[in] cost = cost function
     @param[in] cost_ctxt = cost function context 
    
-    @return a map that tells the amount of flow along each edge */
+    @return a map that tells the amount of flow along each edge or NULL in case of error */
 SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, 
 					     SCEDA_Vertex *s, SCEDA_Vertex *t, 
 					     SCEDA_int_edge_fun capacity, void *cap_ctxt, 
 					     SCEDA_int_edge_fun cost, void *cost_ctxt);
 
+/** Compute a maximal flow in the directed network that satisfies the supply constraints.
+
+    @param[in] g = network
+    @param[in] capacity = capacity function
+    @param[in] cap_ctxt = capacity function context
+    @param[in] supply = supply function
+    @param[in] sup_ctxt = supply function context
+    
+    @return a map that tells the amount of flow along each edge or NULL in case no feasible flow exists */
 SCEDA_HashMap *SCEDA_graph_feasible_flow(SCEDA_Graph *g, 
 					 SCEDA_int_edge_fun capacity, void *cap_ctxt, 
 					 SCEDA_int_vertex_fun supply, void *sup_ctxt);
 
+/** Compute a minimum cost flow that satisfies the capacity and supply constraints.
+
+    @param[in] g = network
+    @param[in] lcap = lower bound capacity function
+    @param[in] lcap_ctxt = lower bound capacity function context
+    @param[in] ucap = upper bound capacity function
+    @param[in] ucap_ctxt = upper bound capacity function context
+    @param[in] supply = supply function
+    @param[in] sup_ctxt = supply function context
+    @param[in] cost = cost function
+    @param[in] cost_ctxt = cost function context 
+
+    @return a map that tells the amount of flow along each edge or NULL in case no feasible flow exists */    
 SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
 					 SCEDA_int_edge_fun ucap, void *ucap_ctxt,
