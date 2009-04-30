@@ -10,18 +10,16 @@
 #include <assert.h>
 
 typedef struct {
-  int flow;
-  int cost;
-} FlowCost;
+  int value;
+} Integer;
 
-FlowCost *new_FlowCost(int f, int c) {
-  FlowCost *x = malloc(sizeof(FlowCost));
-  x->flow = f;
-  x->cost = c;
+Integer *new_Integer(int n) {
+  Integer *x = malloc(sizeof(Integer));
+  x->value = n;
   return x;
 }
 
-void delete_FlowCost(FlowCost *x) {
+void delete_Integer(Integer *x) {
   free(x);
 }
 
@@ -29,88 +27,62 @@ void delete_string(char *s) {
   free(s);
 }
 
-int get_cost(SCEDA_Edge *e, void *ctxt) {
-  return SCEDA_edge_get_data(FlowCost *,e)->cost;
+int get_edge_value(SCEDA_Edge *e, SCEDA_HashMap *map) {
+  Integer *x = SCEDA_hashmap_get(map, e);
+  return x->value;
 }
 
-int get_flow(SCEDA_Edge *e, void *ctxt) {
-  return SCEDA_edge_get_data(FlowCost *,e)->flow;
+int get_vertex_value(SCEDA_Vertex *v, SCEDA_HashMap *map) {
+  Integer *x = SCEDA_hashmap_get(map, v);
+  return x->value;
 }
 
 int main(int argc, char *argv[]) {
-  // create a graph whose nodes are labelled by strings and edges are labelled by FlowCost structure
-  SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_FlowCost);
+  // create a graph whose nodes are labelled by strings and edges are unlabelled
+  SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_string, NULL);
 
-  SCEDA_Vertex *vS = SCEDA_graph_add_vertex(g, strdup("S"));
+  SCEDA_Vertex *vA = SCEDA_graph_add_vertex(g, strdup("A"));
+  SCEDA_Vertex *vB = SCEDA_graph_add_vertex(g, strdup("B"));
+  SCEDA_Vertex *vC = SCEDA_graph_add_vertex(g, strdup("C"));
+  SCEDA_Vertex *vD = SCEDA_graph_add_vertex(g, strdup("D"));
 
-  SCEDA_Vertex *vA1 = SCEDA_graph_add_vertex(g, strdup("A1"));
-  SCEDA_Vertex *vA2 = SCEDA_graph_add_vertex(g, strdup("A2"));
-  SCEDA_Vertex *vA3 = SCEDA_graph_add_vertex(g, strdup("A3"));
-  SCEDA_Vertex *vA4 = SCEDA_graph_add_vertex(g, strdup("A4"));
-  SCEDA_Vertex *vA5 = SCEDA_graph_add_vertex(g, strdup("A5"));
+  SCEDA_Edge *e0 = SCEDA_graph_add_edge(g, vA, vB, NULL);
+  SCEDA_Edge *e1 = SCEDA_graph_add_edge(g, vB, vC, NULL);
+  SCEDA_Edge *e2 = SCEDA_graph_add_edge(g, vC, vA, NULL);
+  SCEDA_Edge *e3 = SCEDA_graph_add_edge(g, vC, vD, NULL);
+  SCEDA_Edge *e4 = SCEDA_graph_add_edge(g, vA, vD, NULL);
 
-  SCEDA_Vertex *vB1 = SCEDA_graph_add_vertex(g, strdup("B1"));
-  SCEDA_Vertex *vB2 = SCEDA_graph_add_vertex(g, strdup("B2"));
-  SCEDA_Vertex *vB3 = SCEDA_graph_add_vertex(g, strdup("B3"));
-  SCEDA_Vertex *vB4 = SCEDA_graph_add_vertex(g, strdup("B4"));
-  SCEDA_Vertex *vB5 = SCEDA_graph_add_vertex(g, strdup("B5"));
+  SCEDA_HashMap *supply = SCEDA_vertex_map_create((SCEDA_delete_fun)delete_Integer);
+  SCEDA_hashmap_put(supply, vA, new_Integer(4), NULL);
+  SCEDA_hashmap_put(supply, vB, new_Integer(3), NULL);
+  SCEDA_hashmap_put(supply, vC, new_Integer(-2), NULL);
+  SCEDA_hashmap_put(supply, vD, new_Integer(-5), NULL);
+  
+  SCEDA_HashMap *lcap = SCEDA_edge_map_create((SCEDA_delete_fun)delete_Integer);
+  SCEDA_hashmap_put(lcap, e0, new_Integer(0), NULL);
+  SCEDA_hashmap_put(lcap, e1, new_Integer(2), NULL);
+  SCEDA_hashmap_put(lcap, e2, new_Integer(0), NULL);
+  SCEDA_hashmap_put(lcap, e3, new_Integer(1), NULL);
+  SCEDA_hashmap_put(lcap, e4, new_Integer(4), NULL);
 
-  SCEDA_Vertex *vT = SCEDA_graph_add_vertex(g, strdup("T"));
+  SCEDA_HashMap *ucap = SCEDA_edge_map_create((SCEDA_delete_fun)delete_Integer);
+  SCEDA_hashmap_put(ucap, e0, new_Integer(1), NULL);
+  SCEDA_hashmap_put(ucap, e1, new_Integer(4), NULL);
+  SCEDA_hashmap_put(ucap, e2, new_Integer(5), NULL);
+  SCEDA_hashmap_put(ucap, e3, new_Integer(2), NULL);
+  SCEDA_hashmap_put(ucap, e4, new_Integer(9), NULL);
 
-  // We encode the following assignment problem:
-  //     B1 B2 B3 B4 B5
-  //  A1  7  8  7 15  4
-  //  A2  7  9 17 14 10
-  //  A3  9  6 12  6  7
-  //  A4  7  6 14  6 10
-  //  A5  9  6 12 10  6
+  SCEDA_HashMap *cost = SCEDA_edge_map_create((SCEDA_delete_fun)delete_Integer);
+  SCEDA_hashmap_put(cost, e0, new_Integer(1), NULL);
+  SCEDA_hashmap_put(cost, e1, new_Integer(2), NULL);
+  SCEDA_hashmap_put(cost, e2, new_Integer(1), NULL);
+  SCEDA_hashmap_put(cost, e3, new_Integer(3), NULL);
+  SCEDA_hashmap_put(cost, e4, new_Integer(2), NULL);
 
-  SCEDA_graph_add_edge(g, vS, vA1, new_FlowCost(1,0));
-  SCEDA_graph_add_edge(g, vS, vA2, new_FlowCost(1,0));
-  SCEDA_graph_add_edge(g, vS, vA3, new_FlowCost(1,0));
-  SCEDA_graph_add_edge(g, vS, vA4, new_FlowCost(1,0));
-  SCEDA_graph_add_edge(g, vS, vA5, new_FlowCost(1,0));
+  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, get_edge_value, lcap, get_edge_value, ucap, get_vertex_value, supply, get_edge_value, cost);
 
-  SCEDA_graph_add_edge(g, vB1, vT, new_FlowCost(1,0));
-  SCEDA_graph_add_edge(g, vB2, vT, new_FlowCost(1,0));
-  SCEDA_graph_add_edge(g, vB3, vT, new_FlowCost(1,0));
-  SCEDA_graph_add_edge(g, vB4, vT, new_FlowCost(1,0));
-  SCEDA_graph_add_edge(g, vB5, vT, new_FlowCost(1,0));
-
-  SCEDA_graph_add_edge(g, vA1, vB1, new_FlowCost(1,7));
-  SCEDA_graph_add_edge(g, vA1, vB2, new_FlowCost(1,8));
-  SCEDA_graph_add_edge(g, vA1, vB3, new_FlowCost(1,7));
-  SCEDA_graph_add_edge(g, vA1, vB4, new_FlowCost(1,15));
-  SCEDA_graph_add_edge(g, vA1, vB5, new_FlowCost(1,4));
-
-  SCEDA_graph_add_edge(g, vA2, vB1, new_FlowCost(1,7));
-  SCEDA_graph_add_edge(g, vA2, vB2, new_FlowCost(1,9));
-  SCEDA_graph_add_edge(g, vA2, vB3, new_FlowCost(1,17));
-  SCEDA_graph_add_edge(g, vA2, vB4, new_FlowCost(1,14));
-  SCEDA_graph_add_edge(g, vA2, vB5, new_FlowCost(1,10));
-
-  SCEDA_graph_add_edge(g, vA3, vB1, new_FlowCost(1,9));
-  SCEDA_graph_add_edge(g, vA3, vB2, new_FlowCost(1,6));
-  SCEDA_graph_add_edge(g, vA3, vB3, new_FlowCost(1,12));
-  SCEDA_graph_add_edge(g, vA3, vB4, new_FlowCost(1,6));
-  SCEDA_graph_add_edge(g, vA3, vB5, new_FlowCost(1,7));
-
-  SCEDA_graph_add_edge(g, vA4, vB1, new_FlowCost(1,7));
-  SCEDA_graph_add_edge(g, vA4, vB2, new_FlowCost(1,6));
-  SCEDA_graph_add_edge(g, vA4, vB3, new_FlowCost(1,14));
-  SCEDA_graph_add_edge(g, vA4, vB4, new_FlowCost(1,6));
-  SCEDA_graph_add_edge(g, vA4, vB5, new_FlowCost(1,10));
-
-  SCEDA_graph_add_edge(g, vA5, vB1, new_FlowCost(1,9));
-  SCEDA_graph_add_edge(g, vA5, vB2, new_FlowCost(1,6));
-  SCEDA_graph_add_edge(g, vA5, vB3, new_FlowCost(1,12));
-  SCEDA_graph_add_edge(g, vA5, vB4, new_FlowCost(1,10));
-  SCEDA_graph_add_edge(g, vA5, vB5, new_FlowCost(1,6));
-
-  SCEDA_HashMap *flow = SCEDA_graph_min_cost_max_flow(g, vS, vT, get_flow, NULL, get_cost, NULL);
-
-  {
-    int cost = 0;
+  if(flow != NULL) {
+    int flowcost = 0;
 
     SCEDA_EdgesIterator edges;
     SCEDA_edges_iterator_init(g, &edges);
@@ -118,12 +90,17 @@ int main(int argc, char *argv[]) {
       SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges);
       int *f_e = SCEDA_hashmap_get(flow, e);
       fprintf(stdout,"%s -> %s : %d\n", SCEDA_vertex_get_data(char *, SCEDA_edge_source(e)), SCEDA_vertex_get_data(char *, SCEDA_edge_target(e)), *f_e);
-      cost += *f_e * get_cost(e, NULL);
+      flowcost += *f_e * get_edge_value(e, cost);
     }      
     SCEDA_edges_iterator_cleanup(&edges);
 
-    fprintf(stdout,"total cost = %d\n",cost);
+    fprintf(stdout,"total cost = %d\n",flowcost);
   }   
+
+  SCEDA_hashmap_delete(cost);
+  SCEDA_hashmap_delete(ucap);
+  SCEDA_hashmap_delete(lcap);
+  SCEDA_hashmap_delete(supply);
 
   SCEDA_hashmap_delete(flow);
 

@@ -198,6 +198,7 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
   return flow;
 }
 
+#if(0)
 static int SCEDA_augment_flow_along_neg_cycle_bellman_ford(SCEDA_Graph *g, 
 							   SCEDA_int_edge_fun capacity, void *cap_ctxt, 
 							   SCEDA_int_edge_fun cost, void *cost_ctxt, 
@@ -373,6 +374,7 @@ static int SCEDA_augment_flow_along_neg_cycle_bellman_ford(SCEDA_Graph *g,
 
   return TRUE;
 }
+#endif
 
 static int SCEDA_augment_flow_along_neg_cycle_karp(SCEDA_Graph *g, 
 						   SCEDA_int_edge_fun capacity, void *cap_ctxt, 
@@ -625,13 +627,188 @@ static int SCEDA_augment_flow_along_neg_cycle_karp(SCEDA_Graph *g,
 SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, 
 					     SCEDA_int_edge_fun capacity, void *cap_ctxt, 
 					     SCEDA_int_edge_fun cost, void *cost_ctxt) {
-  if(s == t) {
-    return NULL;
-  }
-
   SCEDA_HashMap *flow = SCEDA_graph_max_flow(g, s, t, capacity, cap_ctxt);
 
-  while(SCEDA_augment_flow_along_neg_cycle(g, capacity, cap_ctxt, cost, cost_ctxt, flow)) {
+  if(flow != NULL) {
+    while(SCEDA_augment_flow_along_neg_cycle(g, capacity, cap_ctxt, cost, cost_ctxt, flow)) {
+    }
+  }
+
+  return flow;
+}
+
+typedef struct {
+  SCEDA_Vertex *s;
+  SCEDA_Vertex *t;
+  SCEDA_int_edge_fun capacity;
+  void *cap_ctxt;
+  SCEDA_HashMap *ncap;
+} FFCtxt;
+
+static int SCEDA_FF_cap(SCEDA_Edge *e, FFCtxt *ctxt) {
+  if((SCEDA_edge_source(e) == ctxt->s) || (SCEDA_edge_target(e) == ctxt->t)) {
+    boxed(int) cap = SCEDA_hashmap_get(ctxt->ncap, e);
+    return boxed_get(cap);
+  } else {
+    return ctxt->capacity(e, ctxt->cap_ctxt);
+  }
+}
+
+SCEDA_HashMap *SCEDA_graph_feasible_flow(SCEDA_Graph *g,
+					 SCEDA_int_edge_fun capacity, void *cap_ctxt,
+					 SCEDA_int_vertex_fun supply, void *sup_ctxt) {
+  SCEDA_Vertex *s = SCEDA_graph_add_vertex(g, NULL);
+  SCEDA_Vertex *t = SCEDA_graph_add_vertex(g, NULL);
+  SCEDA_List *new_edges = SCEDA_list_create(NULL);
+  SCEDA_HashMap *ncap = SCEDA_edge_map_create((SCEDA_delete_fun)boxed_delete);
+
+  {
+    SCEDA_VerticesIterator vertices;
+    SCEDA_vertices_iterator_init(g, &vertices);
+    while(SCEDA_vertices_iterator_has_next(&vertices)) {
+      SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
+      if((v == s) || (v == t)) {
+	continue;
+      }
+      int sup = supply(v, sup_ctxt);
+      if(sup > 0) {
+	SCEDA_Edge *e = SCEDA_graph_add_edge(g, s, v, NULL);
+	safe_call(SCEDA_list_add(new_edges, e));
+	safe_call(SCEDA_hashmap_put(ncap, e, boxed_create(int, sup), NULL));
+      } else if(sup < 0) {
+	SCEDA_Edge *e = SCEDA_graph_add_edge(g, v, t, NULL);
+	safe_call(SCEDA_list_add(new_edges, e));
+	safe_call(SCEDA_hashmap_put(ncap, e, boxed_create(int, -sup), NULL));
+      }
+    }
+    SCEDA_vertices_iterator_cleanup(&vertices);
+  }
+
+  FFCtxt ctxt;
+  ctxt.s = s;
+  ctxt.t = t;
+  ctxt.capacity = capacity;
+  ctxt.cap_ctxt = cap_ctxt;
+  ctxt.ncap = ncap;
+
+  SCEDA_HashMap *flow = SCEDA_graph_max_flow(g, s, t, (SCEDA_int_edge_fun)SCEDA_FF_cap, (void *)&ctxt);
+  
+  safe_ptr(flow);
+
+  int feasible = TRUE;
+  
+  {
+    SCEDA_ListIterator edges;
+    SCEDA_list_iterator_init(new_edges, &edges);
+    while(SCEDA_list_iterator_has_next(&edges)) {
+      SCEDA_Edge *e = SCEDA_list_iterator_next(&edges);
+      boxed(int) ce = SCEDA_hashmap_get(ncap, e);
+      boxed(int) fe;
+      safe_call(SCEDA_hashmap_remove(flow, (void **)&e, (void **)&fe));
+      if(boxed_get(fe) != boxed_get(ce)) {
+	feasible = FALSE;
+      }
+      boxed_delete(fe);
+      void *data;
+      safe_call(SCEDA_graph_remove_edge(g, e, &data));
+    }
+    SCEDA_list_iterator_cleanup(&edges);
+
+    SCEDA_hashmap_delete(ncap);
+
+    SCEDA_list_delete(new_edges);
+
+    void *data;
+    safe_call(SCEDA_graph_remove_vertex(g, s, &data));
+    safe_call(SCEDA_graph_remove_vertex(g, t, &data));
+  }
+  
+  if(!feasible) {
+    SCEDA_hashmap_delete(flow);
+    return NULL;
+  } else {
+    return flow;
+  }
+}
+
+typedef struct {
+  SCEDA_int_edge_fun lcap;
+  void *lcap_ctxt;
+  SCEDA_int_edge_fun ucap;
+  void *ucap_ctxt;
+} MCFCtxt;
+
+static int SCEDA_MCF_cap(SCEDA_Edge *e, MCFCtxt *ctxt) {
+  return ctxt->ucap(e, ctxt->ucap_ctxt) - ctxt->lcap(e, ctxt->lcap_ctxt);
+}
+
+static int SCEDA_MCF_supply(SCEDA_Vertex *v, SCEDA_HashMap *supply) {
+  boxed(int) sup = SCEDA_hashmap_get(supply, v);
+  return boxed_get(sup);
+}
+
+SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
+					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
+					 SCEDA_int_edge_fun ucap, void *ucap_ctxt,
+					 SCEDA_int_vertex_fun supply, void *sup_ctxt,
+					 SCEDA_int_edge_fun cost, void *cost_ctxt) {
+
+  SCEDA_HashMap *supply_map = SCEDA_vertex_map_create((SCEDA_delete_fun)boxed_delete);
+
+  {
+    SCEDA_VerticesIterator vertices;
+    SCEDA_vertices_iterator_init(g, &vertices);
+    while(SCEDA_vertices_iterator_has_next(&vertices)) {
+      SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
+      int sup = supply(v, sup_ctxt);
+
+      {
+	SCEDA_OutEdgesIterator out_edges;
+	SCEDA_out_edges_iterator_init(v, &out_edges);
+	while(SCEDA_out_edges_iterator_has_next(&out_edges)) {
+	  SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&out_edges);
+	  sup -= lcap(e, lcap_ctxt);
+	}
+	SCEDA_out_edges_iterator_cleanup(&out_edges);
+      }
+
+      {
+	SCEDA_InEdgesIterator in_edges;
+	SCEDA_in_edges_iterator_init(v, &in_edges);
+	while(SCEDA_in_edges_iterator_has_next(&in_edges)) {
+	  SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&in_edges);
+	  sup += lcap(e, lcap_ctxt);
+	}
+	SCEDA_in_edges_iterator_cleanup(&in_edges);
+      }
+
+      safe_call(SCEDA_hashmap_put(supply_map, v, boxed_create(int, sup), NULL));
+    }
+    SCEDA_vertices_iterator_cleanup(&vertices);
+  }
+
+  MCFCtxt ctxt;
+  ctxt.lcap = lcap;
+  ctxt.lcap_ctxt = lcap_ctxt;
+  ctxt.ucap = ucap;
+  ctxt.ucap_ctxt = ucap_ctxt;
+
+  SCEDA_HashMap *flow = SCEDA_graph_feasible_flow(g, (SCEDA_int_edge_fun)SCEDA_MCF_cap, (void *)&ctxt, (SCEDA_int_vertex_fun)SCEDA_MCF_supply, (void *)supply_map);
+
+  SCEDA_hashmap_delete(supply_map);
+
+  if(flow != NULL) {
+    while(SCEDA_augment_flow_along_neg_cycle(g, (SCEDA_int_edge_fun)SCEDA_MCF_cap, (void *)&ctxt, cost, cost_ctxt, flow)) {
+    }
+
+    SCEDA_HashMapIterator phi;
+    SCEDA_hashmap_iterator_init(flow, &phi);
+    while(SCEDA_hashmap_iterator_has_next(&phi)) {
+      void *e;
+      boxed(int) fe = SCEDA_hashmap_iterator_next(&phi, &e);
+      boxed_set(fe, boxed_get(fe) + lcap((SCEDA_Edge *)e, lcap_ctxt));
+    }
+    SCEDA_hashmap_iterator_cleanup(&phi);
   }
 
   return flow;

@@ -38,6 +38,9 @@ typedef struct {
   SCEDA_delete_fun delete;
 } SCEDA_Vertex;
 
+/** Type of closures that take a vertex and return a "cost" */
+typedef int (*SCEDA_int_vertex_fun)(SCEDA_Vertex *v, void *ctxt);
+
 /** Create an empty set of vertex. 
 
     Vertices stored in the set won't be deallocated by hashset_delete.

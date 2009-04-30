@@ -33,7 +33,9 @@
     @param[in] c_ctxt = capacity function context
     
     @return a map that tells the amount of flow along each edge */
-SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, SCEDA_int_edge_fun capacity, void *c_ctxt);
+SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, 
+				    SCEDA_Vertex *s, SCEDA_Vertex *t, 
+				    SCEDA_int_edge_fun capacity, void *c_ctxt);
 
 /** Compute a maximum flow of minimum cost in the directed network.
 
@@ -46,6 +48,19 @@ SCEDA_HashMap *SCEDA_graph_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Verte
     @param[in] cost_ctxt = cost function context 
    
     @return a map that tells the amount of flow along each edge */
-SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, SCEDA_int_edge_fun capacity, void *cap_ctxt, SCEDA_int_edge_fun cost, void *cost_ctxt);
+SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, 
+					     SCEDA_Vertex *s, SCEDA_Vertex *t, 
+					     SCEDA_int_edge_fun capacity, void *cap_ctxt, 
+					     SCEDA_int_edge_fun cost, void *cost_ctxt);
+
+SCEDA_HashMap *SCEDA_graph_feasible_flow(SCEDA_Graph *g, 
+					 SCEDA_int_edge_fun capacity, void *cap_ctxt, 
+					 SCEDA_int_vertex_fun supply, void *sup_ctxt);
+
+SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
+					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
+					 SCEDA_int_edge_fun ucap, void *ucap_ctxt,
+					 SCEDA_int_vertex_fun supply, void *sup_ctxt,
+					 SCEDA_int_edge_fun cost, void *cost_ctxt);
 
 #endif
