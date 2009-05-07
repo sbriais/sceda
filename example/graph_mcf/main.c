@@ -79,7 +79,8 @@ int main(int argc, char *argv[]) {
   SCEDA_hashmap_put(cost, e3, new_Integer(3), NULL);
   SCEDA_hashmap_put(cost, e4, new_Integer(2), NULL);
 
-  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, get_edge_value, lcap, get_edge_value, ucap, get_vertex_value, supply, get_edge_value, cost);
+  //  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, get_edge_value, lcap, get_edge_value, ucap, get_vertex_value, supply, get_edge_value, cost);
+  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, NULL, NULL, NULL, NULL, get_vertex_value, supply, get_edge_value, cost);
 
   if(flow != NULL) {
     int flowcost = 0;
@@ -95,14 +96,17 @@ int main(int argc, char *argv[]) {
     SCEDA_edges_iterator_cleanup(&edges);
 
     fprintf(stdout,"total cost = %d\n",flowcost);
-  }   
+
+  
+    SCEDA_hashmap_delete(flow);
+  } else {
+    fprintf(stdout,"no solution was found\n");
+  }
 
   SCEDA_hashmap_delete(cost);
   SCEDA_hashmap_delete(ucap);
   SCEDA_hashmap_delete(lcap);
   SCEDA_hashmap_delete(supply);
-
-  SCEDA_hashmap_delete(flow);
 
   SCEDA_graph_delete(g);
 

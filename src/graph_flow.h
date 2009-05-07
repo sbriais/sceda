@@ -78,7 +78,18 @@ SCEDA_HashMap *SCEDA_graph_feasible_flow(SCEDA_Graph *g,
     @param[in] cost = cost function
     @param[in] cost_ctxt = cost function context 
 
-    @return a map that tells the amount of flow along each edge or NULL in case no feasible flow exists */    
+    @return a map that tells the amount of flow along each edge or NULL in case no feasible flow exists
+
+    if lcap == NULL:
+    - if lcap_ctxt == NULL then a lower capacity of 0 is assumed.
+    - if lcap_ctxt != NULL then a constant lower bound, whose integer
+      value is pointed by lcap_ctxt, is assumed.
+
+    if ucap == NULL:
+    - if ucap_ctxt == NULL then capacities of edges are unbounded.
+    - if lcap_ctxt != NULL then a constant upper bound, whose integer
+      value is pointed by ucap_ctxt, is assumed.
+*/    
 SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
 					 SCEDA_int_edge_fun ucap, void *ucap_ctxt,
