@@ -1194,7 +1194,7 @@ SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
     }
 
     if(potential != NULL) {
-      *potential = SCEDA_graph_mcf_potential(g, cap, cap_ctxt, cost, cost_ctxt, flow);
+      *potential = SCEDA_graph_mcf_potential(g, ucap, ucap_ctxt, cost, cost_ctxt, flow);
     }
   }
 
