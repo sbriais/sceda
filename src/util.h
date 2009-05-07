@@ -41,6 +41,8 @@
 
 #define safe_ptr(x)
 
+#define safe_ensure(x) 
+
 #else
 #include <assert.h>
 #include <stdio.h>
@@ -74,6 +76,9 @@
 
 #define safe_ptr(x) \
   ({ if(x == NULL) fail("null pointer"); })
+
+#define safe_ensure(x) \
+  ({ if(!x) fail("assertion failed"); })
 
 #endif
 

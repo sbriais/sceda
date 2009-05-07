@@ -21,6 +21,8 @@
 #include "boxed.h"
 #include "queue.h"
 
+#include "util.h"
+
 #define SCEDA_graph_max_flow_highest_label SCEDA_graph_max_flow
 /* #define SCEDA_graph_max_flow_relabel_to_front SCEDA_graph_max_flow */
 
@@ -983,16 +985,143 @@ static int SCEDA_MCF_constant_cap(SCEDA_Edge *e, int *bound) {
   return *bound;
 }
 
+static int SCEDA_MCF_map_cost(SCEDA_Edge *e, SCEDA_HashMap *map) {
+  int *n = SCEDA_hashmap_get(map, e);
+  return *n;
+}
+
+static int SCEDA_MCF_map_supply(SCEDA_Vertex *v, SCEDA_HashMap *map) {
+  int *n = SCEDA_hashmap_get(map, v);
+  return *n;
+}
+
 #define ABS(n$) \
   ({ int _n = (n$); \
      (_n>=0)?(_n):(-_n); })
+
+static SCEDA_HashMap *SCEDA_graph_mcf_potential(SCEDA_Graph *g,
+						SCEDA_int_edge_fun capacity, void *cap_ctxt,
+						SCEDA_int_edge_fun cost, void *cost_ctxt,
+						SCEDA_HashMap *flow) {
+  SCEDA_HashMap *dist = SCEDA_vertex_map_create((SCEDA_delete_fun)boxed_delete);
+
+  int n = SCEDA_graph_vcount(g);
+
+  SCEDA_HashSet *in_queue = SCEDA_vertex_set_create();
+  SCEDA_Queue *queue = SCEDA_queue_create(NULL);
+
+  /* Initially, each node is at distance 0 from a virtual source */
+  {
+    SCEDA_VerticesIterator vertices;
+    SCEDA_vertices_iterator_init(g, &vertices);
+    while(SCEDA_vertices_iterator_has_next(&vertices)) {
+      SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
+      safe_call(SCEDA_hashmap_put(dist, v, boxed_create(int, 0), NULL));
+      safe_call(SCEDA_queue_enqueue(queue, v));
+      safe_call(SCEDA_hashset_add(in_queue, v));  
+    }
+    SCEDA_vertices_iterator_cleanup(&vertices);
+  }
+
+  safe_call(SCEDA_queue_enqueue(queue, NULL));
+
+  /* This is an adaptation of Bellman-Ford algorithm, that works on the residual graph */
+  int i = 0;
+  while((i < n) && (!SCEDA_queue_is_empty(queue))) {
+    SCEDA_Vertex *u;
+    safe_call(SCEDA_queue_dequeue(queue, (void **)&u));
+    if(u == NULL) {
+      i++;
+      if(i < n) {
+	safe_call(SCEDA_queue_enqueue(queue, NULL));
+      }
+      continue;
+    }
+    safe_call(SCEDA_hashset_remove(in_queue, (void **)&u));
+    
+    boxed(int) dist_u = SCEDA_hashmap_get(dist, u);
+   
+    /* we first iterate over out edges with positive residual capacity */
+    SCEDA_OutEdgesIterator out_edges;
+    SCEDA_out_edges_iterator_init(u, &out_edges);
+    while(SCEDA_out_edges_iterator_has_next(&out_edges)) {
+      SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&out_edges);
+      boxed(int) fe = SCEDA_hashmap_get(flow, e);
+      int rc = capacity(e, cap_ctxt) - boxed_get(fe);
+      if(rc <= 0) {
+	continue;
+      }
+      SCEDA_Vertex *v = SCEDA_edge_target(e);
+      boxed(int) dist_v = SCEDA_hashmap_get(dist, v);
+      int ce = cost(e, cost_ctxt);
+      if(boxed_get(dist_u) + ce < boxed_get(dist_v)) {
+	boxed_set(dist_v, boxed_get(dist_u) + ce);
+	if(!SCEDA_hashset_contains(in_queue, v)) {
+	  safe_call(SCEDA_queue_enqueue(queue, v));
+	  safe_call(SCEDA_hashset_add(in_queue, v));
+	}
+      }
+    }
+    SCEDA_out_edges_iterator_cleanup(&out_edges);
+    
+    /* then we iterate over in edges with positive residual capacity (flow) */
+    SCEDA_InEdgesIterator in_edges;
+    SCEDA_in_edges_iterator_init(u, &in_edges);
+    while(SCEDA_in_edges_iterator_has_next(&in_edges)) {
+      SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&in_edges);
+      boxed(int) fe = SCEDA_hashmap_get(flow, e);
+      if(boxed_get(fe) <= 0) {
+	continue;
+      }
+      SCEDA_Vertex *v = SCEDA_edge_source(e);
+      boxed(int) dist_v = SCEDA_hashmap_get(dist, v);
+      int ce = -cost(e, cost_ctxt);
+      if(boxed_get(dist_u) + ce < boxed_get(dist_v)) {
+	boxed_set(dist_v, boxed_get(dist_u) + ce);
+	if(!SCEDA_hashset_contains(in_queue, v)) {
+	  safe_call(SCEDA_queue_enqueue(queue, v));
+	  safe_call(SCEDA_hashset_add(in_queue, v));
+	}
+      }
+    }
+    SCEDA_in_edges_iterator_cleanup(&in_edges);
+  }
+
+  SCEDA_hashset_delete(in_queue);
+
+  safe_ensure((i < n) || (SCEDA_queue_is_empty(queue)));
+
+  SCEDA_queue_delete(queue);
+
+  {
+    SCEDA_HashMapIterator vertices;
+    SCEDA_hashmap_iterator_init(dist, &vertices);
+    while(SCEDA_hashmap_iterator_has_next(&vertices)) {
+      SCEDA_Vertex *v;
+      boxed(int) dist_v = SCEDA_hashmap_iterator_next(&vertices, &v);
+      boxed_set(dist_v, -boxed_get(dist_v));
+    }
+    SCEDA_hashmap_iterator_cleanup(&vertices);
+  }
+
+  return dist;
+}
 
 SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
 					 SCEDA_int_edge_fun ucap, void *ucap_ctxt,
 					 SCEDA_int_vertex_fun sup, void *sup_ctxt,
-					 SCEDA_int_edge_fun cost, void *cost_ctxt) {
+					 SCEDA_int_edge_fun cost, void *cost_ctxt,
+					 SCEDA_HashMap **potential) {
   MCFCtxt ctxt;
+  if(sup == NULL) {
+    sup = (SCEDA_int_vertex_fun)SCEDA_MCF_map_supply;
+  }
+
+  if(cost == NULL) {
+    cost = (SCEDA_int_edge_fun)SCEDA_MCF_map_cost;
+  }
+
   ctxt.supply = sup;
   ctxt.sup_ctxt = sup_ctxt;
 
@@ -1062,6 +1191,10 @@ SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 	boxed_set(fe, boxed_get(fe) + lcap((SCEDA_Edge *)e, lcap_ctxt));
       }
       SCEDA_hashmap_iterator_cleanup(&phi);
+    }
+
+    if(potential != NULL) {
+      *potential = SCEDA_graph_mcf_potential(g, cap, cap_ctxt, cost, cost_ctxt, flow);
     }
   }
 
