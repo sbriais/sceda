@@ -75,12 +75,13 @@ int main(int argc, char *argv[]) {
   SCEDA_HashMap *cost = SCEDA_edge_map_create((SCEDA_delete_fun)delete_Integer);
   SCEDA_hashmap_put(cost, e0, new_Integer(1), NULL);
   SCEDA_hashmap_put(cost, e1, new_Integer(2), NULL);
-  SCEDA_hashmap_put(cost, e2, new_Integer(1), NULL);
-  SCEDA_hashmap_put(cost, e3, new_Integer(3), NULL);
+  SCEDA_hashmap_put(cost, e2, new_Integer(0), NULL);
+  SCEDA_hashmap_put(cost, e3, new_Integer(-3), NULL);
   SCEDA_hashmap_put(cost, e4, new_Integer(2), NULL);
 
   SCEDA_HashMap *potentials = NULL;
-  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, get_edge_value, lcap, get_edge_value, ucap, NULL, supply, NULL, cost, &potentials);
+  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, NULL, NULL, NULL, NULL, NULL, supply, NULL, cost, &potentials);
+  //  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, get_edge_value, lcap, get_edge_value, ucap, NULL, supply, NULL, cost, &potentials);
   
   //  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, NULL, NULL, NULL, NULL, NULL, supply, NULL, cost, &potentials);
 

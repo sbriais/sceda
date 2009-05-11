@@ -1089,7 +1089,7 @@ static SCEDA_HashMap *SCEDA_graph_mcf_potential(SCEDA_Graph *g,
 
   SCEDA_hashset_delete(in_queue);
 
-  safe_ensure((i < n) || (SCEDA_queue_is_empty(queue)));
+  safe_ensure(SCEDA_queue_is_empty(queue));
 
   SCEDA_queue_delete(queue);
 
@@ -1181,6 +1181,10 @@ SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
   if(flow != NULL) {
     while(SCEDA_augment_flow_along_neg_cycle(g, cap, cap_ctxt, cost, cost_ctxt, flow)) {
     }
+
+    if(potential != NULL) {
+      *potential = SCEDA_graph_mcf_potential(g, cap, cap_ctxt, cost, cost_ctxt, flow);
+    }
     
     if(lcap != NULL) {
       SCEDA_HashMapIterator phi;
@@ -1191,10 +1195,6 @@ SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 	boxed_set(fe, boxed_get(fe) + lcap((SCEDA_Edge *)e, lcap_ctxt));
       }
       SCEDA_hashmap_iterator_cleanup(&phi);
-    }
-
-    if(potential != NULL) {
-      *potential = SCEDA_graph_mcf_potential(g, ucap, ucap_ctxt, cost, cost_ctxt, flow);
     }
   }
 
