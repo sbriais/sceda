@@ -23,6 +23,12 @@
 
 #include "util.h"
 
+#include <stdio.h>
+
+#define ABS(n$) \
+  ({ int _n = (n$); \
+     (_n>=0)?(_n):(-_n); })
+
 #define SCEDA_graph_max_flow_highest_label SCEDA_graph_max_flow
 /* #define SCEDA_graph_max_flow_relabel_to_front SCEDA_graph_max_flow */
 
@@ -981,8 +987,6 @@ static int SCEDA_MCF_supply(SCEDA_Vertex *v, MCFCtxt *ctxt) {
   return sup;
 }
 
-#include <stdio.h>
-
 static int SCEDA_MCF_constant_cap(SCEDA_Edge *e, int *bound) {
   return *bound;
 }
@@ -996,10 +1000,6 @@ static int SCEDA_MCF_map_supply(SCEDA_Vertex *v, SCEDA_HashMap *map) {
   int *n = SCEDA_hashmap_get(map, v);
   return *n;
 }
-
-#define ABS(n$) \
-  ({ int _n = (n$); \
-     (_n>=0)?(_n):(-_n); })
 
 SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
