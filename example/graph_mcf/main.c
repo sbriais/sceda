@@ -75,15 +75,11 @@ int main(int argc, char *argv[]) {
   SCEDA_HashMap *cost = SCEDA_edge_map_create((SCEDA_delete_fun)delete_Integer);
   SCEDA_hashmap_put(cost, e0, new_Integer(1), NULL);
   SCEDA_hashmap_put(cost, e1, new_Integer(2), NULL);
-  SCEDA_hashmap_put(cost, e2, new_Integer(0), NULL);
-  SCEDA_hashmap_put(cost, e3, new_Integer(-3), NULL);
+  SCEDA_hashmap_put(cost, e2, new_Integer(1), NULL);
+  SCEDA_hashmap_put(cost, e3, new_Integer(3), NULL);
   SCEDA_hashmap_put(cost, e4, new_Integer(2), NULL);
 
-  SCEDA_HashMap *potentials = NULL;
-  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, NULL, NULL, NULL, NULL, NULL, supply, NULL, cost, &potentials);
-  //  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, get_edge_value, lcap, get_edge_value, ucap, NULL, supply, NULL, cost, &potentials);
-  
-  //  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, NULL, NULL, NULL, NULL, NULL, supply, NULL, cost, &potentials);
+  SCEDA_HashMap *flow = SCEDA_graph_min_cost_flow(g, get_edge_value, lcap, get_edge_value, ucap, NULL, supply, NULL, cost);
 
   if(flow != NULL) {
     int flowcost = 0;
@@ -100,21 +96,6 @@ int main(int argc, char *argv[]) {
 
     fprintf(stdout,"total cost = %d\n",flowcost);
 
-    int picost = 0;
-
-    SCEDA_VerticesIterator vertices;
-    SCEDA_vertices_iterator_init(g, &vertices);
-    while(SCEDA_vertices_iterator_has_next(&vertices)) {
-      SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
-      int *pi_v = SCEDA_hashmap_get(potentials, v);
-      fprintf(stdout,"%s : %d\n", SCEDA_vertex_get_data(char *, v), *pi_v);
-      picost += *pi_v * get_vertex_value(v, supply);
-    }
-    SCEDA_vertices_iterator_cleanup(&vertices);
-
-    fprintf(stdout,"total cost = %d\n",picost);
-
-    SCEDA_hashmap_delete(potentials);
     SCEDA_hashmap_delete(flow);
   } else {
     fprintf(stdout,"no solution was found\n");

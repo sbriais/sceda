@@ -94,7 +94,6 @@ SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
 					 SCEDA_int_edge_fun ucap, void *ucap_ctxt,
 					 SCEDA_int_vertex_fun supply, void *sup_ctxt,
-					 SCEDA_int_edge_fun cost, void *cost_ctxt,
-					 SCEDA_HashMap **pi);
+					 SCEDA_int_edge_fun cost, void *cost_ctxt);
 
 #endif
