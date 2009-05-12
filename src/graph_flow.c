@@ -267,8 +267,6 @@ SCEDA_HashMap *SCEDA_graph_max_flow_highest_label(SCEDA_Graph *g, SCEDA_Vertex *
     }
   }
 
-  int in_excess = 0;
-
   {
     SCEDA_VerticesIterator vertices;
     SCEDA_vertices_iterator_init(g, &vertices);
@@ -280,7 +278,6 @@ SCEDA_HashMap *SCEDA_graph_max_flow_highest_label(SCEDA_Graph *g, SCEDA_Vertex *
       boxed(int) ex_v = SCEDA_hashmap_get(excess, v);
       if(boxed_get(ex_v) > 0) {
 	safe_call(SCEDA_queue_enqueue(&levels[0], v));
-	in_excess++;
       }
     }
     SCEDA_vertices_iterator_cleanup(&vertices);
@@ -289,14 +286,14 @@ SCEDA_HashMap *SCEDA_graph_max_flow_highest_label(SCEDA_Graph *g, SCEDA_Vertex *
   int highest = 0;
 
   /* Preflow (highest label) */
-  while(in_excess > 0) {
-    while(SCEDA_queue_is_empty(&levels[highest])) {
+  while(highest >= 0) {
+    if(SCEDA_queue_is_empty(&levels[highest])) {
       highest--;
+      continue;
     }
 
     SCEDA_Vertex *u;
     safe_call(SCEDA_queue_dequeue(&levels[highest], (void **)&u));
-    in_excess--;
     if(u == t) {
       continue;
     }
@@ -329,7 +326,6 @@ SCEDA_HashMap *SCEDA_graph_max_flow_highest_label(SCEDA_Graph *g, SCEDA_Vertex *
 	      /* v was not exceeding (hence not in the queue)
 		 but will be exceeding now */
 	      safe_call(SCEDA_queue_enqueue(&levels[boxed_get(h_v)], v));
-	      in_excess++;
 	    }
 	    /* amount of flow to push */
 	    int push = boxed_get(ex_u);
@@ -371,7 +367,6 @@ SCEDA_HashMap *SCEDA_graph_max_flow_highest_label(SCEDA_Graph *g, SCEDA_Vertex *
 	      /* v was not exceeding (hence not in the queue)
 		 but will be exceeding now */
 	      safe_call(SCEDA_queue_enqueue(&levels[boxed_get(h_v)], v));
-	      in_excess++;
 	    }
 	    /* amount of flow to push */
 	    int push = boxed_get(ex_u);
