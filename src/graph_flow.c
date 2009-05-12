@@ -831,14 +831,21 @@ static int SCEDA_augment_flow_along_neg_cycle_karp(SCEDA_Graph *g,
   }
 }
 
+static void SCEDA_minimise_flow_cost(SCEDA_Graph *g, 
+				     SCEDA_int_edge_fun cap, void *cap_ctxt, 
+				     SCEDA_int_edge_fun cost, void *cost_ctxt, 
+				     SCEDA_HashMap *flow) {
+  while(SCEDA_augment_flow_along_neg_cycle(g, cap, cap_ctxt, cost, cost_ctxt, flow)) {
+  }
+}
+
 SCEDA_HashMap *SCEDA_graph_min_cost_max_flow(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t, 
 					     SCEDA_int_edge_fun capacity, void *cap_ctxt, 
 					     SCEDA_int_edge_fun cost, void *cost_ctxt) {
   SCEDA_HashMap *flow = SCEDA_graph_max_flow(g, s, t, capacity, cap_ctxt);
 
   if(flow != NULL) {
-    while(SCEDA_augment_flow_along_neg_cycle(g, capacity, cap_ctxt, cost, cost_ctxt, flow)) {
-    }
+    SCEDA_minimise_flow_cost(g, capacity, cap_ctxt, cost, cost_ctxt, flow);
   }
 
   return flow;
@@ -1065,8 +1072,7 @@ SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
   SCEDA_HashMap *flow = SCEDA_graph_feasible_flow(g, cap, cap_ctxt, supply, supply_ctxt);
 
   if(flow != NULL) {
-    while(SCEDA_augment_flow_along_neg_cycle(g, cap, cap_ctxt, cost, cost_ctxt, flow)) {
-    }
+    SCEDA_minimise_flow_cost(g, cap, cap_ctxt, cost, cost_ctxt, flow);
 
     if(lcap != NULL) {
       SCEDA_HashMapIterator phi;
