@@ -928,7 +928,7 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
     }
 
     SCEDA_Queue *todo = SCEDA_queue_create(NULL);
-    SCEDA_HashSet *in_queue = SCEDA_vertex_set_create();
+/*     SCEDA_HashSet *in_queue = SCEDA_vertex_set_create(); */
 
     {
       SCEDA_VerticesIterator vertices;
@@ -941,7 +941,7 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 #endif    
 	if(boxed_get(eu) > 0) {
 	  safe_call(SCEDA_queue_enqueue(todo, u));
-	  safe_call(SCEDA_hashset_add(in_queue, u));
+/* 	  safe_call(SCEDA_hashset_add(in_queue, u)); */
 	}
       }
       SCEDA_vertices_iterator_cleanup(&vertices);
@@ -950,7 +950,7 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
     while(!SCEDA_queue_is_empty(todo)) {
       SCEDA_Vertex *u;
       safe_call(SCEDA_queue_dequeue(todo, (void **)&u));
-      safe_call(SCEDA_hashset_remove(in_queue, (void **)&u));
+/*       safe_call(SCEDA_hashset_remove(in_queue, (void **)&u)); */
 #ifdef DEBUG
       fprintf(stderr,"current active vertex = %s\n", SCEDA_vertex_get_data(char *, u));
 #endif      
@@ -981,12 +981,22 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 	      boxed_set(fe, boxed_get(fe) + push);
 
 	      boxed(int) ev = SCEDA_hashmap_get(excess, v);
-	      boxed_set(ev, boxed_get(ev) + push);
-	      boxed_set(eu, boxed_get(eu) - push);
-	      if((boxed_get(ev) > 0) && (!SCEDA_hashset_contains(in_queue, v))) {
-		safe_call(SCEDA_queue_enqueue(todo, v));
-		safe_call(SCEDA_hashset_add(in_queue, v));
+	      if(boxed_get(ev) <= 0) {
+		boxed_set(ev, boxed_get(ev) + push);
+		boxed_set(eu, boxed_get(eu) - push);
+		if(boxed_get(ev) > 0) {
+		  safe_call(SCEDA_queue_enqueue(todo, v)); 
+		}
+	      } else {
+		boxed_set(ev, boxed_get(ev) + push);
+		boxed_set(eu, boxed_get(eu) - push);
 	      }
+/* 	      boxed_set(ev, boxed_get(ev) + push); */
+/* 	      boxed_set(eu, boxed_get(eu) - push); */
+/* 	      if((boxed_get(ev) > 0) && (!SCEDA_hashset_contains(in_queue, v))) { */
+/* 		safe_call(SCEDA_queue_enqueue(todo, v)); */
+/* 		safe_call(SCEDA_hashset_add(in_queue, v)); */
+/* 	      } */
 	      if(boxed_get(eu) == 0) {
 		break;
 	      }
@@ -1018,12 +1028,22 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 	      boxed_set(fe, boxed_get(fe) - push);
 
 	      boxed(int) ev = SCEDA_hashmap_get(excess, v);
-	      boxed_set(ev, boxed_get(ev) + push);
-	      boxed_set(eu, boxed_get(eu) - push);
-	      if((boxed_get(ev) > 0) && (!SCEDA_hashset_contains(in_queue, v))) {
-		safe_call(SCEDA_queue_enqueue(todo, v));
-		safe_call(SCEDA_hashset_add(in_queue, v));
+	      if(boxed_get(ev) <= 0) {
+		boxed_set(ev, boxed_get(ev) + push);
+		boxed_set(eu, boxed_get(eu) - push);
+		if(boxed_get(ev) > 0) {
+		  safe_call(SCEDA_queue_enqueue(todo, v)); 
+		}
+	      } else {
+		boxed_set(ev, boxed_get(ev) + push);
+		boxed_set(eu, boxed_get(eu) - push);
 	      }
+/* 	      boxed_set(ev, boxed_get(ev) + push); */
+/* 	      boxed_set(eu, boxed_get(eu) - push); */
+/* 	      if((boxed_get(ev) > 0) && (!SCEDA_hashset_contains(in_queue, v))) { */
+/* 		safe_call(SCEDA_queue_enqueue(todo, v)); */
+/* 		safe_call(SCEDA_hashset_add(in_queue, v)); */
+/* 	      } */
 	      if(boxed_get(eu) == 0) {
 		break;
 	      }
@@ -1038,7 +1058,7 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
       } while(boxed_get(eu) > 0);
     }
 
-    SCEDA_hashset_delete(in_queue);
+/*     SCEDA_hashset_delete(in_queue); */
     SCEDA_queue_delete(todo);
   }
 

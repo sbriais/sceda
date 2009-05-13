@@ -8,7 +8,7 @@ LDFLAGS=-L$(SCEDA)/lib -lSCEDA
 
 PROJECT=example
 
-SRCC=main.c
+SRCC=main2.c
 SRCC+=
 SRCC+=
 SRCC+=
