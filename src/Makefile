@@ -1,7 +1,8 @@
 include ../Makefile.config
 
 # sets and maps
-SRCC=list.c listset.c listmap.c
+SRCC=list.c listset.c listmap.c 
+SRCC+=dlist.c
 SRCC+=hashset.c hashmap.c
 SRCC+=treeset.c treemap.c
 # graphs
@@ -22,7 +23,8 @@ SRCC+=heap.c
  
 SRCH=common.h util.h
 # sets and maps
-SRCH+=list.h listset.h listmap.h queue.h stack.h
+SRCH+=list.h listset.h listmap.h queue.h stack.h 
+SRCH+=dlist.h
 SRCH+=hashset.h hashmap.h
 SRCH+=treeset.h treemap.h
 # graphs
@@ -51,7 +53,8 @@ OBJS=$(SRCC:.c=.o)
 DISTFILES=Makefile $(SRCC) $(SRCH) $(DOCH)
 INSTALLH=common.h 
 # sets and maps
-INSTALLH+=list.h listset.h listmap.h queue.h stack.h
+INSTALLH+=list.h listset.h listmap.h queue.h stack.h 
+#INSTALLH+=dlist.h
 INSTALLH+=hashset.h hashmap.h
 INSTALLH+=treeset.h treemap.h
 # graphs

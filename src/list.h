@@ -153,7 +153,7 @@ int SCEDA_list_rem_next(SCEDA_List *list, SCEDA_ListElt *element, void **data);
 
     \hideinitializer */
 #define SCEDA_list_add_tail(list$, data$) \
-  ({ SCEDA_List *_list = list$; \
+  ({ SCEDA_List *_list = (list$);					\
      SCEDA_list_ins_next(_list, SCEDA_list_tail(_list), data$); })
 
 /** Remove first occurence of a data from a list
