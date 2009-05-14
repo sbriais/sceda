@@ -20,6 +20,8 @@
 
 #include "boxed.h"
 #include "queue.h"
+#include "stack.h"
+#include "dlist.h"
 
 #include "util.h"
 
@@ -29,6 +31,9 @@
   ({ int _n = (n$); \
      (_n>=0)?(_n):(-_n); })
 
+#define DEBUG
+#undef DEBUG
+
 #define SCEDA_graph_max_flow_highest_label SCEDA_graph_max_flow
 /* #define SCEDA_graph_max_flow_relabel_to_front SCEDA_graph_max_flow */
 
@@ -36,7 +41,8 @@
 #define SCEDA_augment_flow_along_neg_cycle_karp SCEDA_augment_flow_along_neg_cycle 
 
 /* #define SCEDA_minimise_flow_cost_cycle_cancelling SCEDA_minimise_flow_cost */
-#define SCEDA_minimise_flow_cost_cost_scaling SCEDA_minimise_flow_cost
+#define SCEDA_minimise_flow_cost_cost_scaling_fifo SCEDA_minimise_flow_cost
+/* #define SCEDA_minimise_flow_cost_cost_scaling_wave SCEDA_minimise_flow_cost */
 
 SCEDA_HashMap *SCEDA_graph_max_flow_relabel_to_front(SCEDA_Graph *g, SCEDA_Vertex *s, SCEDA_Vertex *t,
 						     SCEDA_int_edge_fun capacity, void *c_ctxt) {
@@ -848,13 +854,10 @@ static void SCEDA_minimise_flow_cost_cycle_cancelling(SCEDA_Graph *g,
   }
 }
 
-#define DEBUG
-#undef DEBUG
-
-static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g, 
-						  SCEDA_int_edge_fun cap, void *cap_ctxt, 
-						  SCEDA_int_edge_fun cost, void *cost_ctxt, 
-						  SCEDA_HashMap *flow) {
+static void SCEDA_minimise_flow_cost_cost_scaling_fifo(SCEDA_Graph *g, 
+						       SCEDA_int_edge_fun cap, void *cap_ctxt, 
+						       SCEDA_int_edge_fun cost, void *cost_ctxt, 
+						       SCEDA_HashMap *flow) {
   int n = SCEDA_graph_vcount(g);
 
   SCEDA_HashMap *excess = SCEDA_vertex_map_create((SCEDA_delete_fun)boxed_delete);
@@ -973,6 +976,9 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 	    double ce_red = cost(e, cost_ctxt) - boxed_get(piu) + boxed_get(piv);
 	    /** check whether e is an admissible edge */
 	    if((-epsilon <= ce_red) && (ce_red < 0)) {
+#ifdef DEBUG
+	      fprintf(stderr,"push to %s\n",SCEDA_vertex_get_data(char *, v));
+#endif
 	      int push = boxed_get(eu);
 	      if(push > rc) {
 		push = rc;
@@ -980,15 +986,10 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 	      boxed_set(fe, boxed_get(fe) + push);
 
 	      boxed(int) ev = SCEDA_hashmap_get(excess, v);
-	      if(boxed_get(ev) <= 0) {
-		boxed_set(ev, boxed_get(ev) + push);
-		boxed_set(eu, boxed_get(eu) - push);
-		if(boxed_get(ev) > 0) {
-		  safe_call(SCEDA_queue_enqueue(todo, v)); 
-		}
-	      } else {
-		boxed_set(ev, boxed_get(ev) + push);
-		boxed_set(eu, boxed_get(eu) - push);
+	      boxed_set(eu, boxed_get(eu) - push);
+	      boxed_set(ev, boxed_get(ev) + push);
+	      if((boxed_get(ev) > 0) && (boxed_get(ev) <= push)) {
+		safe_call(SCEDA_queue_enqueue(todo, v)); 
 	      }
 	      if(boxed_get(eu) == 0) {
 		break;
@@ -1020,6 +1021,9 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 	    double ce_red = -cost(e, cost_ctxt) - boxed_get(piu) + boxed_get(piv);
 	    /** check whether e is an admissible edge */
 	    if((-epsilon <= ce_red) && (ce_red < 0)) {
+#ifdef DEBUG
+	      fprintf(stderr,"push to back %s\n",SCEDA_vertex_get_data(char *, v));
+#endif
 	      int push = boxed_get(eu);
 	      if(push > rc) {
 		push = rc;
@@ -1027,15 +1031,10 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 	      boxed_set(fe, boxed_get(fe) - push);
 
 	      boxed(int) ev = SCEDA_hashmap_get(excess, v);
-	      if(boxed_get(ev) <= 0) {
-		boxed_set(ev, boxed_get(ev) + push);
-		boxed_set(eu, boxed_get(eu) - push);
-		if(boxed_get(ev) > 0) {
-		  safe_call(SCEDA_queue_enqueue(todo, v)); 
-		}
-	      } else {
-		boxed_set(ev, boxed_get(ev) + push);
-		boxed_set(eu, boxed_get(eu) - push);
+	      boxed_set(eu, boxed_get(eu) - push);
+	      boxed_set(ev, boxed_get(ev) + push);
+	      if((boxed_get(ev) > 0) && (boxed_get(ev) <= push)) {
+		safe_call(SCEDA_queue_enqueue(todo, v)); 
 	      }
 	      if(boxed_get(eu) == 0) {
 		break;
@@ -1056,7 +1055,7 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 	    ce_red_min = 0;
 	  }
 #ifdef DEBUG
-	  fprintf(stderr,"labelling %g\n",ce_red_min);
+	  fprintf(stderr,"relabelling %g\n",ce_red_min);
 #endif
 	  boxed_set(piu, boxed_get(piu) + ce_red_min + epsilon);
 	}
@@ -1065,6 +1064,245 @@ static void SCEDA_minimise_flow_cost_cost_scaling(SCEDA_Graph *g,
 
     SCEDA_queue_delete(todo);
   }
+
+  SCEDA_hashmap_delete(pi);
+  SCEDA_hashmap_delete(excess);
+}
+
+static void SCEDA_minimise_flow_cost_cost_scaling_wave(SCEDA_Graph *g, 
+						       SCEDA_int_edge_fun cap, void *cap_ctxt, 
+						       SCEDA_int_edge_fun cost, void *cost_ctxt, 
+						       SCEDA_HashMap *flow) {
+  int n = SCEDA_graph_vcount(g);
+
+  SCEDA_HashMap *excess = SCEDA_vertex_map_create((SCEDA_delete_fun)boxed_delete);
+
+  SCEDA_HashMap *pi = SCEDA_vertex_map_create((SCEDA_delete_fun)boxed_delete);
+
+  SCEDA_DList *topsort = SCEDA_dlist_create(NULL);
+
+  double epsilon = 1;
+
+  /* Initialise excess, pi, and epsilon */
+  {
+    /** we have excess(v) = supply(v) + sum(e \in In(v)) f(e) - sum(e \in Out(v)) f(e) */
+    /** since f is a flow, excess(v) = 0 for any v */
+    SCEDA_VerticesIterator vertices;
+    SCEDA_vertices_iterator_init(g, &vertices);
+    while(SCEDA_vertices_iterator_has_next(&vertices)) {
+      SCEDA_Vertex *u = SCEDA_vertices_iterator_next(&vertices);
+      safe_call(SCEDA_hashmap_put(excess, u, boxed_create(int, 0), NULL));
+      safe_call(SCEDA_hashmap_put(pi, u, boxed_create(double, 0), NULL));
+      safe_call(SCEDA_dlist_ins_next(topsort, NULL, u));
+    }
+    SCEDA_vertices_iterator_cleanup(&vertices);
+
+    int C = 0;
+
+    SCEDA_EdgesIterator edges;
+    SCEDA_edges_iterator_init(g, &edges);
+    while(SCEDA_edges_iterator_has_next(&edges)) {
+      SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges);
+      int ce = cost(e, cost_ctxt);
+      if(ABS(ce) > C) {
+	C = ABS(ce);
+      }
+    }
+    SCEDA_edges_iterator_cleanup(&edges);
+
+    epsilon = 1;
+    while(epsilon < C) {
+      epsilon *= 2;
+    }
+  }
+
+  while(n * epsilon >= 1) {
+    {
+      epsilon = epsilon / 2;
+
+      SCEDA_EdgesIterator edges;
+      SCEDA_edges_iterator_init(g, &edges);
+      while(SCEDA_edges_iterator_has_next(&edges)) {
+	SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges);
+	int ce = cost(e, cost_ctxt);
+	SCEDA_Vertex *u = SCEDA_edge_source(e);
+	SCEDA_Vertex *v = SCEDA_edge_target(e);
+	double ce_red = ce - boxed_get(((boxed(double))SCEDA_hashmap_get(pi, u))) + boxed_get(((boxed(double))SCEDA_hashmap_get(pi, v)));
+	if(ce_red > 0) {
+	  boxed(int) fe = SCEDA_hashmap_get(flow, e);
+	  boxed(int) eu = SCEDA_hashmap_get(excess, u);
+	  boxed(int) ev = SCEDA_hashmap_get(excess, v);
+	  boxed_set(eu, boxed_get(eu) + boxed_get(fe));
+	  boxed_set(ev, boxed_get(ev) - boxed_get(fe));
+	  boxed_set(fe, 0);
+	} else if(ce_red < 0) {
+	  boxed(int) fe = SCEDA_hashmap_get(flow, e);
+	  int ucap = cap(e, cap_ctxt);
+	  boxed(int) eu = SCEDA_hashmap_get(excess, u);
+	  boxed(int) ev = SCEDA_hashmap_get(excess, v);
+	  boxed_set(eu, boxed_get(eu) + boxed_get(fe) - ucap);
+	  boxed_set(ev, boxed_get(ev) - boxed_get(fe) + ucap);
+	  boxed_set(fe, ucap);
+	}
+      }
+      SCEDA_edges_iterator_cleanup(&edges);
+    }
+
+    int in_excess = 0;
+
+    {
+      SCEDA_VerticesIterator vertices;
+      SCEDA_vertices_iterator_init(g, &vertices);
+      while(SCEDA_vertices_iterator_has_next(&vertices)) {
+	SCEDA_Vertex *u = SCEDA_vertices_iterator_next(&vertices);
+	boxed(int) eu = SCEDA_hashmap_get(excess, u);
+#ifdef DEBUG
+	fprintf(stderr,"e(%s) = %d\n", SCEDA_vertex_get_data(char *, u), boxed_get(eu));
+#endif    
+	if(boxed_get(eu) > 0) {
+	  in_excess++;
+	}
+      }
+      SCEDA_vertices_iterator_cleanup(&vertices);
+    }
+
+    SCEDA_DListElt *current = SCEDA_dlist_head(topsort);
+
+    while(in_excess > 0) {
+      safe_ptr(current);
+      SCEDA_Vertex *u = SCEDA_dlist_data(SCEDA_Vertex *, current);
+
+      boxed(int) eu = SCEDA_hashmap_get(excess, u);
+      if(boxed_get(eu) <= 0) {
+	current = SCEDA_dlist_next(current);
+	continue;
+      }
+
+#ifdef DEBUG
+      fprintf(stderr,"current active vertex = %s\n", SCEDA_vertex_get_data(char *, u));
+#endif      
+
+      boxed(double) piu = SCEDA_hashmap_get(pi, u);
+      do {
+	double ce_red_min = -1;
+
+	{
+	  SCEDA_OutEdgesIterator out_edges;
+	  SCEDA_out_edges_iterator_init(u, &out_edges);
+	  while(SCEDA_out_edges_iterator_has_next(&out_edges)) {
+	    SCEDA_Edge *e = SCEDA_out_edges_iterator_next(&out_edges);
+	    boxed(int) fe = SCEDA_hashmap_get(flow, e);
+	    int rc = cap(e, cap_ctxt) - boxed_get(fe);
+	    /** check whether e is in the residual graph */
+	    if(rc <= 0) {
+	      continue;
+	    }
+	    SCEDA_Vertex *v = SCEDA_edge_target(e);
+	    boxed(double) piv = SCEDA_hashmap_get(pi, v);
+	    double ce_red = cost(e, cost_ctxt) - boxed_get(piu) + boxed_get(piv);
+	    /** check whether e is an admissible edge */
+	    if((-epsilon <= ce_red) && (ce_red < 0)) {
+#ifdef DEBUG
+	      fprintf(stderr,"push to %s\n", SCEDA_vertex_get_data(char *, v));
+#endif
+	      int push = boxed_get(eu);
+	      if(push > rc) {
+		push = rc;
+	      }
+	      boxed_set(fe, boxed_get(fe) + push);
+
+	      boxed(int) ev = SCEDA_hashmap_get(excess, v);
+
+	      boxed_set(eu, boxed_get(eu) - push);
+	      boxed_set(ev, boxed_get(ev) + push);
+	      if((boxed_get(ev) > 0) && (boxed_get(ev) <= push)) {
+		in_excess++;
+	      }
+
+	      if(boxed_get(eu) == 0) {
+		break;
+	      }
+	    } else {
+	      if(ce_red >= 0) {
+		if((ce_red_min < 0) || (ce_red < ce_red_min)) {
+		  ce_red_min = ce_red;
+		} 
+	      }
+	    }
+	  }
+	  SCEDA_out_edges_iterator_cleanup(&out_edges);
+	}
+
+	if(boxed_get(eu) > 0) {
+	  SCEDA_InEdgesIterator in_edges;
+	  SCEDA_in_edges_iterator_init(u, &in_edges);
+	  while(SCEDA_in_edges_iterator_has_next(&in_edges)) {
+	    SCEDA_Edge *e = SCEDA_in_edges_iterator_next(&in_edges);
+	    boxed(int) fe = SCEDA_hashmap_get(flow, e);
+	    int rc = boxed_get(fe);
+	    /** check whether e is in the residual graph */
+	    if(rc <= 0) {
+	      continue;
+	    }
+	    SCEDA_Vertex *v = SCEDA_edge_source(e);
+	    boxed(double) piv = SCEDA_hashmap_get(pi, v);
+	    double ce_red = -cost(e, cost_ctxt) - boxed_get(piu) + boxed_get(piv);
+	    /** check whether e is an admissible edge */
+	    if((-epsilon <= ce_red) && (ce_red < 0)) {
+#ifdef DEBUG
+	      fprintf(stderr,"push back to %s\n", SCEDA_vertex_get_data(char *, v));
+#endif
+	      int push = boxed_get(eu);
+	      if(push > rc) {
+		push = rc;
+	      }
+	      boxed_set(fe, boxed_get(fe) - push);
+
+	      boxed(int) ev = SCEDA_hashmap_get(excess, v);
+
+	      boxed_set(eu, boxed_get(eu) - push);
+	      boxed_set(ev, boxed_get(ev) + push);
+	      if((boxed_get(ev) > 0) && (boxed_get(ev) <= push)) {
+		in_excess++;
+	      }
+
+	      if(boxed_get(eu) == 0) {
+		break;
+	      }
+	    } else {
+	      if(ce_red >= 0) {
+		if((ce_red_min < 0) || (ce_red < ce_red_min)) {
+		  ce_red_min = ce_red;
+		} 
+	      }
+	    }
+	  }
+	  SCEDA_in_edges_iterator_cleanup(&in_edges);
+	}
+
+	if(boxed_get(eu) > 0) {
+	  if(ce_red_min < 0) {
+	    ce_red_min = 0;
+	  }
+#ifdef DEBUG
+	  fprintf(stderr,"relabelling %g\n",ce_red_min);
+#endif
+	  boxed_set(piu, boxed_get(piu) + ce_red_min + epsilon);
+	  
+	  if(current != SCEDA_dlist_head(topsort)) {
+	    safe_call(SCEDA_dlist_rem(topsort, current, (void **)&u));
+	    safe_call(SCEDA_dlist_ins_next(topsort, NULL, u));
+	    current = SCEDA_dlist_head(topsort);
+	  }
+	}
+      } while(boxed_get(eu) > 0);
+
+      in_excess--;
+      current = SCEDA_dlist_next(current);
+    }
+  }
+
+  SCEDA_dlist_delete(topsort);
 
   SCEDA_hashmap_delete(pi);
   SCEDA_hashmap_delete(excess);
