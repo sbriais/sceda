@@ -225,8 +225,6 @@
     Compute a maximum flow of minimum cost in the directed
     network. 
 
-    It is an implementation of the mean cycle cancelling method.
-
     \code
     HashMap *graph_feasible_flow(Graph *g, 
                                  int_edge_fun capacity, void *cap_ctxt, 
@@ -245,6 +243,9 @@
 
     Compute a minimum cost flow that satisfies the capacity and supply
     constraints, if one exists.
+
+    Min Cost Flow algorithms use the cost scaling technique of
+    Goldberg & Tarjan.
 
     \section negcycsec Negative Cycles Detection
 
