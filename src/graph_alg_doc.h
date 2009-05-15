@@ -207,6 +207,32 @@
 
     \section flowsec Network Flows
 
+    In the following, a network is a directed graph \f$G = (V, E)\f$.
+    We assume to have a lower capacity function \f$lcap: E \mapsto
+    Nat\f$, an upper capacity function \f$ucap: E \mapsto Nat\f$, a
+    supply function \f$b:V \to ZNat\f$ and a cost function \f$cost: E
+    \mapsto Nat\f$.
+
+    A flow is a function \f$f: E \mapsto Nat\f$ such that \f$\forall v
+    \in V: \sum\limits_{e \in Out(v)} f(e) - \sum\limits_{e \in In(v)}
+    f(e) = b(v)\f$ and \f$\forall e \in E: lcap(e) \leq f(e) \leq
+    ucap(e)\f$.
+
+    The cost of a flow is given by \f$\sum\limits_{e \in E} cost(e)
+    f(e)\f$.
+
+    Note that a necessary condition for a flow to exist is that
+    \f$\sum\limits_{v \in V} b(v) = 0\f$.
+
+    The problem of the maximum flow is the following:
+    Assume to have a single source \f$s\f$ and a single sink \f$t\f$.
+    Assume \f$b(v) = 0\f$ for any \f$v \in V \setminus \{s, t\}\f$ and
+    \f$lcap(e) = 0\f$ for any \f$e \in E\f$. Find a flow such that \f$b(s)\f$ is maximum.
+
+    The problem of the feasible flow is the problem of the existence
+    of a flow in the simplified case where \f$lcap(e) = 0\f$ for any
+    \f$e \in E\f$.
+
     \code
     HashMap *graph_max_flow(Graph *g, Vertex *s, Vertex *t, 
                             int_edge_fun capacity, void *cap_ctxt);
@@ -214,7 +240,7 @@
     
     Compute a maximum flow in the directed network. 
 
-    It is an implementation of the preflow relabel to front method.
+    It is an implementation of the highest label push/relabel method.
 
     \code
     HashMap *graph_min_cost_max_flow(Graph *g, Vertex *s, Vertex *t, 
@@ -232,7 +258,7 @@
     \endcode
 
     Compute a maximum flow that satisfies the supply constraint, if one exists.
-
+    
     \code
     HashMap *graph_min_cost_flow(Graph *g,
 				 int_edge_fun lcap, void *lcap_ctxt,

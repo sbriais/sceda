@@ -985,7 +985,7 @@ static void SCEDA_mcf_price_update(SCEDA_Graph *g,
     while(SCEDA_vertices_iterator_has_next(&vertices)) {
       SCEDA_Vertex *u = SCEDA_vertices_iterator_next(&vertices);
       boxed(int) eu = SCEDA_hashmap_get(excess, u);
-      if(boxed_get(eu) < 0) {
+      if(boxed_get(eu) <= 0) {
 	safe_call(SCEDA_hashset_add(visited, u));
 	safe_call(SCEDA_queue_enqueue(todo, u));
       } else {
