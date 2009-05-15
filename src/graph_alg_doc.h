@@ -224,10 +224,11 @@
     Note that a necessary condition for a flow to exist is that
     \f$\sum\limits_{v \in V} b(v) = 0\f$.
 
-    The problem of the maximum flow is the following:
-    Assume to have a single source \f$s\f$ and a single sink \f$t\f$.
-    Assume \f$b(v) = 0\f$ for any \f$v \in V \setminus \{s, t\}\f$ and
-    \f$lcap(e) = 0\f$ for any \f$e \in E\f$. Find a flow such that \f$b(s)\f$ is maximum.
+    The problem of the maximum flow is the following. Assume to have a
+    single source \f$s\f$ and a single sink \f$t\f$.  Assume \f$b(v) =
+    0\f$ for any \f$v \in V \setminus \{s, t\}\f$ and \f$lcap(e) =
+    0\f$ for any \f$e \in E\f$. Find \f$b(s)\f$ maximum such that a
+    flow exists.
 
     The problem of the feasible flow is the problem of the existence
     of a flow in the simplified case where \f$lcap(e) = 0\f$ for any
