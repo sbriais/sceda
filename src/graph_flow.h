@@ -97,7 +97,8 @@ SCEDA_HashMap *SCEDA_graph_feasible_flow(SCEDA_Graph *g,
     - cost_ctxt is assumed to be a hashmap from edges to integers (int *)
 
     Beware that when capacities are unbounded, the result is correct
-    iff the initial graph do not contain a cycle of nagative cost.
+    iff the initial graph do not contain a cycle of negative cost and
+    unbounded capacity.
 */    
 SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
