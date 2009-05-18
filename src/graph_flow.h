@@ -89,6 +89,15 @@ SCEDA_HashMap *SCEDA_graph_feasible_flow(SCEDA_Graph *g,
     - if ucap_ctxt == NULL then capacities of edges are unbounded.
     - if lcap_ctxt != NULL then a constant upper bound, whose integer
       value is pointed by ucap_ctxt, is assumed.
+
+    if supply == NULL
+    - supply_ctxt is assumed to be a hashmap from vertices to integers (int *)
+
+    if cost == NULL
+    - cost_ctxt is assumed to be a hashmap from edges to integers (int *)
+
+    Beware that when capacities are unbounded, the result is correct
+    iff the initial graph do not contain a cycle of nagative cost.
 */    
 SCEDA_HashMap *SCEDA_graph_min_cost_flow(SCEDA_Graph *g,
 					 SCEDA_int_edge_fun lcap, void *lcap_ctxt,
