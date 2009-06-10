@@ -21,7 +21,7 @@ SRCC+=graph_flow.c
 SRCC+=pqueue.c
 SRCC+=heap.c
  
-SRCH=common.h util.h
+SRCH=common.h util.h boxed.h
 # sets and maps
 SRCH+=list.h listset.h listmap.h queue.h stack.h 
 SRCH+=dlist.h
