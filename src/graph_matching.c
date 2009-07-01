@@ -1,5 +1,6 @@
 /*
-   Copyright 2008, 2009 Sebastien Briais
+   Copyright Sebastien Briais 2008, 2009
+
    This file is part of SCEDA.
    
    SCEDA is free software: you can redistribute it and/or modify it
