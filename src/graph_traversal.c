@@ -1,6 +1,6 @@
 /*
-   This file is part of SCEDA.
    Copyright 2008, 2009 Sebastien Briais
+   This file is part of SCEDA.
    
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
