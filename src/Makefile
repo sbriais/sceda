@@ -1,7 +1,9 @@
 include ../Makefile.config
 
+# utilities
+SRCC=stringutil.c
 # sets and maps
-SRCC=list.c listset.c listmap.c 
+SRCC+=list.c listset.c listmap.c 
 SRCC+=dlist.c
 SRCC+=hashset.c hashmap.c
 SRCC+=treeset.c treemap.c
@@ -22,6 +24,8 @@ SRCC+=pqueue.c
 SRCC+=heap.c
  
 SRCH=common.h util.h boxed.h
+# utilities
+SRCH+=stringutil.h
 # sets and maps
 SRCH+=list.h listset.h listmap.h queue.h stack.h 
 SRCH+=dlist.h
@@ -52,6 +56,8 @@ OBJS=$(SRCC:.c=.o)
 
 DISTFILES=Makefile $(SRCC) $(SRCH) $(DOCH)
 INSTALLH=common.h 
+# utilities
+INSTALLH+=stringutil.h
 # sets and maps
 INSTALLH+=list.h listset.h listmap.h queue.h stack.h 
 #INSTALLH+=dlist.h
