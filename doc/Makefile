@@ -7,6 +7,8 @@ INSTALLLIB=
 all:
 	$(DOXYGEN)
 
+.PHONY: all clean dist-files install-h install-lib
+
 clean:
 	rm -rf html latex *~
 

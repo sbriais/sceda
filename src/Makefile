@@ -78,6 +78,8 @@ INSTALLLIB=
 
 all: .depend $(OBJS)
 
+.PHONY: all clean dist-files install-h install-lib
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 

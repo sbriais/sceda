@@ -29,7 +29,7 @@ all: $(LIBNAME).a doc
 $(LIBNAME).a: Makefile $(SRCSUBDIRS) $(OBJS)
 	for dir in $(SRCSUBDIRS); do $(AR) rvs $(LIBNAME).a $$dir/*.o; done
 
-.PHONY: subdirs $(SUBDIRS)
+.PHONY: all clean dist list-headers list-objects install subdirs $(SUBDIRS)
 
 subdirs: $(SRCSUBDIRS) $(OTHERDIRS)
 
