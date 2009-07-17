@@ -6,7 +6,7 @@ SUBDIRS+=listset hashset treeset
 SUBDIRS+=heap pqueue 
 SUBDIRS+=list queue stack 
 
-DISTFILES=Makefile
+DISTFILES=Makefile README
 
 all: $(SUBDIRS)
 
