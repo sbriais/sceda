@@ -1,6 +1,10 @@
 CC?=gcc
 
+	ifdef	LIBHOME
+SCEDA?=$(LIBHOME)
+	else
 SCEDA?=$(HOME)/SCEDA
+	endif
 
 CFLAGS=-O3 -Wall 
 CPPFLAGS=-I$(SCEDA)/include
