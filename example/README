@@ -2,6 +2,3 @@ To build the examples, simply type
 
 make SCEDA=/path/to/SCEDA
 
-or alternatively
-
-make LIBHOME=/path/to/{SCEDA}
