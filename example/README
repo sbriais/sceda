@@ -2,3 +2,5 @@ To build the examples, simply type
 
 make SCEDA=/path/to/SCEDA
 
+where /path/to/SCEDA is SCEDA installation path.
+
