@@ -33,6 +33,6 @@ make doc
 
 To compile all the examples, type:
 
-make example SCEDA=/path/to/SCEDA
+make examples SCEDA=/path/to/SCEDA
 
 (replace the /path/to/SCEDA with the path you just used for installing SCEDA)

@@ -1,7 +1,7 @@
 include Makefile.config
 
 SRCSUBDIRS=src
-OTHERDIRS=doc example
+OTHERDIRS=doc examples
 SUBDIRS=$(SRCSUBDIRS) $(OTHERDIRS)
 
 PROJECT_NAME=SCEDA
