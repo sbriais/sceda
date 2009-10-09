@@ -6,7 +6,7 @@ AR=ar
 
 # C Compiler flags
 # Define UNSAFE to remove all assertions/checks performed by SCEDA
-CFLAGS=-Wall -O3 -fno-strict-aliasing -Werror -Wno-unused-function -g
+CFLAGS=-Wall -O3 -fno-strict-aliasing -Werror -Wno-unused-function 
 
 # Doxygen command
 DOXYGEN=doxygen
