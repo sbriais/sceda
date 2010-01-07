@@ -27,86 +27,6 @@
 #define SCEDA_treeset_root(set) ((set)->root)
 #define SCEDA_treeset_nil(set) (&((set)->nil))
 
-#define RB_DEBUG 0
-
-#if(RB_DEBUG)
-#include <assert.h>
-
-static int SCEDA_treeset_height_aux(SCEDA_TreeSet *set, SCEDA_TreeSetElt *x) {
-  if(x == SCEDA_treeset_nil(set)) {
-    return 0;
-  }
-  int l = SCEDA_treeset_height_aux(set, x->left);
-  int r = SCEDA_treeset_height_aux(set, x->right);
-  if(l > r) {
-    return ++l;
-  } else {
-    return ++r;
-  }
-}
-
-static int SCEDA_treeset_height(SCEDA_TreeSet *set) {
-  return SCEDA_treeset_height_aux(set, SCEDA_treeset_root(set));
-}
-
-static void SCEDA_treeset_check_color(SCEDA_TreeSet *set, SCEDA_TreeSetElt *x) {
-  if(x == SCEDA_treeset_nil(set)) {
-    return;
-  }
-  if(x->color == RED) {
-    if(x->left != SCEDA_treeset_nil(set)) {
-      assert(x->left->color == BLACK);
-    }
-    if(x->right != SCEDA_treeset_nil(set)) {
-      assert(x->right->color == BLACK);
-    }
-  }
-
-  SCEDA_treeset_check_color(set, x->left);
-  SCEDA_treeset_check_color(set, x->right);
-}
-
-static int SCEDA_treeset_check_black_height(SCEDA_TreeSet *set, SCEDA_TreeSetElt *x) {
-  if(x == SCEDA_treeset_nil(set)) {
-    return 0;
-  }
-  int l = SCEDA_treeset_check_black_height(set, x->left);
-  int r = SCEDA_treeset_check_black_height(set, x->right);
-  assert(l == r);
-  if(x->color == BLACK) {
-    return (1+l);
-  } else {
-    return l;
-  }
-}
-
-static void SCEDA_treeset_check_order(SCEDA_TreeSet *set, SCEDA_TreeSetElt *x) {
-  if(x == SCEDA_treeset_nil(set)) {
-    return;
-  }
-  if(x->left != SCEDA_treeset_nil(set)) {
-    assert(x->left->parent == x);
-    assert(set->compare(SCEDA_treeset_data(void *, x->left), SCEDA_treeset_data(void *, x)) < 0);
-  }
-  if(x->right != SCEDA_treeset_nil(set)) {
-    assert(x->right->parent == x);
-    assert(set->compare(SCEDA_treeset_data(void *, x->right), SCEDA_treeset_data(void *, x)) > 0);
-  }
-  SCEDA_treeset_check_order(set, x->left);
-  SCEDA_treeset_check_order(set, x->right);
-}
-
-static void SCEDA_treeset_check(SCEDA_TreeSet *set) {
-  if(set->size == 0) {
-    return;
-  }
-  assert(SCEDA_treeset_root(set)->color == BLACK);
-  SCEDA_treeset_check_color(set, SCEDA_treeset_root(set));
-  SCEDA_treeset_check_black_height(set, SCEDA_treeset_root(set));
-  SCEDA_treeset_check_order(set, SCEDA_treeset_root(set));
-}
-#endif
-
 static SCEDA_TreeSetElt *SCEDA_treeset_min(SCEDA_TreeSet *set, SCEDA_TreeSetElt *x) {
   while(x != SCEDA_treeset_nil(set)) {
     if(x->left == SCEDA_treeset_nil(set)) {
@@ -340,9 +260,7 @@ int SCEDA_treeset_add(SCEDA_TreeSet *set, const void *data) {
   
   set->size++;
 
-#if(RB_DEBUG)
   SCEDA_treeset_check(set);
-#endif
 
   return 0;
 }
@@ -461,9 +379,7 @@ int SCEDA_treeset_remove(SCEDA_TreeSet *set, void **data) {
 
   set->size--;
 
-#if(RB_DEBUG)
   SCEDA_treeset_check(set);
-#endif
 
   return 0;
 }

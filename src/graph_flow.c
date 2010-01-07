@@ -32,9 +32,6 @@
   ({ int _n = (n$); \
      (_n>=0)?(_n):(-_n); })
 
-#define DEBUG
-#undef DEBUG
-
 #define SCEDA_graph_max_flow_highest_label SCEDA_graph_max_flow
 /* #define SCEDA_graph_max_flow_relabel_to_front SCEDA_graph_max_flow */
 
@@ -1074,9 +1071,6 @@ static void SCEDA_mcf_price_update(SCEDA_Graph *g,
     SCEDA_hashset_iterator_init(compl, &vertices);
     while(SCEDA_hashset_iterator_has_next(&vertices)) {
       SCEDA_Vertex *u = SCEDA_hashset_iterator_next(&vertices);
-#ifdef DEBUG
-      fprintf(stderr,"price update of %s\n",SCEDA_vertex_get_data(char *, u));
-#endif
       boxed(double) piu = SCEDA_hashmap_get(pi, u);
       boxed_set(piu, boxed_get(piu) + epsilon);
     }
@@ -1172,9 +1166,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_fifo(SCEDA_Graph *g,
       while(SCEDA_vertices_iterator_has_next(&vertices)) {
 	SCEDA_Vertex *u = SCEDA_vertices_iterator_next(&vertices);
 	boxed(int) eu = SCEDA_hashmap_get(excess, u);
-#ifdef DEBUG
-	fprintf(stderr,"e(%s) = %d\n", SCEDA_vertex_get_data(char *, u), boxed_get(eu));
-#endif    
 	if(boxed_get(eu) > 0) {
 	  safe_call(SCEDA_queue_enqueue(todo, u));
 	}
@@ -1187,20 +1178,11 @@ static void SCEDA_minimise_flow_cost_cost_scaling_fifo(SCEDA_Graph *g,
     while(!SCEDA_queue_is_empty(todo)) {
       if(relabelling > n) {
 	relabelling = 0;
-#ifdef DEBUG
-	fprintf(stderr,"time for a global price update\n");
-#endif
 	SCEDA_mcf_price_update(g, cap, cap_ctxt, cost, cost_ctxt, flow, excess, pi, epsilon);
-#ifdef DEBUG
-	fprintf(stderr,"done\n");
-#endif
       }
 
       SCEDA_Vertex *u;
       safe_call(SCEDA_queue_dequeue(todo, (void **)&u));
-#ifdef DEBUG
-      fprintf(stderr,"current active vertex = %s\n", SCEDA_vertex_get_data(char *, u));
-#endif      
  
       boxed(int) eu = SCEDA_hashmap_get(excess, u);
       boxed(double) piu = SCEDA_hashmap_get(pi, u);
@@ -1223,9 +1205,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_fifo(SCEDA_Graph *g,
 	    double ce_red = cost(e, cost_ctxt) - boxed_get(piu) + boxed_get(piv);
 	    /** check whether e is an admissible edge */
 	    if((-epsilon <= ce_red) && (ce_red < 0)) {
-#ifdef DEBUG
-	      fprintf(stderr,"push to %s\n",SCEDA_vertex_get_data(char *, v));
-#endif
 	      int push = boxed_get(eu);
 	      if(push > rc) {
 		push = rc;
@@ -1268,9 +1247,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_fifo(SCEDA_Graph *g,
 	    double ce_red = -cost(e, cost_ctxt) - boxed_get(piu) + boxed_get(piv);
 	    /** check whether e is an admissible edge */
 	    if((-epsilon <= ce_red) && (ce_red < 0)) {
-#ifdef DEBUG
-	      fprintf(stderr,"push back to %s\n",SCEDA_vertex_get_data(char *, v));
-#endif
 	      int push = boxed_get(eu);
 	      if(push > rc) {
 		push = rc;
@@ -1301,9 +1277,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_fifo(SCEDA_Graph *g,
 	  if(ce_red_min < 0) {
 	    ce_red_min = 0;
 	  }
-#ifdef DEBUG
-	  fprintf(stderr,"relabelling %g\n",ce_red_min);
-#endif
 	  boxed_set(piu, boxed_get(piu) + ce_red_min + epsilon);
 	  relabelling++;
 	}
@@ -1406,9 +1379,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_wave(SCEDA_Graph *g,
       while(SCEDA_vertices_iterator_has_next(&vertices)) {
 	SCEDA_Vertex *u = SCEDA_vertices_iterator_next(&vertices);
 	boxed(int) eu = SCEDA_hashmap_get(excess, u);
-#ifdef DEBUG
-	fprintf(stderr,"e(%s) = %d\n", SCEDA_vertex_get_data(char *, u), boxed_get(eu));
-#endif    
 	if(boxed_get(eu) > 0) {
 	  in_excess++;
 	}
@@ -1427,10 +1397,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_wave(SCEDA_Graph *g,
 	current = SCEDA_dlist_next(current);
 	continue;
       }
-
-#ifdef DEBUG
-      fprintf(stderr,"current active vertex = %s\n", SCEDA_vertex_get_data(char *, u));
-#endif      
 
       boxed(double) piu = SCEDA_hashmap_get(pi, u);
       do {
@@ -1452,9 +1418,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_wave(SCEDA_Graph *g,
 	    double ce_red = cost(e, cost_ctxt) - boxed_get(piu) + boxed_get(piv);
 	    /** check whether e is an admissible edge */
 	    if((-epsilon <= ce_red) && (ce_red < 0)) {
-#ifdef DEBUG
-	      fprintf(stderr,"push to %s\n", SCEDA_vertex_get_data(char *, v));
-#endif
 	      int push = boxed_get(eu);
 	      if(push > rc) {
 		push = rc;
@@ -1499,9 +1462,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_wave(SCEDA_Graph *g,
 	    double ce_red = -cost(e, cost_ctxt) - boxed_get(piu) + boxed_get(piv);
 	    /** check whether e is an admissible edge */
 	    if((-epsilon <= ce_red) && (ce_red < 0)) {
-#ifdef DEBUG
-	      fprintf(stderr,"push back to %s\n", SCEDA_vertex_get_data(char *, v));
-#endif
 	      int push = boxed_get(eu);
 	      if(push > rc) {
 		push = rc;
@@ -1534,9 +1494,6 @@ static void SCEDA_minimise_flow_cost_cost_scaling_wave(SCEDA_Graph *g,
 	  if(ce_red_min < 0) {
 	    ce_red_min = 0;
 	  }
-#ifdef DEBUG
-	  fprintf(stderr,"relabelling %g\n",ce_red_min);
-#endif
 	  boxed_set(piu, boxed_get(piu) + ce_red_min + epsilon);
 	  
 	  if(current != SCEDA_dlist_head(topsort)) {

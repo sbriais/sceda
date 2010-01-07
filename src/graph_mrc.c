@@ -25,13 +25,6 @@
 
 #include <stdlib.h>
 
-#undef DEBUG
-//#define DEBUG
-
-#ifdef DEBUG
-#include <stdio.h>
-#endif
-
 typedef struct {
   SCEDA_int_edge_fun weight;
   void *w_ctxt;
@@ -54,12 +47,6 @@ static long double mrc_cost(SCEDA_Edge *e, MRCcontext *ctxt) {
 static int mrc_unit_cost(SCEDA_Edge *e, void *ctxt) {
   return 1;
 }
-
-#ifdef DEBUG
-static void print_rational(FILE *stream, long double *x) {
-  fprintf(stream,"%Lf", *x);
-}
-#endif
 
 static int rational_norm(long double *x) {
   return 0;
@@ -157,10 +144,6 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     
     rational_inv_int(n, &(ctxt.lambda));
     
-#ifdef DEBUG
-    fprintf(stdout,"checking for negative time cycles\n");
-#endif
-
     SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_edge_fun)mrc_cost, &ctxt);
 
     if(!SCEDA_list_is_empty(cycle)) {
@@ -185,11 +168,6 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     ctxt.time = time;
     ctxt.t_ctxt = t_ctxt;
 
-#ifdef DEBUG
-    fprintf(stdout,"delta = ");
-    print_rational(stdout,&delta);
-    fprintf(stdout,"\n");
-#endif
     while(!small_enough(&lambda_min, &lambda_max, &delta)) {
       rational_add(&(lambda_min), &(lambda_max), &(ctxt.lambda));
       rational_div_n(2, &(ctxt.lambda));
@@ -197,16 +175,6 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
 	ret_code = -1;
 	break;
       }
-#ifdef DEBUG
-      fprintf(stdout,"min = ");
-      print_rational(stdout, &lambda_min);
-      fprintf(stdout,"\tmax = ");
-      print_rational(stdout, &lambda_max);
-      fprintf(stdout,"\n");
-      fprintf(stdout,"current = ");
-      print_rational(stdout,&(ctxt.lambda));
-      fprintf(stdout,"\n");
-#endif
       
       SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_edge_fun)mrc_cost, &ctxt);
       
@@ -220,19 +188,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     }
 
     if(ret_code == 0) {
-#ifdef DEBUG
-      fprintf(stdout,"min = ");
-      print_rational(stdout, &lambda_min);
-      fprintf(stdout,"\tmax = ");
-      print_rational(stdout, &lambda_max);
-      fprintf(stdout,"\n");
-#endif
       ctxt.lambda = lambda_max;
-#ifdef DEBUG
-      fprintf(stdout,"current = ");
-      print_rational(stdout,&(ctxt.lambda));
-      fprintf(stdout,"\n");
-#endif
 
       *min_cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_edge_fun)mrc_cost, &ctxt);
 
