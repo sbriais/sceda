@@ -260,8 +260,6 @@ int SCEDA_treeset_add(SCEDA_TreeSet *set, const void *data) {
   
   set->size++;
 
-  SCEDA_treeset_check(set);
-
   return 0;
 }
 
@@ -378,8 +376,6 @@ int SCEDA_treeset_remove(SCEDA_TreeSet *set, void **data) {
   }
 
   set->size--;
-
-  SCEDA_treeset_check(set);
 
   return 0;
 }
