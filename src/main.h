@@ -23,6 +23,16 @@
     \li \ref heaps
     \li \ref graphs and \ref graphalgs
 
+    \section history_sec History
+
+    \subsection v110 v 1.1.0
+    
+    \li Cleaned the code
+
+    \subsection v100 v 1.0.0
+
+    \li Initial release
+
     \section license_sec License
 
     Copyright Sebastien Briais 2008, 2009
