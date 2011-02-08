@@ -88,7 +88,7 @@ SCEDA_HashMap *SCEDA_graph_feasible_flow(SCEDA_Graph *g,
 
     if ucap == NULL:
     - if ucap_ctxt == NULL then capacities of edges are unbounded.
-    - if lcap_ctxt != NULL then a constant upper bound, whose integer
+    - if ucap_ctxt != NULL then a constant upper bound, whose integer
       value is pointed by ucap_ctxt, is assumed.
 
     if supply == NULL
