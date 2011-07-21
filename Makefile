@@ -28,12 +28,14 @@ DISTFILES+=$(SRCC) $(SRCH)
 INSTALLH=
 INSTALLLIB=$(LIBNAME).a
 
-all: $(LIBNAME).a doc 
+all: library doc 
+
+library: $(LIBNAME).a
 
 $(LIBNAME).a: Makefile $(SRCSUBDIRS) $(OBJS)
 	for dir in $(SRCSUBDIRS); do $(AR) rvs $(LIBNAME).a $$dir/*.o; done
 
-.PHONY: all clean dist list-headers list-objects install subdirs $(SUBDIRS)
+.PHONY: all library clean dist list-headers list-objects install subdirs $(SUBDIRS)
 
 subdirs: $(SRCSUBDIRS) $(OTHERDIRS)
 
