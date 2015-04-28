@@ -22,7 +22,7 @@ void delete_Integer(Integer *x) {
 int main(int argc, char *argv[]) {
   // create a graph whose nodes are labelled by Integer and edges are not labelled
   SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_Integer, NULL);
-      
+
   // build the graph
   {
     SCEDA_Vertex *v[1<<ORDER];
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     for(i = 0; i < 1<<ORDER; i++) {
       v[i] = SCEDA_graph_add_vertex(g, new_Integer(i));
     }
-    
+
     // connect them
     // i -> j iff j is a superset of i with exactly one more element
     // (when we interpret the binary representation as a subset of [0;ORDER[)
@@ -73,6 +73,6 @@ int main(int argc, char *argv[]) {
 
   // delete the graph
   SCEDA_graph_delete(g);
-  
+
   return 0;
 }

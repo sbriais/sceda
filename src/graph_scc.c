@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -77,7 +77,7 @@ SCEDA_List *SCEDA_graph_strongly_connected_components(SCEDA_Graph *g) {
   SCEDA_List *scc = SCEDA_list_create((SCEDA_delete_fun)SCEDA_hashset_delete);
 
   SCEDA_hashset_clear(visited);
-  
+
   {
     while(!SCEDA_stack_is_empty(ordered_vertices)) {
       SCEDA_Vertex *u;
@@ -96,4 +96,3 @@ SCEDA_List *SCEDA_graph_strongly_connected_components(SCEDA_Graph *g) {
 
   return scc;
 }
-

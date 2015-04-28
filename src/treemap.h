@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -49,17 +49,17 @@ typedef struct {
     @param[in] delete_key = delete function for keys or NULL
     @param[in] delete_value = delete function for values or NULL
     @param[in] compare_key = comparison function on keys */
-void SCEDA_treemap_init(SCEDA_TreeMap *map, SCEDA_delete_fun delete_key, 
+void SCEDA_treemap_init(SCEDA_TreeMap *map, SCEDA_delete_fun delete_key,
 			SCEDA_delete_fun delete_value, SCEDA_compare_fun compare_key);
 
 /** Create a (tree) map, ready for use.
 
     @param[in] delete_key = delete function for keys or NULL
     @param[in] delete_value = delete function for values or NULL
-    @param[in] compare_key = comparison function on keys 
-    
+    @param[in] compare_key = comparison function on keys
+
     @return the (tree) map */
-SCEDA_TreeMap *SCEDA_treemap_create(SCEDA_delete_fun delete_key, SCEDA_delete_fun delete_value, 
+SCEDA_TreeMap *SCEDA_treemap_create(SCEDA_delete_fun delete_key, SCEDA_delete_fun delete_value,
 				    SCEDA_compare_fun compare_key);
 
 /** Clean up a (tree) map.
@@ -124,17 +124,17 @@ int SCEDA_treemap_lookup(SCEDA_TreeMap *map, void **key, void **value);
 /** Size of the (tree) map in time complexity O(1).
 
     @param[in] map = map
-    
-    @return size of the map 
+
+    @return size of the map
 
     \hideinitializer */
 #define SCEDA_treemap_size(map$) ((map$)->size)
 
 /** Test whether the (tree) map is empty in time complexity O(1).
 
-    @param[in] map = map 
+    @param[in] map = map
 
-    @return TRUE if empty, FALSE otherwise 
+    @return TRUE if empty, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_treemap_is_empty(map$) (SCEDA_treemap_size(map$) == 0)
@@ -154,15 +154,15 @@ typedef struct {
     @param[in] iter = map iterator */
 void SCEDA_treemap_iterator_init(SCEDA_TreeMap *map, SCEDA_TreeMapIterator *iter);
 
-/** Test whether there is a next data in the map iterator. 
-    
+/** Test whether there is a next data in the map iterator.
+
     @param[in] iter = map iterator
-    
+
     @return TRUE if there is a "next" data, FALSE otherwise */
 int SCEDA_treemap_iterator_has_next(SCEDA_TreeMapIterator *iter);
 
-/** Return the next data of the map iterator. 
-    
+/** Return the next data of the map iterator.
+
     @param[in] iter = map iterator
     @param[out] key = corresponding key (filled by the iterator)
 

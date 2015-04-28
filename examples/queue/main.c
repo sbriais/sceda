@@ -20,7 +20,7 @@ void delete_Integer(Integer *x) {
 int main(int argc, char *argv[]) {
   // create a queue of Integer
   SCEDA_Queue *queue = SCEDA_queue_create((SCEDA_delete_fun)delete_Integer);
-      
+
   int i;
   for(i = 0; i < 10; i++) {
     // enqueue i in the queue

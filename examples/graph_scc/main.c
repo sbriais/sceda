@@ -22,7 +22,7 @@ void delete_Integer(Integer *x) {
 int main(int argc, char *argv[]) {
   // create a graph whose nodes are labelled by Integer and edges are not labelled
   SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_Integer, NULL);
- 
+
   SCEDA_Vertex *v0 = SCEDA_graph_add_vertex(g, new_Integer(0));
   SCEDA_Vertex *v1 = SCEDA_graph_add_vertex(g, new_Integer(1));
   SCEDA_Vertex *v2 = SCEDA_graph_add_vertex(g, new_Integer(2));

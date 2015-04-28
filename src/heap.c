@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -80,8 +80,8 @@ static inline void remove_child(SCEDA_HeapElt *parent, SCEDA_HeapElt *elt) {
   parent->degree--;
 }
 
-void SCEDA_heap_init(SCEDA_Heap *heap, 
-		     SCEDA_delete_fun delete_value, SCEDA_delete_fun delete_key, 
+void SCEDA_heap_init(SCEDA_Heap *heap,
+		     SCEDA_delete_fun delete_value, SCEDA_delete_fun delete_key,
 		     SCEDA_compare_fun compare_key) {
   heap->min = NULL;
   heap->size = 0;
@@ -90,7 +90,7 @@ void SCEDA_heap_init(SCEDA_Heap *heap,
   heap->compare_key = compare_key;
 }
 
-SCEDA_Heap *SCEDA_heap_create(SCEDA_delete_fun delete_value, SCEDA_delete_fun delete_key, 
+SCEDA_Heap *SCEDA_heap_create(SCEDA_delete_fun delete_value, SCEDA_delete_fun delete_key,
 			      SCEDA_compare_fun compare_key) {
   SCEDA_Heap *heap = (SCEDA_Heap *)safe_malloc(sizeof(SCEDA_Heap));
   SCEDA_heap_init(heap, delete_value, delete_key, compare_key);
@@ -136,16 +136,16 @@ void SCEDA_heap_clear(SCEDA_Heap *heap) {
 
 static void SCEDA_heap_insert_elt(SCEDA_Heap *heap, SCEDA_HeapElt *elt) {
   elt->child = NULL;
-  
+
   elt->degree = 0;
   elt->marked = FALSE;
-  
+
   insert_root(heap, elt);
-  
+
   if(compare_heap_elt(heap, elt, heap->min) < 0) {
     heap->min = elt;
   }
-  
+
   heap->size++;
 }
 
@@ -226,8 +226,8 @@ static void fibo_consolidate(SCEDA_Heap *heap) {
       d++;
     }
     aux[d] = x;
-  } 
-  
+  }
+
   for(i = 0; i < n; i++) {
     SCEDA_HeapElt *x = aux[i];
     if(x != NULL) {
@@ -253,9 +253,9 @@ static SCEDA_HeapElt *SCEDA_heap_extract_elt(SCEDA_Heap *heap) {
     if(heap->min != NULL) {
       fibo_consolidate(heap);
     }
-    
+
     heap->size--;
-  } 
+  }
   return z;
 }
 

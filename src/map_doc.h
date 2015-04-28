@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -54,17 +54,17 @@
 
     \section mapsapi_sec API
 
-    The API for maps is described below. 
+    The API for maps is described below.
 
     Replace the word "map" by either "listmap", or "hashmap" or
     "treemap" to get the API of the corresponding implementation (see
     also \link listmap.h \endlink, \link hashmap.h \endlink and \link treemap.h \endlink).
 
     \code
-    void map_init(Map *map, 
-                  delete_fun delete_key, delete_fun delete_value, 
+    void map_init(Map *map,
+                  delete_fun delete_key, delete_fun delete_value,
 		  va_list args);
-    Map *map_create(delete_fun delete_key, delete_fun delete_value, 
+    Map *map_create(delete_fun delete_key, delete_fun delete_value,
                     va_list args);
     \endcode
 
@@ -97,18 +97,18 @@
 
     If an existing binding was replaced and old_value is not NULL,
     then it is set to the value that was existing in the map before.
-    
+
     \code
     int map_remove(Map *map, void **key, void **value);
     \endcode
 
-    Remove the binding corresponding to a key in a map. 
+    Remove the binding corresponding to a key in a map.
 
     Return 0 if a binding was successfully removed, 1 if the
     key was not bound in the map, and -1 in case of error.
 
     The key (resp. the value) is replaced by the key (resp. the value)
-    of the binding found in the map. 
+    of the binding found in the map.
 
     \code
     int map_contains_key(Map *map, const void *key);
@@ -133,7 +133,7 @@
     Return 0 if a binding was found and -1 otherwise.
 
     The key (resp. the value) is replaced by the key (resp. the value)
-    of the binding found in the map. 
+    of the binding found in the map.
 
     \code
     int map_size(Map *map);
@@ -153,7 +153,7 @@
     void map_iterator_init(Map *map, MapIterator *iter);
     \endcode
 
-    Initialise a map iterator. 
+    Initialise a map iterator.
 
     The order in which the bindings are visited is not specified for
     list maps and hash maps. On the contrary, the bindings are visited
@@ -192,7 +192,7 @@
     It then print the map content, using a map iterator.
 
     Finally, the map is deleted.
-    
+
     \subsection listmap_exa ListMap example
 
     \include "listmap/main.c"
@@ -202,7 +202,7 @@
     \include "hashmap/main.c"
 
     \subsection treemap_exa TreeMap example
-    
+
     \include "treemap/main.c"
 
 */

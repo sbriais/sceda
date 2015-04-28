@@ -28,10 +28,10 @@ void delete_string(char *s) {
 
 int main(int argc, char *argv[]) {
   // create a set of Integer
-  SCEDA_ListMap *map = SCEDA_listmap_create((SCEDA_delete_fun)delete_string, 
+  SCEDA_ListMap *map = SCEDA_listmap_create((SCEDA_delete_fun)delete_string,
 					    (SCEDA_delete_fun)delete_Integer,
 					    (SCEDA_match_fun)match_string);
-  
+
   // note that strings are allocated onto the heap, thanks to strdup function
   SCEDA_listmap_put(map, strdup("Odissey"), new_Integer(2001), NULL);
   SCEDA_listmap_put(map, strdup("Torment"), new_Integer(2002), NULL);

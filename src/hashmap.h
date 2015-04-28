@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -54,9 +54,9 @@ void SCEDA_hashmap_init(SCEDA_HashMap *map, SCEDA_delete_fun delete_key, SCEDA_d
     @param[in] delete_value = delete function for values or NULL
     @param[in] match_key = equality function on keys
     @param[in] hash_key = hash function for keys
-    
+
     @return the (hash) map */
-SCEDA_HashMap *SCEDA_hashmap_create(SCEDA_delete_fun delete_key, SCEDA_delete_fun delete_value, 
+SCEDA_HashMap *SCEDA_hashmap_create(SCEDA_delete_fun delete_key, SCEDA_delete_fun delete_value,
 			SCEDA_match_fun match_key, SCEDA_hash_fun hash_key);
 
 /** Clean up a (hash) map.
@@ -70,7 +70,7 @@ void SCEDA_hashmap_cleanup(SCEDA_HashMap *map);
 void SCEDA_hashmap_delete(SCEDA_HashMap *map);
 
 /** Clear a (hash) map.
-    
+
     @param[in] map = map to clear */
 void SCEDA_hashmap_clear(SCEDA_HashMap *map);
 
@@ -121,17 +121,17 @@ int SCEDA_hashmap_lookup(SCEDA_HashMap *map, void **key, void **value);
 /** Size of the (hash) map in time complexity O(1).
 
     @param[in] map = map
-    
-    @return size of the map 
+
+    @return size of the map
 
     \hideinitializer */
 #define SCEDA_hashmap_size(map$) ((map$)->size)
 
 /** Test whether the (hash) map is empty in time complexity O(1).
 
-    @param[in] map = map 
+    @param[in] map = map
 
-    @return TRUE if empty, FALSE otherwise 
+    @return TRUE if empty, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_hashmap_is_empty(map$) (SCEDA_hashmap_size(map$) == 0)
@@ -146,20 +146,20 @@ typedef struct {
 /** Initialise a (hash) map iterator.
 
     @param[in] map = map
-    @param[in] iter = map iterator 
+    @param[in] iter = map iterator
 
     \hideinitializer */
 #define SCEDA_hashmap_iterator_init(map$, iter$) \
   ({ SCEDA_HashMapIterator *_iter = (iter$);   \
      _iter->i = 0;                        \
      _iter->map = (map$);	            \
-     SCEDA_listmap_iterator_init(SCEDA_hashmap_nth_map((_iter->map),0), &(_iter->elements)); }) 
+     SCEDA_listmap_iterator_init(SCEDA_hashmap_nth_map((_iter->map),0), &(_iter->elements)); })
 
-/** Test whether there is a next data in the map iterator. 
-    
+/** Test whether there is a next data in the map iterator.
+
     @param[in] iter = map iterator
-    
-    @return TRUE if there is a "next" data, FALSE otherwise 
+
+    @return TRUE if there is a "next" data, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_hashmap_iterator_has_next(iter$)                                                                  \
@@ -171,25 +171,25 @@ typedef struct {
      }                                                                                                     \
      (_iter->i < _iter->map->buckets) && (SCEDA_listmap_iterator_has_next(&(_iter->elements))); })
 
-/** Return the next data of the map iterator. 
-    
+/** Return the next data of the map iterator.
+
     @param[in] iter = map iterator
     @param[out] key = corresponding key (filled by the iterator)
 
-    @return the "next" data 
+    @return the "next" data
 
     \hideinitializer */
 #define SCEDA_hashmap_iterator_next(iter$, key$) (SCEDA_listmap_iterator_next(&((iter$)->elements), key$))
 
 /** Clean up a (hash) map iterator.
 
-    @param[in] iter = map iterator 
+    @param[in] iter = map iterator
 
     \hideinitializer */
 #define SCEDA_hashmap_iterator_cleanup(iter$)             \
   ({ SCEDA_HashMapIterator *_iter = (iter$);            \
      SCEDA_listmap_iterator_cleanup(&(_iter->elements)); \
-     memset(_iter, 0, sizeof(SCEDA_HashMapIterator)); }) 
+     memset(_iter, 0, sizeof(SCEDA_HashMapIterator)); })
 
 
 #endif

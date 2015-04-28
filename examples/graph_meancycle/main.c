@@ -32,7 +32,7 @@ int get_distance(SCEDA_Edge *e, void *ctxt) {
 int main(int argc, char *argv[]) {
   // create a graph whose nodes are labelled by strings and edges are labelled by Integers
   SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_Integer);
-  
+
   SCEDA_Vertex *vA = SCEDA_graph_add_vertex(g, strdup("A"));
   SCEDA_Vertex *vB = SCEDA_graph_add_vertex(g, strdup("B"));
   SCEDA_Vertex *vC = SCEDA_graph_add_vertex(g, strdup("C"));
@@ -47,9 +47,9 @@ int main(int argc, char *argv[]) {
   SCEDA_graph_add_edge(g, vC, vD, new_Integer(3));
   SCEDA_graph_add_edge(g, vD, vE, new_Integer(4));
   SCEDA_graph_add_edge(g, vE, vB, new_Integer(5));
-  
+
   SCEDA_List *mean_cycle;
-  
+
   if(SCEDA_graph_minimum_mean_cycle(g, get_distance, NULL, &mean_cycle) == 0) {
     fprintf(stdout,"Minimum Mean Cycle found.\n");
 

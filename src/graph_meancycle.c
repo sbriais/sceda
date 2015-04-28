@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -22,8 +22,8 @@
 #include "graph_meancycle.h"
 #include "boxed.h"
 
-int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g, 
-				   SCEDA_int_edge_fun cost, void *c_ctxt, 
+int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g,
+				   SCEDA_int_edge_fun cost, void *c_ctxt,
 				   SCEDA_List **min_cycle) {
   int n = SCEDA_graph_vcount(g);
 
@@ -56,7 +56,7 @@ int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g,
       SCEDA_vertices_iterator_init(g, &vertices);
       while(SCEDA_vertices_iterator_has_next(&vertices)) {
 	SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vertices);
-	
+
 	boxed(int) dv = boxed_create(int, 0);
 	SCEDA_Edge *in_v = NULL;
 
@@ -73,7 +73,7 @@ int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g,
 	  }
 
 	  int ce = cost(e, c_ctxt);
-	  
+
 	  if((in_v == NULL) || (boxed_get(du) + ce < boxed_get(dv))) {
 	    in_v = e;
 	    boxed_set(dv, boxed_get(du) + ce);
@@ -123,7 +123,7 @@ int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g,
 	if((den_max == 0) || (num_max * den < den_max * num)) {
 	  num_max = num;
 	  den_max = den;
-	} 
+	}
       }
 
       if((mu_v == NULL) || (num_max * mu_den < den_max * mu_num)) {
@@ -147,7 +147,7 @@ int SCEDA_graph_minimum_mean_cycle(SCEDA_Graph *g,
       k--;
     } while(!SCEDA_hashset_contains(in_cycle, cycle));
     SCEDA_hashset_delete(in_cycle);
-    
+
     SCEDA_Vertex *v = mu_v;
     k = n;
     while(v != cycle) {

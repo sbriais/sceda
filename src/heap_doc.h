@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -55,7 +55,7 @@
     HeapElt *heap_insert(Heap *heap, const void *value, const void *key);
     \endcode
 
-    Insert a new element in a Fibonacci heap in time O(1).  
+    Insert a new element in a Fibonacci heap in time O(1).
 
     Return a heap element that can be used for direct access
     afterwards.
@@ -118,13 +118,13 @@
     \endcode
 
     Remove an element from a Fibonacci heap in amortized time O(log|heap|).
-    
+
     Return the value and the key of the removed element.
 
     \code
     int heap_size(Heap *heap);
     \endcode
-  
+
     Return the size of a Fibonacci heap.
 
     \code

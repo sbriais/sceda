@@ -34,7 +34,7 @@ int compare_Task(Task *x, Task *y) {
 int main(int argc, char *argv[]) {
   // create a priority queue
   SCEDA_PQueue *pqueue = SCEDA_pqueue_create((SCEDA_delete_fun)delete_Task, (SCEDA_compare_fun)compare_Task);
-      
+
   SCEDA_pqueue_insert(pqueue, new_Task("free", 4));
   SCEDA_pqueue_insert(pqueue, new_Task("cleanup", 3));
   SCEDA_pqueue_insert(pqueue, new_Task("alloc",1));

@@ -35,7 +35,7 @@ int compare_Integer(Integer *x, Integer *y) {
 int main(int argc, char *argv[]) {
   // create a priority queue
   SCEDA_Heap *heap = SCEDA_heap_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_Integer,(SCEDA_compare_fun)compare_Integer);
-      
+
   SCEDA_heap_insert(heap, strdup("free"), new_Integer(4));
   SCEDA_heap_insert(heap, strdup("cleanup"), new_Integer(3));
   SCEDA_heap_insert(heap, strdup("alloc"), new_Integer(1));

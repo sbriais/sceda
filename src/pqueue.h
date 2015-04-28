@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -34,7 +34,7 @@ typedef struct {
 } SCEDA_PQueue;
 
 /** Initialise a priority queue.
-    
+
     @param[in] pqueue = priority queue to initialise
     @param[in] delete = delete function or NULL
     @param[in] compare = comparison function
@@ -84,7 +84,7 @@ int SCEDA_pqueue_extract(SCEDA_PQueue *pqueue, void **data);
 
 /** Return the minimum element in the priority queue in time
     complexity O(1)
-    
+
     @param[in] pqueue = priority queue
     @param[out] data = minimum element of the priority queue (filled by the function)
 
@@ -95,7 +95,7 @@ int SCEDA_pqueue_min(SCEDA_PQueue *pqueue, void **data);
 
     @param[in] pqueue = priority queue
 
-    @return the size of the priority queue 
+    @return the size of the priority queue
 
     \hideinitializer */
 #define SCEDA_pqueue_size(pqueue$) ((pqueue$)->size)
@@ -103,8 +103,8 @@ int SCEDA_pqueue_min(SCEDA_PQueue *pqueue, void **data);
 /** Test whether a priority queue is empty.
 
     @param[in] pqueue = priority queue
-    
-    @return TRUE if queue is empty, FALSE otherwise 
+
+    @return TRUE if queue is empty, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_pqueue_is_empty(pqueue$) (SCEDA_pqueue_size(pqueue$) == 0)

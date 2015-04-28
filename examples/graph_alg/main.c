@@ -26,7 +26,7 @@ void delete_Integer(Integer *x) {
 int main(int argc, char *argv[]) {
   // create a graph whose nodes are labelled by Integer and edges are not labelled
   SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_Integer, NULL);
-      
+
   // build the graph
   {
     SCEDA_Vertex *v[1<<ORDER];
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     for(i = 0; i < 1<<ORDER; i++) {
       v[i] = SCEDA_graph_add_vertex(g, new_Integer(i));
     }
-    
+
     // connect them
     // i -> j iff j is a superset of i with exactly one more element
     // (when we interpret the binary representation as a subset of [0;ORDER[)
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 	SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vert);
 	Integer *vlab = SCEDA_vertex_get_data(Integer *, v);
 	fprintf(stdout,"Vertex labelled by %d.\nSuccessors: ", vlab->value);
-	
+
 	// iterate over the successors of the current vertex
 	SCEDA_VertexSuccIterator succ;
 	SCEDA_vertex_succ_iterator_init(v, &succ);
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
       SCEDA_Vertex *v = SCEDA_vertices_iterator_next(&vert);
       Integer *vlab = SCEDA_vertex_get_data(Integer *, v);
       fprintf(stdout,"Vertex labelled by %d.\n", vlab->value);
-      
+
       {
 	fprintf(stdout,"BFS: ");
 	// make a bfs from the current vertex
@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
     SCEDA_vertices_iterator_cleanup(&vert);
   }
 
-  
+
   if(!SCEDA_graph_is_acyclic(g)) {
     fprintf(stderr,"error: the graph is not acyclic\n");
     exit(-1);
@@ -135,17 +135,17 @@ int main(int argc, char *argv[]) {
 	// next vertex of gf
 	SCEDA_Vertex *vf = SCEDA_vertices_iterator_next(&vert);
 	// corresponding vertex in g
-	SCEDA_Vertex *v = SCEDA_vertex_get_data(SCEDA_Vertex *, vf); 
+	SCEDA_Vertex *v = SCEDA_vertex_get_data(SCEDA_Vertex *, vf);
 	// label of the vertex
 	Integer *vlab = SCEDA_vertex_get_data(Integer *, v);
 	fprintf(stdout,"Vertex labelled by %d.\nSuccessors: ", vlab->value);
-	
+
 	// iterate over the successors of the current vertex
 	SCEDA_VertexSuccIterator succ;
 	SCEDA_vertex_succ_iterator_init(vf, &succ);
 	while(SCEDA_vertex_succ_iterator_has_next(&succ)) {
 	  SCEDA_Vertex *wf = SCEDA_vertex_succ_iterator_next(&succ);
-	  SCEDA_Vertex *w = SCEDA_vertex_get_data(SCEDA_Vertex *, wf); 
+	  SCEDA_Vertex *w = SCEDA_vertex_get_data(SCEDA_Vertex *, wf);
 	  Integer *wlab = SCEDA_vertex_get_data(Integer *, w);
 	  fprintf(stdout,"%d ", wlab->value);
 	}
@@ -178,6 +178,6 @@ int main(int argc, char *argv[]) {
 
   // delete the graph
   SCEDA_graph_delete(g);
-  
+
   return 0;
 }

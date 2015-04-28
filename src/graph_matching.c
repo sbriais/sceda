@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -127,7 +127,7 @@ SCEDA_HashMap *SCEDA_graph_maximum_bipartite_matching(SCEDA_Graph *g, SCEDA_List
       if(couplage == XPART) {
 	// if v is in X then its neighbour are
 	// the adjacent vertice not in the current matching
-	
+
 	// first proceed with the successors
 	SCEDA_VertexSuccIterator v_succ;
 	SCEDA_vertex_succ_iterator_init(v, &v_succ);
@@ -217,7 +217,7 @@ SCEDA_HashMap *SCEDA_graph_maximum_bipartite_matching(SCEDA_Graph *g, SCEDA_List
 	    SCEDA_vertex_set_matched(w, TRUE);
 	  }
 	}
-      } 
+      }
     }
   }
 
@@ -246,4 +246,3 @@ SCEDA_HashMap *SCEDA_graph_maximum_bipartite_matching(SCEDA_Graph *g, SCEDA_List
 #undef init_state
 #undef decl_state
 }
-

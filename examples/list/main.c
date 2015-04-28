@@ -20,7 +20,7 @@ void delete_Integer(Integer *x) {
 int main(int argc, char *argv[]) {
   // create a list of Integer
   SCEDA_List *list = SCEDA_list_create((SCEDA_delete_fun)delete_Integer);
-      
+
   int i;
   for(i = 0; i < 10; i++) {
     // add i at head of the list

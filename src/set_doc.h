@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -54,12 +54,12 @@
 
     \section setsapi_sec API
 
-    The API for sets is described below. 
+    The API for sets is described below.
 
     Replace the word "set" by either "listset", or "hashset" or
     "treeset" to get the API of the corresponding implementation (see
     also \link listset.h \endlink, \link hashset.h \endlink and \link treeset.h \endlink).
-    
+
     \code
     void set_init(Set *set, delete_function delete, va_list args);
     Set *set_create(delete_function delete, va_list args);
@@ -91,11 +91,11 @@
     succesfully added, 1 if the element was already in the set, and -1
     in case of error.
 
-    \code    
+    \code
     int set_remove(Set *set, void **data);
     \endcode
 
-    Remove an element from a set. 
+    Remove an element from a set.
 
     Return 0 if the element was successfully removed, 1 if the
     element was not in the set, and -1 in case of error.
@@ -106,13 +106,13 @@
     int set_contains(Set *set, const void *data);
     \endcode
 
-    Test whether an element belongs to a set. 
+    Test whether an element belongs to a set.
 
     \code
     int set_lookup(Set *set, void **data);
     \endcode
 
-    Search for an element in a set. 
+    Search for an element in a set.
 
     Return 0 if the element was found and -1 otherwise.
 
@@ -135,7 +135,7 @@
     void set_iterator_init(Set *set, SetIterator *iter);
     \endcode
 
-    Initialise a set iterator. 
+    Initialise a set iterator.
 
     The order in which the elements are visited is not specified for
     list sets and hash sets. On the contrary, the elements are visited
@@ -170,7 +170,7 @@
     It then print the set content, using a set iterator.
 
     Finally, the set is deleted.
-    
+
     \subsection listset_exa ListSet example
 
     \include "listset/main.c"

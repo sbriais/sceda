@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -25,13 +25,13 @@
     gives for each edge its source and its target.
 
     SCEDA offers support for labeled directed graphs. Each vertex
-    and/or edge can have a label. 
+    and/or edge can have a label.
 
     \section graphapi API
-    
+
     \code
-    void graph_init(Graph *g, 
-                    delete_fun delete_vertex_data, 
+    void graph_init(Graph *g,
+                    delete_fun delete_vertex_data,
 		    delete_fun delete_edge_data);
 
     Graph *graph_create(delete_fun delete_vertex_data,
@@ -42,7 +42,7 @@
     (resp. delete_edge_data) function provided is used (when not NULL)
     to delete vertex labels (resp. edge labels) upon graph clean
     up/delete.
-    
+
     \code
     void graph_cleanup(Graph *g);
     void graph_delete(Graph *g);
@@ -104,17 +104,17 @@
     int vertex_out_deg(Vertex *v);
     \endcode
 
-    Return the number of successors of a vertex (out degree). 
+    Return the number of successors of a vertex (out degree).
 
     \code
     int vertex_in_deg(Vertex *v);
     \endcode
-    
+
     Return the number of predecessors of a vertex (in degree).
 
     \subsection graphiter Iterators
 
-    Several kinds of iterators are provided. 
+    Several kinds of iterators are provided.
 
     \code
     void vertices_iterator_init(Graph *g, VerticesIterator *iter);
@@ -159,7 +159,7 @@
     void vertex_pred_iterator_cleanup(VertexPredIterator *iter);
     \endcode
 
-    Iterator over the set of predecessors of a vertex v. 
+    Iterator over the set of predecessors of a vertex v.
 
     \code
     void in_edges_iterator_init(Vertex *v, InEdgesIterator *iter);
@@ -168,7 +168,7 @@
     void in_edges_iterator_cleanup(InEdgesIterator *iter);
     \endcode
 
-    Iterator over the set of input edges to a vertex v. 
+    Iterator over the set of input edges to a vertex v.
 
     \code
     void vertex_adj_iterator_init(Vertex *v, VertexAdjIterator *iter);

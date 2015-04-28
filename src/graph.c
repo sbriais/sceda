@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -43,7 +43,7 @@ static int SCEDA_vertex_match(SCEDA_Vertex *v1, SCEDA_Vertex *v2) {
 }
 
 static int SCEDA_vertex_hash(SCEDA_Vertex *v) {
-  return v->id;    
+  return v->id;
 }
 
 static inline void SCEDA_edge_delete_struct(SCEDA_Edge *e) {
@@ -82,8 +82,8 @@ SCEDA_HashMap *SCEDA_edge_map_create(SCEDA_delete_fun delete) {
   return SCEDA_hashmap_create(NULL, delete, (SCEDA_match_fun)SCEDA_edge_match, (SCEDA_hash_fun)SCEDA_edge_hash);
 }
 
-void SCEDA_graph_init(SCEDA_Graph *g, 
-		SCEDA_delete_fun delete_vertex_data, 
+void SCEDA_graph_init(SCEDA_Graph *g,
+		SCEDA_delete_fun delete_vertex_data,
 		SCEDA_delete_fun delete_edge_data) {
   g->counter = 0;
   g->vertices = SCEDA_hashset_create((SCEDA_delete_fun)SCEDA_vertex_delete, (SCEDA_match_fun)SCEDA_vertex_match, (SCEDA_hash_fun)SCEDA_vertex_hash);
@@ -139,7 +139,7 @@ int SCEDA_graph_remove_vertex(SCEDA_Graph *g, SCEDA_Vertex *v, void **data) {
   if(SCEDA_hashset_remove(g->vertices, (void **)&v) != 0) {
     return -1;
   }
-  
+
   *data = SCEDA_vertex_get_data(void *, v);
 
   // delete in edges
@@ -170,7 +170,7 @@ int SCEDA_graph_remove_vertex(SCEDA_Graph *g, SCEDA_Vertex *v, void **data) {
     SCEDA_Vertex *w = SCEDA_vertex_succ_iterator_next(&succ);
     SCEDA_HashSet *out;
     safe_call(SCEDA_hashmap_remove(w->in_edges, (void **)&v, (void **)&out));
-    
+
     SCEDA_HashSetIterator edges;
     SCEDA_hashset_iterator_init(out, &edges);
     while(SCEDA_hashset_iterator_has_next(&edges)) {
@@ -230,7 +230,7 @@ int SCEDA_graph_remove_edge(SCEDA_Graph *g, SCEDA_Edge *e, void **data) {
     safe_call(SCEDA_hashmap_remove(v_t->in_edges, (void **)&v_s, (void **)&out));
     SCEDA_hashset_delete(out);
   }
-  
+
   SCEDA_edge_delete_struct(e);
 
   return 0;

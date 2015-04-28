@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -117,7 +117,7 @@ int SCEDA_pqueue_extract(SCEDA_PQueue *pqueue, void **data) {
     int r = right(i);
     int min;
     void *mindata;
-    if((l < pqueue->size) && 
+    if((l < pqueue->size) &&
        (compare(SCEDA_pqueue_elt(pqueue, l), ndata) < 0)) {
       min = l;
       mindata = SCEDA_pqueue_elt(pqueue,l);
@@ -125,7 +125,7 @@ int SCEDA_pqueue_extract(SCEDA_PQueue *pqueue, void **data) {
       min = i;
       mindata = ndata;
     }
-    if((r < pqueue->size) && 
+    if((r < pqueue->size) &&
        (compare(SCEDA_pqueue_elt(pqueue, r), mindata) < 0)) {
       min = r;
       mindata = SCEDA_pqueue_elt(pqueue,r);
@@ -137,7 +137,7 @@ int SCEDA_pqueue_extract(SCEDA_PQueue *pqueue, void **data) {
     i = min;
   }
   SCEDA_pqueue_elt(pqueue,i) = ndata;
-  
+
   if(4*pqueue->size < pqueue->length) {
     resize_pqueue(pqueue, 1+pqueue->length/2);
   }

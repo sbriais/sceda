@@ -2,24 +2,24 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
 #ifndef __SCEDA_LIST_H
 #define __SCEDA_LIST_H
-/** \file list.h 
+/** \file list.h
     \brief Linked lists implementation */
 
 #include "common.h"
@@ -37,7 +37,7 @@ typedef struct {
   SCEDA_delete_fun delete;
 } SCEDA_List;
 
-/** Initialise a list. 
+/** Initialise a list.
 
     @param[in] list = list to initialise
     @param[in] delete = function to delete data in the list or NULL */
@@ -68,7 +68,7 @@ void SCEDA_list_clear(SCEDA_List *list);
 
 /** Insert data just after a list element.
 
-    @param[in] list = list 
+    @param[in] list = list
     @param[in] element = list element or NULL to insert at list head
     @param[in] data = data to insert
 
@@ -77,7 +77,7 @@ int SCEDA_list_ins_next(SCEDA_List *list, SCEDA_ListElt *element, const void *da
 
 /** Remove data just after a list element.
 
-    @param[in] list = list 
+    @param[in] list = list
     @param[in] element = list element or NULL to remove list head
     @param[out] data = pointer to the removed data
 
@@ -88,12 +88,12 @@ int SCEDA_list_rem_next(SCEDA_List *list, SCEDA_ListElt *element, void **data);
 
     @param[in] list = list
 
-    @return size of the list in time complexity O(1) 
+    @return size of the list in time complexity O(1)
 
     \hideinitializer */
 #define SCEDA_list_size(list$) ((list$)->size)
 
-/** Return head element of the list 
+/** Return head element of the list
 
     @param[in] list = list
 
@@ -102,7 +102,7 @@ int SCEDA_list_rem_next(SCEDA_List *list, SCEDA_ListElt *element, void **data);
     \hideinitializer */
 #define SCEDA_list_head(list$) ((list$)->head)
 
-/** Return tail element of the list 
+/** Return tail element of the list
 
     @param[in] list = list
 
@@ -111,7 +111,7 @@ int SCEDA_list_rem_next(SCEDA_List *list, SCEDA_ListElt *element, void **data);
     \hideinitializer */
 #define SCEDA_list_tail(list$) ((list$)->tail)
 
-/** Return data field of a list element 
+/** Return data field of a list element
 
     @param type = type of data (for cast)
     @param[in] element = list element
@@ -121,7 +121,7 @@ int SCEDA_list_rem_next(SCEDA_List *list, SCEDA_ListElt *element, void **data);
     \hideinitializer */
 #define SCEDA_list_data(type$, element$) ((type$)((element$)->data))
 
-/** Return next element in the list 
+/** Return next element in the list
 
     @param element = list element
 
@@ -136,7 +136,7 @@ int SCEDA_list_rem_next(SCEDA_List *list, SCEDA_ListElt *element, void **data);
     @param[in] list = list
     @param[in] data = data to insert
 
-    @return 0 in case of success, -1 otherwise 
+    @return 0 in case of success, -1 otherwise
 
     Complexity = O(1)
 
@@ -163,7 +163,7 @@ int SCEDA_list_rem_next(SCEDA_List *list, SCEDA_ListElt *element, void **data);
     @param[in, out] data = data to remove (will be replaced by the actual data)
     @param[in] match = equality function
 
-    @return 0 in case of success, -1 otherwise 
+    @return 0 in case of success, -1 otherwise
 
     Complexity = O(|list|) */
 int SCEDA_list_remove(SCEDA_List *list, void **data, SCEDA_match_fun match);
@@ -173,7 +173,7 @@ int SCEDA_list_remove(SCEDA_List *list, void **data, SCEDA_match_fun match);
     @param[in] list = list
     @param[out] data = removed data (filled by the function)
 
-    @return 0 in case of success, -1 otherwise 
+    @return 0 in case of success, -1 otherwise
 
     \hideinitializer */
 #define SCEDA_list_remove_head(list$, data$) (SCEDA_list_rem_next(list$, NULL, data$))
@@ -184,7 +184,7 @@ int SCEDA_list_remove(SCEDA_List *list, void **data, SCEDA_match_fun match);
     @param[in] data = data to look for
     @param[in] match = equality function
 
-    @return TRUE if present, FALSE otherwise 
+    @return TRUE if present, FALSE otherwise
 
     Complexity = O(|list|) */
 int SCEDA_list_contains(SCEDA_List *list, const void *data, SCEDA_match_fun match);
@@ -198,11 +198,11 @@ int SCEDA_list_contains(SCEDA_List *list, const void *data, SCEDA_match_fun matc
     @return 0 in case if found, -1 otherwise */
 int SCEDA_list_lookup(SCEDA_List *list, void **data, SCEDA_match_fun match);
 
-/** Test whether the given list is empty. 
-    
-    @param[in] list = list 
+/** Test whether the given list is empty.
 
-    @return TRUE if empty, FALSE otherwise. 
+    @param[in] list = list
+
+    @return TRUE if empty, FALSE otherwise.
 
     \hideinitializer */
 #define SCEDA_list_is_empty(list$) (SCEDA_list_size(list$) == 0)
@@ -212,26 +212,26 @@ typedef struct {
   SCEDA_ListElt *x;
 } SCEDA_ListIterator;
 
-/** Initialise a list iterator. 
+/** Initialise a list iterator.
 
     @param[in] list = list
-    @param[in] iter = list iterator 
+    @param[in] iter = list iterator
 
     \hideinitializer */
 #define SCEDA_list_iterator_init(list$, iter$) ((iter$)->x = SCEDA_list_head(list$))
 
 /** Test whether there is a next data in the list iterator.
 
-    @param[in] iter = list iterator 
+    @param[in] iter = list iterator
 
     \hideinitializer */
 #define SCEDA_list_iterator_has_next(iter$) ((iter$)->x != NULL)
 
-/** Return the next data of the list iterator. 
+/** Return the next data of the list iterator.
 
-    @param[in] iter = list iterator 
+    @param[in] iter = list iterator
 
-    @return the "next" data in the list 
+    @return the "next" data in the list
 
     \hideinitializer */
 #define SCEDA_list_iterator_next(iter$)	          \
@@ -242,7 +242,7 @@ typedef struct {
 
 /** Clean up a list iterator.
 
-    @param[in] iter = list iterator 
+    @param[in] iter = list iterator
 
     \hideinitializer */
 #define SCEDA_list_iterator_cleanup(iter$) (memset(iter$, 0, sizeof(SCEDA_ListIterator)))

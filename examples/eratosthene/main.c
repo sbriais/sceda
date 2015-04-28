@@ -41,7 +41,7 @@ unsigned int hash_Integer(Integer *x) {
 }
 
 Set *eratosthene(int n) {
-  Set *primes = set_create((SCEDA_delete_fun)delete_Integer, 
+  Set *primes = set_create((SCEDA_delete_fun)delete_Integer,
 			   (SCEDA_match_fun)match_Integer,
 			   (SCEDA_compare_fun)compare_Integer,
 			   (SCEDA_hash_fun)hash_Integer);
@@ -61,7 +61,7 @@ Set *eratosthene(int n) {
       // remove all its multiple
       int j;
       for(j = i * i; j < n; j += i) {
-	x.value = j;	
+	x.value = j;
 	Integer *y = &x;
 	if(set_remove(primes, (void **)&y) == 0) {
 	  delete_Integer(y);
@@ -77,16 +77,16 @@ int main(int argc, char *argv[]) {
   // create a set of Integer
 
   Set *primes = eratosthene(N);
-  
+
   SetIterator elts;
   set_iterator_init(primes, &elts);
   while(set_iterator_has_next(&elts)) {
     Integer *x = set_iterator_next(&elts);
-    
+
     fprintf(stdout,"%d\n", x->value);
   }
   set_iterator_cleanup(&elts);
-  
+
   set_delete(primes);
 
   return 0;

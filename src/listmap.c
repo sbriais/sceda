@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -50,7 +50,7 @@ void SCEDA_listmap_cleanup(SCEDA_ListMap *map) {
       if(map->delete_value != NULL) {
 	map->delete_value(value);
       }
-    } 
+    }
   }
 
   memset(map, 0, sizeof(SCEDA_ListMap));
@@ -93,7 +93,7 @@ int SCEDA_listmap_ins_next(SCEDA_ListMap *map, SCEDA_ListMapElt *element, const 
   return 0;
 }
 
-int SCEDA_listmap_rem_next(SCEDA_ListMap *map, SCEDA_ListMapElt *element, 
+int SCEDA_listmap_rem_next(SCEDA_ListMap *map, SCEDA_ListMapElt *element,
 			    void **key, void **value) {
   SCEDA_ListMapElt *old_element;
 
@@ -125,7 +125,7 @@ int SCEDA_listmap_rem_next(SCEDA_ListMap *map, SCEDA_ListMapElt *element,
 }
 
 int SCEDA_listmap_put(SCEDA_ListMap *map, const void *key, const void *value, void **old_value) {
-  SCEDA_match_fun match = map->match_key; 
+  SCEDA_match_fun match = map->match_key;
 
   SCEDA_ListMapElt *x = SCEDA_listmap_head(map);
   while(x != NULL) {

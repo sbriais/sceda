@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -42,7 +42,7 @@ typedef struct {
 /** Type of closures that take a vertex and return a "cost" */
 typedef int (*SCEDA_int_vertex_fun)(SCEDA_Vertex *v, void *ctxt);
 
-/** Create an empty set of vertex. 
+/** Create an empty set of vertex.
 
     Vertices stored in the set won't be deallocated by hashset_delete.
 
@@ -63,9 +63,9 @@ SCEDA_HashSet *SCEDA_vertex_set_create();
 SCEDA_HashMap *SCEDA_vertex_map_create(SCEDA_delete_fun delete);
 
 /** Set data contained in a vertex.
-    
+
     @param[in] vertex = vertex
-    @param[in] data = data 
+    @param[in] data = data
 
     \hideinitializer */
 #define SCEDA_vertex_set_data(vertex$, data$) ((vertex$)->data = (void *)(data$))
@@ -75,7 +75,7 @@ SCEDA_HashMap *SCEDA_vertex_map_create(SCEDA_delete_fun delete);
     @param type = type of data
     @param[in] vertex = vertex
 
-    @return data 
+    @return data
 
     \hideinitializer */
 #define SCEDA_vertex_get_data(type$, vertex$) ((type$)((vertex$)->data))
@@ -128,14 +128,14 @@ typedef struct {
     @param[in] g = graph to initialise
     @param[in] delete_vertex_data = delete function for vertex data
     @param[in] delete_edge_data = delete function for edge data */
-void SCEDA_graph_init(SCEDA_Graph *g, 
-		      SCEDA_delete_fun delete_vertex_data, 
+void SCEDA_graph_init(SCEDA_Graph *g,
+		      SCEDA_delete_fun delete_vertex_data,
 		      SCEDA_delete_fun delete_edge_data);
 
 /** Create a graph, ready for use.
 
     @param[in] delete_vertex_data = delete function for vertex data
-    @param[in] delete_edge_data = delete function for edge data 
+    @param[in] delete_edge_data = delete function for edge data
 
     @return the created graph */
 SCEDA_Graph *SCEDA_graph_create(SCEDA_delete_fun delete_vertex_data,
@@ -146,7 +146,7 @@ SCEDA_Graph *SCEDA_graph_create(SCEDA_delete_fun delete_vertex_data,
     @param[in] g = graph to delete */
 void SCEDA_graph_cleanup(SCEDA_Graph *g);
 
-/** Delete a graph 
+/** Delete a graph
 
     @param[in] g = graph to delete */
 void SCEDA_graph_delete(SCEDA_Graph *g);
@@ -154,7 +154,7 @@ void SCEDA_graph_delete(SCEDA_Graph *g);
 /** Add a new vertex in a graph.
 
     @param[in] g = graph
-    @param[in] data = label of the new vertex 
+    @param[in] data = label of the new vertex
 
     @return the new vertex */
 SCEDA_Vertex *SCEDA_graph_add_vertex(SCEDA_Graph *g, const void *data);
@@ -163,7 +163,7 @@ SCEDA_Vertex *SCEDA_graph_add_vertex(SCEDA_Graph *g, const void *data);
 
     @param[in] g = graph
     @param[in] v = vertex to remove
-    @param[out] data = label of removed vertex (filled by the function) 
+    @param[out] data = label of removed vertex (filled by the function)
 
     @return 0 in case of success, -1 otherwise */
 int SCEDA_graph_remove_vertex(SCEDA_Graph *g, SCEDA_Vertex *v, void **data);
@@ -178,11 +178,11 @@ int SCEDA_graph_remove_vertex(SCEDA_Graph *g, SCEDA_Vertex *v, void **data);
     @return the new edge */
 SCEDA_Edge *SCEDA_graph_add_edge(SCEDA_Graph *g, SCEDA_Vertex *v_s, SCEDA_Vertex *v_t, const void *data);
 
-/** Remove an edge from a graph. 
+/** Remove an edge from a graph.
 
     @param[in] g = graph
     @param[in] e = edge to remove
-    @param[out] data = label of removed edge (filled by the function) 
+    @param[out] data = label of removed edge (filled by the function)
 
     @return 0 in case of success, -1 otherwise */
 int SCEDA_graph_remove_edge(SCEDA_Graph *g, SCEDA_Edge *e, void **data);
@@ -191,7 +191,7 @@ int SCEDA_graph_remove_edge(SCEDA_Graph *g, SCEDA_Edge *e, void **data);
 
     @param[in] g = graph
 
-    @return the number of vertices 
+    @return the number of vertices
 
     \hideinitializer */
 #define SCEDA_graph_vcount(g$) (SCEDA_hashset_size((g$)->vertices))
@@ -205,12 +205,12 @@ int SCEDA_graph_remove_edge(SCEDA_Graph *g, SCEDA_Edge *e, void **data);
     \hideinitializer */
 #define SCEDA_graph_ecount(g$) (SCEDA_hashset_size((g$)->edges))
 
-/** Get label of a edge 
+/** Get label of a edge
 
     @param type = type of label
     @param[in] edge = edge
 
-    @return data 
+    @return data
 
     \hideinitializer */
 #define SCEDA_edge_get_data(type$, edge$) ((type$)((edge$)->data))
@@ -227,7 +227,7 @@ int SCEDA_graph_remove_edge(SCEDA_Graph *g, SCEDA_Edge *e, void **data);
 /** Get target vertex of a edge.
 
     @param[in] edge = edge
-    
+
     @return target vertex
 
     \hideinitializer */
@@ -262,7 +262,7 @@ int SCEDA_graph_remove_edge(SCEDA_Graph *g, SCEDA_Edge *e, void **data);
 /** Is v_t a successor of v_s?
 
     @param[in] v_t = (target) vertex
-    @param[in] v_s = (source) vertex 
+    @param[in] v_s = (source) vertex
 
     @return TRUE if v_t is a successor of v_s, FALSE otherwise */
 int SCEDA_vertex_is_succ_of(const SCEDA_Vertex *v_t, const SCEDA_Vertex *v_s);
@@ -270,10 +270,10 @@ int SCEDA_vertex_is_succ_of(const SCEDA_Vertex *v_t, const SCEDA_Vertex *v_s);
 /** Iterator on all graph vertices. */
 typedef SCEDA_HashSetIterator SCEDA_VerticesIterator;
 
-/** Initialise the vertices iterator. 
+/** Initialise the vertices iterator.
 
     @param[in] g = graph
-    @param[in] iter = vertices iterator 
+    @param[in] iter = vertices iterator
 
     \hideinitializer */
 #define SCEDA_vertices_iterator_init(g$, iter$) (SCEDA_hashset_iterator_init((g$)->vertices, (iter$)))
@@ -287,7 +287,7 @@ typedef SCEDA_HashSetIterator SCEDA_VerticesIterator;
 
     @param[in] iter = vertices iterator
 
-    @return the "next" vertex 
+    @return the "next" vertex
 
     \hideinitializer */
 #define SCEDA_vertices_iterator_next(iter$) ((SCEDA_Vertex *)SCEDA_hashset_iterator_next(iter$))
@@ -300,10 +300,10 @@ typedef SCEDA_HashSetIterator SCEDA_VerticesIterator;
 /** Iterator on all graph edges. */
 typedef SCEDA_HashSetIterator SCEDA_EdgesIterator;
 
-/** Initialise the edges iterator. 
+/** Initialise the edges iterator.
 
     @param[in] g = graph
-    @param[in] iter = edges iterator 
+    @param[in] iter = edges iterator
 
     \hideinitializer */
 #define SCEDA_edges_iterator_init(g$, iter$) (SCEDA_hashset_iterator_init((g$)->edges, (iter$)))
@@ -317,7 +317,7 @@ typedef SCEDA_HashSetIterator SCEDA_EdgesIterator;
 
     @param[in] iter = edges iterator
 
-    @return the "next" edge 
+    @return the "next" edge
 
     \hideinitializer */
 #define SCEDA_edges_iterator_next(iter$) ((SCEDA_Edge *)SCEDA_hashset_iterator_next(iter$))
@@ -334,7 +334,7 @@ typedef struct {
   SCEDA_HashSetIterator edges;
 } SCEDA_OutEdgesIterator;
 
-/** Initialise the outgoing edges iterator 
+/** Initialise the outgoing edges iterator
 
     @param[in] v = vertex
     @param[in] iter = outgoing edges iterator to initialise */
@@ -343,7 +343,7 @@ void SCEDA_out_edges_iterator_init(SCEDA_Vertex *v, SCEDA_OutEdgesIterator *iter
 /** Is there a "next" edge in the iterator?
 
     @param[in] iter = out edges iterator
-    
+
     \hideinitializer */
 #define SCEDA_out_edges_iterator_has_next(iter$) ((iter$)->has_next)
 
@@ -365,7 +365,7 @@ typedef SCEDA_HashMapIterator SCEDA_VertexSuccIterator;
 /** Initialise the succ iterator.
 
     @param[in] vertex = vertex
-    @param[in] iter = succ iterator to initialise 
+    @param[in] iter = succ iterator to initialise
 
     \hideinitializer */
 #define SCEDA_vertex_succ_iterator_init(vertex$, iter$) (SCEDA_hashmap_iterator_init((vertex$)->out_edges, (iter$)))
@@ -394,7 +394,7 @@ typedef struct {
   SCEDA_HashSetIterator edges;
 } SCEDA_InEdgesIterator;
 
-/** Initialise the input edges iterator 
+/** Initialise the input edges iterator
 
     @param[in] v = vertex
     @param[in] iter = input edges iterator to initialise */
@@ -403,7 +403,7 @@ void SCEDA_in_edges_iterator_init(SCEDA_Vertex *v, SCEDA_InEdgesIterator *iter);
 /** Is there a "next" edge in the iterator?
 
     @param[in] iter = in edges iterator
-    
+
     \hideinitializer */
 #define SCEDA_in_edges_iterator_has_next(iter$) ((iter$)->has_next)
 
@@ -425,7 +425,7 @@ typedef SCEDA_HashMapIterator SCEDA_VertexPredIterator;
 /** Initialise the pred iterator.
 
     @param[in] vertex = vertex
-    @param[in] iter = pred iterator to initialise 
+    @param[in] iter = pred iterator to initialise
 
     \hideinitializer */
 #define SCEDA_vertex_pred_iterator_init(vertex$, iter$) (SCEDA_hashmap_iterator_init((vertex$)->in_edges, (iter$)))
@@ -481,4 +481,3 @@ SCEDA_Edge *SCEDA_edge_class_iterator_next(SCEDA_EdgeClassIterator *iter);
 void SCEDA_edge_class_iterator_cleanup(SCEDA_EdgeClassIterator *iter);
 
 #endif
-

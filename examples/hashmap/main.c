@@ -44,11 +44,11 @@ void delete_string(char *s) {
 
 int main(int argc, char *argv[]) {
   // create a set of Integer
-  SCEDA_HashMap *map = SCEDA_hashmap_create((SCEDA_delete_fun)delete_string, 
+  SCEDA_HashMap *map = SCEDA_hashmap_create((SCEDA_delete_fun)delete_string,
 					    (SCEDA_delete_fun)delete_Integer,
 					    (SCEDA_match_fun)match_string,
 					    (SCEDA_hash_fun)hash_string);
-  
+
   // note that strings are allocated onto the heap, thanks to strdup function
   SCEDA_hashmap_put(map, strdup("Odissey"), new_Integer(2001), NULL);
   SCEDA_hashmap_put(map, strdup("Torment"), new_Integer(2002), NULL);

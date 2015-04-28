@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -81,7 +81,7 @@ static void SCEDA_hashmap_resize(SCEDA_HashMap *hmap, int buckets) {
   SCEDA_ListMap (*new_table)[] = safe_calloc(buckets, sizeof(SCEDA_ListMap));
   int i;
   for(i = 0; i < buckets; i++) {
-    SCEDA_listmap_init(nth_map(new_table, i), hmap->delete_key, 
+    SCEDA_listmap_init(nth_map(new_table, i), hmap->delete_key,
 		 hmap->delete_value, hmap->match_key);
   }
 
@@ -102,10 +102,10 @@ static void SCEDA_hashmap_resize(SCEDA_HashMap *hmap, int buckets) {
   hmap->buckets = buckets;
 }
 
-int SCEDA_hashmap_put(SCEDA_HashMap *hmap, const void *key, 
+int SCEDA_hashmap_put(SCEDA_HashMap *hmap, const void *key,
 		const void *value, void **old_value) {
   int i = hash_code(hmap, key);
-  
+
   int res = SCEDA_listmap_put(SCEDA_hashmap_nth_map(hmap, i), key, value, old_value);
 
   if(res == 0) {
@@ -113,16 +113,16 @@ int SCEDA_hashmap_put(SCEDA_HashMap *hmap, const void *key,
     if(hmap->size > hmap->buckets) {
       SCEDA_hashmap_resize(hmap, 1 + 2 * hmap->buckets);
     }
-  } 
+  }
 
   return res;
 }
 
 int SCEDA_hashmap_remove(SCEDA_HashMap *hmap, void **key, void **value) {
   int i = hash_code(hmap, *key);
-  
+
   int res = SCEDA_listmap_remove(SCEDA_hashmap_nth_map(hmap, i), key, value);
-  
+
   if(res == 0) {
     hmap->size--;
     if(4 * hmap->size < hmap->buckets) {
@@ -150,4 +150,3 @@ int SCEDA_hashmap_lookup(SCEDA_HashMap *hmap, void **key, void **value) {
 
   return SCEDA_listmap_lookup(SCEDA_hashmap_nth_map(hmap, i), key, value);
 }
-

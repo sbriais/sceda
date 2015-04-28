@@ -2,24 +2,24 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
 
 /** \page graphalgs Graph Algorithms
-    
+
     SCEDA provides implementation of several (classical) graph algorithms.
 
     \section acycltestsec Acyclicity test
@@ -69,7 +69,7 @@
 
     Vertices of the resulting graph are labelled with vertices of g
     (to easily find the corresponding vertex in the original graph).
-    
+
     Edges of the resulting graph are not labelled.
 
     This is an implementation of Goralcikova-Koubek algorithm.
@@ -105,7 +105,7 @@
 
     \section sccsec Strongly connected components
 
-    \code 
+    \code
     List *graph_strongly_connected_components(Graph *g);
     \endcode
 
@@ -120,7 +120,7 @@
 
     Return a maximum antichain of the given acyclic graph (also know
     as Dilworth decomposition).
-    
+
     \section shortpathsec Shortest paths from a source (to a target) in graphs
 
     \code
@@ -135,7 +135,7 @@
     computed (see \ref topordersec).
 
     The distance function gives for each edge the (integer) cost of
-    the edge. 
+    the edge.
 
     Return a map that gives for each vertex a PathInfo structure,
     which indicates the previous vertex in the shortest path and the
@@ -164,7 +164,7 @@
     Bellman-Ford algorithm.
 
     The distance function gives for each edge the (integer) cost of
-    the edge. 
+    the edge.
 
     Return a map that gives for each vertex a PathInfo structure,
     which indicates the previous vertex in the shortest path and the
@@ -177,10 +177,10 @@
     \section mrcsec Minimum Cost to Time Ratio Cycle
 
     \code
-    int graph_minimum_ratio_cycle(Graph *g, 
-                                  int_edge_fun cost, void *c_ctxt, 
-				  int_edge_fun time, void *t_ctxt, 
-				  int *ratio_num, int *ratio_den, 
+    int graph_minimum_ratio_cycle(Graph *g,
+                                  int_edge_fun cost, void *c_ctxt,
+				  int_edge_fun time, void *t_ctxt,
+				  int *ratio_num, int *ratio_den,
 				  List **min_cycle);
     \endcode
 
@@ -197,8 +197,8 @@
     \section meansec Minimum Mean Cycle
 
     \code
-    int graph_minimum_mean_cycle(Graph *g, 
-                                 int_edge_fun cost, void *c_ctxt, 
+    int graph_minimum_mean_cycle(Graph *g,
+                                 int_edge_fun cost, void *c_ctxt,
 				 List **min_cycle);
     \endcode
 
@@ -236,31 +236,31 @@
     \f$e \in E\f$.
 
     \code
-    HashMap *graph_max_flow(Graph *g, Vertex *s, Vertex *t, 
+    HashMap *graph_max_flow(Graph *g, Vertex *s, Vertex *t,
                             int_edge_fun capacity, void *cap_ctxt);
     \endcode
-    
-    Compute a maximum flow in the directed network. 
+
+    Compute a maximum flow in the directed network.
 
     It is an implementation of the highest label push/relabel method.
 
     \code
-    HashMap *graph_min_cost_max_flow(Graph *g, Vertex *s, Vertex *t, 
+    HashMap *graph_min_cost_max_flow(Graph *g, Vertex *s, Vertex *t,
                                      int_edge_fun capacity, void *cap_ctxt,
 				     int_edge_fun cost, void *cost_ctxt);
     \endcode
 
     Compute a maximum flow of minimum cost in the directed
-    network. 
+    network.
 
     \code
-    HashMap *graph_feasible_flow(Graph *g, 
-                                 int_edge_fun capacity, void *cap_ctxt, 
+    HashMap *graph_feasible_flow(Graph *g,
+                                 int_edge_fun capacity, void *cap_ctxt,
 				 int_vertex_fun supply, void *sup_ctxt);
     \endcode
 
     Compute a maximum flow that satisfies the supply constraint, if one exists.
-    
+
     \code
     HashMap *graph_min_cost_flow(Graph *g,
 				 int_edge_fun lcap, void *lcap_ctxt,

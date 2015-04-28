@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -51,8 +51,8 @@ void SCEDA_treeset_init(SCEDA_TreeSet *set, SCEDA_delete_fun delete, SCEDA_compa
 /** Create a (tree) set, ready for use.
 
     @param[in] delete = delete function or NULL
-    @param[in] compare = comparison function 
-    
+    @param[in] compare = comparison function
+
     @return the (tree) set */
 SCEDA_TreeSet *SCEDA_treeset_create(SCEDA_delete_fun delete, SCEDA_compare_fun compare);
 
@@ -106,17 +106,17 @@ int SCEDA_treeset_lookup(SCEDA_TreeSet *set, void **data);
 /** Size of the (tree) set in time complexity O(1).
 
     @param[in] set = set
-    
-    @return size of the set 
+
+    @return size of the set
 
     \hideinitializer */
 #define SCEDA_treeset_size(set$) ((set$)->size)
 
 /** Test whether the (tree) set is empty in time complexity O(1).
 
-    @param[in] set = set 
+    @param[in] set = set
 
-    @return TRUE if empty, FALSE otherwise 
+    @return TRUE if empty, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_treeset_is_empty(set$) (SCEDA_treeset_size(set$) == 0)
@@ -136,15 +136,15 @@ typedef struct {
     @param[in] iter = tree set iterator */
 void SCEDA_treeset_iterator_init(SCEDA_TreeSet *set, SCEDA_TreeSetIterator *iter);
 
-/** Test whether there is a next data in the set iterator. 
-    
+/** Test whether there is a next data in the set iterator.
+
     @param[in] iter = set iterator
-    
+
     @return TRUE if there is a "next" data, FALSE otherwise */
 int SCEDA_treeset_iterator_has_next(SCEDA_TreeSetIterator *iter);
 
-/** Return the next data of the set iterator. 
-    
+/** Return the next data of the set iterator.
+
     @param[in] iter = set iterator
 
     @return the "next" data */
@@ -152,7 +152,7 @@ void *SCEDA_treeset_iterator_next(SCEDA_TreeSetIterator *iter);
 
 /** Clean up the (tree) set iterator.
 
-    @param[in] iter = set iterator 
+    @param[in] iter = set iterator
 
     \hideinitializer */
 #define SCEDA_treeset_iterator_cleanup(iter$) (memset(iter$, 0, sizeof(SCEDA_TreeSetIterator)))

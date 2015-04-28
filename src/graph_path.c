@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -244,7 +244,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
     safe_call(SCEDA_hashset_remove(in_queue, (void **)&u));
 
     SCEDA_PathInfo *info_u = SCEDA_hashmap_get(paths, u);
-    
+
     SCEDA_OutEdgesIterator out_edges;
     SCEDA_out_edges_iterator_init(u, &out_edges);
     while(SCEDA_out_edges_iterator_has_next(&out_edges)) {
@@ -268,7 +268,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vert
   } else {
     *has_cycle = TRUE;
   }
-  
+
   SCEDA_queue_delete(queue);
   return paths;
 }

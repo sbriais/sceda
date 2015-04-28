@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -158,7 +158,7 @@ static void SCEDA_treeset_left_rotate(SCEDA_TreeSet *set, SCEDA_TreeSetElt *x) {
 
 static void SCEDA_treeset_right_rotate(SCEDA_TreeSet *set, SCEDA_TreeSetElt *y) {
   SCEDA_TreeSetElt *x = y->left;
-  
+
   y->left = x->right;
   if(x->right != SCEDA_treeset_nil(set)) {
     x->right->parent = y;
@@ -232,7 +232,7 @@ int SCEDA_treeset_add(SCEDA_TreeSet *set, const void *data) {
 	if(x == x->parent->right) {
 	  x = x->parent;
 	  SCEDA_treeset_left_rotate(set, x);
-	} 
+	}
 	x->parent->color = BLACK;
 	x->parent->parent->color = RED;
 	SCEDA_treeset_right_rotate(set, x->parent->parent);
@@ -248,7 +248,7 @@ int SCEDA_treeset_add(SCEDA_TreeSet *set, const void *data) {
 	if(x == x->parent->left) {
 	  x = x->parent;
 	  SCEDA_treeset_right_rotate(set, x);
-	} 
+	}
 	x->parent->color = BLACK;
 	x->parent->parent->color = RED;
 	SCEDA_treeset_left_rotate(set, x->parent->parent);
@@ -257,7 +257,7 @@ int SCEDA_treeset_add(SCEDA_TreeSet *set, const void *data) {
   }
   SCEDA_treeset_root(set)->color = BLACK;
   /* done */
-  
+
   set->size++;
 
   return 0;
@@ -292,7 +292,7 @@ int SCEDA_treeset_remove(SCEDA_TreeSet *set, void **data) {
   } else {
     y = SCEDA_treeset_succ(set, z);
   }
-  
+
   SCEDA_TreeSetElt *x;
   if(y->left != SCEDA_treeset_nil(set)) {
     x = y->left;
@@ -396,4 +396,3 @@ void *SCEDA_treeset_iterator_next(SCEDA_TreeSetIterator *titer) {
 
   return SCEDA_treeset_data(void *, elt);
 }
-

@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -72,7 +72,7 @@ int SCEDA_graph_is_acyclic(SCEDA_Graph *g) {
     }
     SCEDA_vertex_succ_iterator_cleanup(&succ);
   }
-  
+
   SCEDA_queue_delete(q);
 
   if(count == n) {
@@ -133,7 +133,7 @@ SCEDA_Graph *SCEDA_graph_transitive_closure(SCEDA_Graph *g) {
   for(i = n-1; i >= 0; i--) {
     SCEDA_Vertex *vi_f = vertice_f[i];
     SCEDA_Vertex *vi = SCEDA_vertex_get_data(SCEDA_Vertex *, vi_f);
-    
+
     SCEDA_VertexSuccIterator vi_succ;
     SCEDA_vertex_succ_iterator_init(vi, &vi_succ);
     while(SCEDA_vertex_succ_iterator_has_next(&vi_succ)) {
@@ -168,7 +168,7 @@ SCEDA_Graph *SCEDA_graph_transitive_closure(SCEDA_Graph *g) {
     SCEDA_vertex_succ_iterator_init(vi_f, &vi_succ);
     while(SCEDA_vertex_succ_iterator_has_next(&vi_succ)) {
       SCEDA_Vertex *v = SCEDA_vertex_succ_iterator_next(&vi_succ);
-      mark[SCEDA_vertex_get_index(v)] = FALSE;      
+      mark[SCEDA_vertex_get_index(v)] = FALSE;
     }
     SCEDA_vertex_succ_iterator_cleanup(&vi_succ);
   }

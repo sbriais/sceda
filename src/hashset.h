@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -43,15 +43,15 @@ typedef struct {
     @param[in] delete = delete function or NULL
     @param[in] match = equality function
     @param[in] hash = hash function */
-void SCEDA_hashset_init(SCEDA_HashSet *set, SCEDA_delete_fun delete, 
+void SCEDA_hashset_init(SCEDA_HashSet *set, SCEDA_delete_fun delete,
 			SCEDA_match_fun match, SCEDA_hash_fun hash);
 
 /** Create a (hash) set, ready for use.
 
     @param[in] delete = delete function or NULL
     @param[in] match = equality function
-    @param[in] hash = hash function 
-    
+    @param[in] hash = hash function
+
     @return the (hash) set */
 SCEDA_HashSet *SCEDA_hashset_create(SCEDA_delete_fun delete, SCEDA_match_fun match,
 			SCEDA_hash_fun hash);
@@ -106,17 +106,17 @@ int SCEDA_hashset_lookup(SCEDA_HashSet *set, void **data);
 /** Size of the (hash) set in time complexity O(1).
 
     @param[in] set = set
-    
-    @return size of the set 
+
+    @return size of the set
 
     \hideinitializer  */
 #define SCEDA_hashset_size(set$) ((set$)->size)
 
 /** Test whether the (hash) set is empty in time complexity O(1).
 
-    @param[in] set = set 
+    @param[in] set = set
 
-    @return TRUE if empty, FALSE otherwise 
+    @return TRUE if empty, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_hashset_is_empty(set$) (SCEDA_hashset_size(set$) == 0)
@@ -131,20 +131,20 @@ typedef struct {
 /** Initialise a (hash) set iterator.
 
     @param[in] set = set
-    @param[in] iter = set iterator 
+    @param[in] iter = set iterator
 
     \hideinitializer */
 #define SCEDA_hashset_iterator_init(set$, iter$) \
   ({ SCEDA_HashSetIterator *_iter = (iter$);   \
      _iter->i = 0;                        \
      _iter->set = (set$);	            \
-     SCEDA_listset_iterator_init(SCEDA_hashset_nth_set((_iter->set),0), &(_iter->elements)); }) 
+     SCEDA_listset_iterator_init(SCEDA_hashset_nth_set((_iter->set),0), &(_iter->elements)); })
 
-/** Test whether there is a next data in the set iterator. 
-    
+/** Test whether there is a next data in the set iterator.
+
     @param[in] iter = set iterator
-    
-    @return TRUE if there is a "next" data, FALSE otherwise 
+
+    @return TRUE if there is a "next" data, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_hashset_iterator_has_next(iter$)                                                                  \
@@ -158,18 +158,18 @@ typedef struct {
      }                                                                                                     \
      (_iter->i < _iter->set->buckets) && (SCEDA_listset_iterator_has_next(&(_iter->elements))); })
 
-/** Return the next data of a set iterator. 
-    
+/** Return the next data of a set iterator.
+
     @param[in] iter = set iterator
 
-    @return the "next" data 
+    @return the "next" data
 
     \hideinitializer */
 #define SCEDA_hashset_iterator_next(iter$) (SCEDA_listset_iterator_next(&((iter$)->elements)))
 
 /** Clean up a (hash) set iterator.
 
-    @param[in] iter = set iterator 
+    @param[in] iter = set iterator
 
     \hideinitializer */
 #define SCEDA_hashset_iterator_cleanup(iter$)             \

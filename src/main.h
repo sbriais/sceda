@@ -15,9 +15,9 @@
 
     \section main_sec Description of SCEDA
 
-    \li \ref generalities 
+    \li \ref generalities
     \li \ref lists
-    \li \ref sets 
+    \li \ref sets
     \li \ref maps
     \li \ref pqueues
     \li \ref heaps
@@ -26,7 +26,7 @@
     \section history_sec History
 
     \subsection v110 v 1.1.0
-    
+
     \li Cleaned the code
 
     \subsection v100 v 1.0.0
@@ -68,7 +68,7 @@
     Each data structure comes with a "create" function that allocates
     memory in the heap (thanks to malloc) for the data structure and
     initialise it, so that it is ready for use.
-    
+
     The general prototype of "create" function is
 
     \code
@@ -80,11 +80,11 @@
     its subcomponents.
 
     The general prototype of "delete" function is
-   
+
     \code
     void data_structure_delete(DataStructure *x);
     \endcode
-    
+
     \section init_subsec Initialising and cleaning up data structures
 
     Each data structure should be initialised before usage: this is
@@ -113,12 +113,12 @@
     \endcode
 
     \section gencreate_subsec "create" = "malloc" + "init"
- 
+
     A generic implementation of "create" is the following:
 
     \code
     DataStructure *data_structure_create(va_list args) {
-      DataStructure *x = malloc(sizeof(DataStructure)); 
+      DataStructure *x = malloc(sizeof(DataStructure));
       assert(x != NULL); // or explode
       data_structure_init(x, args);
       return x;
@@ -136,4 +136,3 @@
     }
     \endcode
 */
-

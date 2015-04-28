@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     fprintf(stdout,"Bellman Ford Moore algorithm\n");
     // create a graph whose nodes are labelled by strings and edges are labelled by Integers
     SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_Integer);
-    
+
     SCEDA_Vertex *vA = SCEDA_graph_add_vertex(g, strdup("A"));
     SCEDA_Vertex *vB = SCEDA_graph_add_vertex(g, strdup("B"));
     SCEDA_Vertex *vC = SCEDA_graph_add_vertex(g, strdup("C"));
@@ -47,16 +47,16 @@ int main(int argc, char *argv[]) {
     SCEDA_graph_add_edge(g, vB, vD, new_Integer(2));
     SCEDA_graph_add_edge(g, vC, vD, new_Integer(3));
     SCEDA_graph_add_edge(g, vC, vA, new_Integer(-2));
-    
+
     SCEDA_Vertex *origin = vA;
-    
+
     int has_neg_cycle;
 
     SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_bellman_ford(g, origin, get_distance, NULL, &has_neg_cycle);
-    
+
     if(!has_neg_cycle) {
       fprintf(stdout,"g has no cycle of negative weight.\n");
-      
+
       SCEDA_HashMapIterator paths;
       SCEDA_hashmap_iterator_init(shortest_paths, &paths);
       while(SCEDA_hashmap_iterator_has_next(&paths)) {
@@ -84,23 +84,23 @@ int main(int argc, char *argv[]) {
     fprintf(stdout,"Dijkstra algorithm\n");
     // create a graph whose nodes are labelled by strings and edges are labelled by Integers
     SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_Integer);
-    
+
     SCEDA_Vertex *vA = SCEDA_graph_add_vertex(g, strdup("A"));
     SCEDA_Vertex *vB = SCEDA_graph_add_vertex(g, strdup("B"));
     SCEDA_Vertex *vC = SCEDA_graph_add_vertex(g, strdup("C"));
     SCEDA_Vertex *vD = SCEDA_graph_add_vertex(g, strdup("D"));
     SCEDA_Vertex *vE = SCEDA_graph_add_vertex(g, strdup("E"));
-    
+
     SCEDA_graph_add_edge(g, vA, vB, new_Integer(5));
     SCEDA_graph_add_edge(g, vB, vC, new_Integer(1));
     SCEDA_graph_add_edge(g, vB, vD, new_Integer(2));
     SCEDA_graph_add_edge(g, vC, vD, new_Integer(3));
     SCEDA_graph_add_edge(g, vC, vA, new_Integer(4));
-    
+
     SCEDA_Vertex *origin = vA;
-    
+
     SCEDA_HashMap *shortest_paths = SCEDA_graph_shortest_path_dijkstra(g, origin, get_distance, NULL);
-    
+
     SCEDA_HashMapIterator paths;
     SCEDA_hashmap_iterator_init(shortest_paths, &paths);
     while(SCEDA_hashmap_iterator_has_next(&paths)) {
@@ -114,9 +114,9 @@ int main(int argc, char *argv[]) {
       }
     }
     SCEDA_hashmap_iterator_cleanup(&paths);
-      
+
     SCEDA_hashmap_delete(shortest_paths);
-    
+
     SCEDA_graph_delete(g);
   }
 

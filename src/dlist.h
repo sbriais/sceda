@@ -2,24 +2,24 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
 */
 #ifndef __SCEDA_DLIST_H
 #define __SCEDA_DLIST_H
-/** \file dlist.h 
+/** \file dlist.h
     \brief Doubly Linked lists implementation */
 
 #include "common.h"
@@ -37,7 +37,7 @@ typedef struct {
   SCEDA_delete_fun delete;
 } SCEDA_DList;
 
-/** Initialise a list. 
+/** Initialise a list.
 
     @param[in] list = list to initialise
     @param[in] delete = function to delete data in the list or NULL */
@@ -68,7 +68,7 @@ void SCEDA_dlist_clear(SCEDA_DList *list);
 
 /** Insert data just after a list element.
 
-    @param[in] list = list 
+    @param[in] list = list
     @param[in] element = list element or NULL to insert at list head
     @param[in] data = data to insert
 
@@ -77,7 +77,7 @@ int SCEDA_dlist_ins_next(SCEDA_DList *list, SCEDA_DListElt *element, const void 
 
 /** Insert data just before a list element.
 
-    @param[in] list = list 
+    @param[in] list = list
     @param[in] element = list element or NULL to insert at list tail
     @param[in] data = data to insert
 
@@ -86,7 +86,7 @@ int SCEDA_dlist_ins_previous(SCEDA_DList *list, SCEDA_DListElt *element, const v
 
 /** Remove a list element.
 
-    @param[in] list = list 
+    @param[in] list = list
     @param[in] element = list element to remove
     @param[out] data = pointer to the removed data
 
@@ -97,12 +97,12 @@ int SCEDA_dlist_rem(SCEDA_DList *list, SCEDA_DListElt *element, void **data);
 
     @param[in] list = list
 
-    @return size of the list in time complexity O(1) 
+    @return size of the list in time complexity O(1)
 
     \hideinitializer */
 #define SCEDA_dlist_size(list$) ((list$)->size)
 
-/** Return head element of the list 
+/** Return head element of the list
 
     @param[in] list = list
 
@@ -111,7 +111,7 @@ int SCEDA_dlist_rem(SCEDA_DList *list, SCEDA_DListElt *element, void **data);
     \hideinitializer */
 #define SCEDA_dlist_head(list$) ((list$)->head)
 
-/** Return tail element of the list 
+/** Return tail element of the list
 
     @param[in] list = list
 
@@ -120,7 +120,7 @@ int SCEDA_dlist_rem(SCEDA_DList *list, SCEDA_DListElt *element, void **data);
     \hideinitializer */
 #define SCEDA_dlist_tail(list$) ((list$)->tail)
 
-/** Return data field of a list element 
+/** Return data field of a list element
 
     @param type = type of data (for cast)
     @param[in] element = list element
@@ -130,14 +130,14 @@ int SCEDA_dlist_rem(SCEDA_DList *list, SCEDA_DListElt *element, void **data);
     \hideinitializer */
 #define SCEDA_dlist_data(type$, element$) ((type$)((element$)->data))
 
-/** Return next element in the list 
+/** Return next element in the list
 
     @param element = list element
 
     @return next element */
 #define SCEDA_dlist_next(element$) ((element$)->next)
 
-/** Return previous element in the list 
+/** Return previous element in the list
 
     @param element = list element
 

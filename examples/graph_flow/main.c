@@ -32,7 +32,7 @@ int get_capacity(SCEDA_Edge *e, void *ctxt) {
 int main(int argc, char *argv[]) {
   // create a graph whose nodes are labelled by strings and edges are labelled by Integer
   SCEDA_Graph *g = SCEDA_graph_create((SCEDA_delete_fun)delete_string, (SCEDA_delete_fun)delete_Integer);
- 
+
   SCEDA_Vertex *vS = SCEDA_graph_add_vertex(g, strdup("S"));
   SCEDA_Vertex *v1 = SCEDA_graph_add_vertex(g, strdup("V1"));
   SCEDA_Vertex *v2 = SCEDA_graph_add_vertex(g, strdup("V2"));
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
       SCEDA_Edge *e = SCEDA_edges_iterator_next(&edges);
       int *f_e = SCEDA_hashmap_get(flow, e);
       fprintf(stdout,"%s -> %s : %d\n", SCEDA_vertex_get_data(char *, SCEDA_edge_source(e)), SCEDA_vertex_get_data(char *, SCEDA_edge_target(e)), *f_e);
-    }      
+    }
     SCEDA_edges_iterator_cleanup(&edges);
   }
 

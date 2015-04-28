@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -24,7 +24,7 @@
 #define new_hash_code(hset, data, buckets) (((hset)->hash(data)) % buckets)
 #define hash_code(hset, data) (new_hash_code(hset, data, (hset)->buckets))
 
-void SCEDA_hashset_init(SCEDA_HashSet *hset, SCEDA_delete_fun delete, 
+void SCEDA_hashset_init(SCEDA_HashSet *hset, SCEDA_delete_fun delete,
 		  SCEDA_match_fun match, SCEDA_hash_fun hash) {
   hset->buckets = SCEDA_DFLT_SIZE;
   hset->size = 0;
@@ -100,7 +100,7 @@ static void SCEDA_hashset_resize(SCEDA_HashSet *hset, int buckets) {
 
 int SCEDA_hashset_add(SCEDA_HashSet *hset, const void *data) {
   int i = hash_code(hset, data);
-  
+
   int res = SCEDA_listset_add(SCEDA_hashset_nth_set(hset, i), data);
 
   if(res == 0) {
@@ -108,16 +108,16 @@ int SCEDA_hashset_add(SCEDA_HashSet *hset, const void *data) {
     if(hset->size > hset->buckets) {
       SCEDA_hashset_resize(hset, 1 + 2 * hset->buckets);
     }
-  } 
+  }
 
   return res;
 }
 
 int SCEDA_hashset_remove(SCEDA_HashSet *hset, void **data) {
   int i = hash_code(hset, *data);
-  
+
   int res = SCEDA_listset_remove(SCEDA_hashset_nth_set(hset, i), data);
-  
+
   if(res == 0) {
     hset->size--;
     if(4 * hset->size < hset->buckets) {
@@ -139,4 +139,3 @@ int SCEDA_hashset_lookup(SCEDA_HashSet *hset, void **data) {
 
   return SCEDA_listset_lookup(SCEDA_hashset_nth_set(hset, i), data);
 }
-

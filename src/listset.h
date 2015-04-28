@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -31,7 +31,7 @@ typedef struct {
 } SCEDA_ListSet;
 
 /** Initialise a (list) set.
-    
+
     @param[in] set = set to initialise
     @param[in] delete = function to delete data in the set or NULL
     @param[in] match = equality function */
@@ -76,7 +76,7 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
     @param[in] set = set
     @param[in, out] data = data to remove (will be replaced by the actual data)
 
-    @return 0 if success, 1 if not in the set, -1 otherwise. 
+    @return 0 if success, 1 if not in the set, -1 otherwise.
 
     \hideinitializer */
 #define SCEDA_listset_remove(set$, data$) \
@@ -89,8 +89,8 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
 
     @param[in] set = set
     @param[in] data = data to look for
-    
-    @return TRUE if present, FALSE otherwise 
+
+    @return TRUE if present, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_listset_contains(set$, data$) \
@@ -102,7 +102,7 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
     @param[in] set = set
     @param[in, out] data = data to look for (will be replaced by the actual data)
 
-    @return 0 if found, -1 otherwise 
+    @return 0 if found, -1 otherwise
 
     \hideinitializer */
 #define SCEDA_listset_lookup(set$, data$) \
@@ -111,7 +111,7 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
 
 /** Return cardinal of the set in time complexity O(1).
 
-    @param[in] set = set 
+    @param[in] set = set
 
     \hideinitializer */
 #define SCEDA_listset_size(set$) (SCEDA_list_size(SCEDA_listset_elements(set$)))
@@ -120,17 +120,17 @@ int SCEDA_listset_add(SCEDA_ListSet *set, const void *data);
 
     @param[in] set = set
 
-    @return TRUE if empty, FALSE otherwise 
+    @return TRUE if empty, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_listset_is_empty(set$) (SCEDA_listset_size(set$) == 0)
 
-/** Return the list of elements in the set. 
-    
+/** Return the list of elements in the set.
+
     @param[in] set = set
 
     @return the list of elements
-    
+
     \hideinitializer */
 #define SCEDA_listset_elements(set$) (&((set$)->elements))
 
@@ -140,22 +140,22 @@ typedef SCEDA_ListIterator SCEDA_ListSetIterator;
 /** Initialise a (list) set iterator.
 
     @param[in] set = set
-    @param[in] iter = set iterator 
+    @param[in] iter = set iterator
 
     \hideinitializer */
 #define SCEDA_listset_iterator_init(set$, iter$) (SCEDA_list_iterator_init(SCEDA_listset_elements(set$), iter$))
 
-/** Test whether there is a next data in the (list) set iterator. 
+/** Test whether there is a next data in the (list) set iterator.
 
     \hideinitializer */
 #define SCEDA_listset_iterator_has_next SCEDA_list_iterator_has_next
 
-/** Return the next data of a (list) set iterator. 
+/** Return the next data of a (list) set iterator.
 
     \hideinitializer */
 #define SCEDA_listset_iterator_next SCEDA_list_iterator_next
 
-/** Clean up a (list) set iterator 
+/** Clean up a (list) set iterator
 
     \hideinitializer */
 #define SCEDA_listset_iterator_cleanup SCEDA_list_iterator_cleanup

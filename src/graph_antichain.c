@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -28,7 +28,7 @@
 // the resulting graph will contain pointers on vertice of G
 static SCEDA_Graph *SCEDA_graph_split(const SCEDA_Graph *g, SCEDA_List **y_vert, SCEDA_List **z_vert) {
   // the split of a graph G = (X,U) is a bipartite graph BG = (Y \cup Z, E)
-  // where Y and Z are two distinct copies of X 
+  // where Y and Z are two distinct copies of X
   // and (y_i,z_j) \in E \iff (x_i,x_j) \in U
   // where y_i is the copy of x_i in Y
   //   and z_j is the copy of x_j in Z
@@ -77,7 +77,7 @@ static SCEDA_Graph *SCEDA_graph_split(const SCEDA_Graph *g, SCEDA_List **y_vert,
   int i;
   for(i = n-1; i >= 0; i--) {
     safe_call(SCEDA_list_ins_next(*y_vert, NULL, v_y[i]));
-    safe_call(SCEDA_list_ins_next(*z_vert, NULL, v_z[i]));	      
+    safe_call(SCEDA_list_ins_next(*z_vert, NULL, v_z[i]));
   }
 
   return bg;
@@ -98,7 +98,7 @@ int SCEDA_graph_minimum_chain_cover(SCEDA_Graph *gf, SCEDA_HashMap **prev_in_cha
 
   // compute the split of Gf
   SCEDA_Graph *bg = SCEDA_graph_split(gf, &y_vert, &z_vert); // based upon Gf vertice
-  
+
   SCEDA_HashMap *spouse = SCEDA_graph_maximum_bipartite_matching(bg, y_vert, z_vert);
 
 #define SCEDA_vertex_get_spouse(v) (SCEDA_hashmap_get(spouse, v))
@@ -221,7 +221,7 @@ static SCEDA_List *SCEDA_graph_maximum_antichain_aux(SCEDA_Graph *gf) {
   return result;
 }
 
-SCEDA_List *SCEDA_graph_maximum_antichain(SCEDA_Graph *g) { 
+SCEDA_List *SCEDA_graph_maximum_antichain(SCEDA_Graph *g) {
   // first compute the transitive closure Gf of G
   safe_call(SCEDA_graph_compute_topological_order(g));
   SCEDA_Graph *gf = SCEDA_graph_transitive_closure(g);

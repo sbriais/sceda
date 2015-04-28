@@ -27,10 +27,10 @@ unsigned int hash_Integer(Integer *x) {
 
 int main(int argc, char *argv[]) {
   // create a set of Integer
-  SCEDA_HashSet *set = SCEDA_hashset_create((SCEDA_delete_fun)delete_Integer, 
+  SCEDA_HashSet *set = SCEDA_hashset_create((SCEDA_delete_fun)delete_Integer,
 					    (SCEDA_match_fun)match_Integer,
 					    (SCEDA_hash_fun)hash_Integer);
-      
+
   int i;
   for(i = 0; i < 10; i++) {
     // insert i into the set

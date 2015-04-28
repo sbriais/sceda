@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
   SCEDA_hashmap_put(supply, vB, new_Integer(3), NULL);
   SCEDA_hashmap_put(supply, vC, new_Integer(-2), NULL);
   SCEDA_hashmap_put(supply, vD, new_Integer(-5), NULL);
-  
+
   SCEDA_HashMap *lcap = SCEDA_edge_map_create((SCEDA_delete_fun)delete_Integer);
   SCEDA_hashmap_put(lcap, e0, new_Integer(0), NULL);
   SCEDA_hashmap_put(lcap, e1, new_Integer(2), NULL);
@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
       int *f_e = SCEDA_hashmap_get(flow, e);
       fprintf(stdout,"%s -> %s : %d\n", SCEDA_vertex_get_data(char *, SCEDA_edge_source(e)), SCEDA_vertex_get_data(char *, SCEDA_edge_target(e)), *f_e);
       flowcost += *f_e * get_edge_value(e, cost);
-    }      
+    }
     SCEDA_edges_iterator_cleanup(&edges);
 
     fprintf(stdout,"total cost = %d\n",flowcost);

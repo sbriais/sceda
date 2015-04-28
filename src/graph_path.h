@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -41,7 +41,7 @@ typedef struct {
     @param[in] dist = distance function
     @param[in] ctxt = distance function context
 
-    @return map of all shortest paths from source vertex 
+    @return map of all shortest paths from source vertex
 
     A topological order must have been computed in g. */
 SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_int_edge_fun dist, void *ctxt);
@@ -53,7 +53,7 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_from_in_dag(SCEDA_Graph *g, SCEDA_Verte
     @param[in] dist = distance function
     @param[in] ctxt = distance function context
 
-    @return map of all shortest paths to target vertex 
+    @return map of all shortest paths to target vertex
 
     A topological order must have been computed in g. */
 SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex *to, SCEDA_int_edge_fun dist, void *ctxt);
@@ -67,19 +67,18 @@ SCEDA_HashMap *SCEDA_graph_shortest_path_to_in_dag(SCEDA_Graph *g, SCEDA_Vertex 
     @param[in] ctxt = distance function context
 
     @return map of all shortest paths from source vertex  */
-SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_int_edge_fun dist, void *ctxt);    
+SCEDA_HashMap *SCEDA_graph_shortest_path_dijkstra(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_int_edge_fun dist, void *ctxt);
 
 /** Compute the shortest paths from a unique source using Bellman-Ford
     algorithm.
 
     @param[in] g = graph
     @param[in] from = source of all the paths
-    @param[in] dist = distance function 
+    @param[in] dist = distance function
     @param[in] ctxt = distance function context
     @param[out] has_neg_cycle = set to TRUE if a negative cycle has been detected, FALSE otherwise
 
     @return map of all shortest paths from source vertex  */
-SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_int_edge_fun dist, void *ctxt, int *has_neg_cycle);    
+SCEDA_HashMap *SCEDA_graph_shortest_path_bellman_ford(SCEDA_Graph *g, SCEDA_Vertex *from, SCEDA_int_edge_fun dist, void *ctxt, int *has_neg_cycle);
 
 #endif
-

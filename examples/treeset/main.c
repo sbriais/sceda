@@ -29,15 +29,15 @@ int compare_Integer(Integer *x, Integer *y) {
 
 int main(int argc, char *argv[]) {
   // create a set of Integer
-  SCEDA_TreeSet *set = SCEDA_treeset_create((SCEDA_delete_fun)delete_Integer, 
+  SCEDA_TreeSet *set = SCEDA_treeset_create((SCEDA_delete_fun)delete_Integer,
 					    (SCEDA_compare_fun)compare_Integer);
-      
+
   int i;
   for(i = 0; i < 10; i++) {
     // insert i into the set
     SCEDA_treeset_add(set, new_Integer(i));
   }
-  
+
   // iterate over the set
   SCEDA_TreeSetIterator elts;
   SCEDA_treeset_iterator_init(set, &elts);

@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -92,9 +92,9 @@ static inline int small_enough(long double *min, long double *max, long double *
   }
 }
 
-int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g, 
-				    SCEDA_int_edge_fun weight, void *w_ctxt, 
-				    SCEDA_int_edge_fun time, void *t_ctxt, 
+int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
+				    SCEDA_int_edge_fun weight, void *w_ctxt,
+				    SCEDA_int_edge_fun time, void *t_ctxt,
 				    int *ratio_num, int *ratio_den,
 				    SCEDA_List **min_cycle) {
   if(SCEDA_graph_is_acyclic(g)) {
@@ -107,7 +107,7 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
 
   int gamma = 0;
   int tau = 0;
-  
+
   {
     int first = TRUE;
     SCEDA_EdgesIterator edges;
@@ -141,23 +141,23 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
     ctxt.w_ctxt = t_ctxt;
     ctxt.time = mrc_unit_cost;
     ctxt.t_ctxt = NULL;
-    
+
     rational_inv_int(n, &(ctxt.lambda));
-    
+
     SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_edge_fun)mrc_cost, &ctxt);
 
     if(!SCEDA_list_is_empty(cycle)) {
       ret_code = -1;
     }
-    
+
     SCEDA_list_delete(cycle);
   }
 
-  if(ret_code == 0) {  
+  if(ret_code == 0) {
     long double lambda_min;
     long double lambda_max;
     long double delta;
-    
+
     rational_int(-n*gamma, &lambda_min);
     rational_int(n*gamma, &lambda_max);
     rational_inv_int(n*n*tau*tau, &delta);
@@ -175,9 +175,9 @@ int SCEDA_graph_minimum_ratio_cycle(SCEDA_Graph *g,
 	ret_code = -1;
 	break;
       }
-      
+
       SCEDA_List *cycle = SCEDA_graph_neg_cycle_long_double(g, (SCEDA_long_double_edge_fun)mrc_cost, &ctxt);
-      
+
       if(!SCEDA_list_is_empty(cycle)) {
 	lambda_max = ctxt.lambda;
       } else {

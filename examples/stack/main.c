@@ -20,7 +20,7 @@ void delete_Integer(Integer *x) {
 int main(int argc, char *argv[]) {
   // create a stack of Integer
   SCEDA_Stack *stack = SCEDA_stack_create((SCEDA_delete_fun)delete_Integer);
-      
+
   int i;
   for(i = 0; i < 10; i++) {
     // push i onto the stack

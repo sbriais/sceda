@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -40,20 +40,20 @@ typedef struct {
   SCEDA_match_fun match_key;
 } SCEDA_ListMap;
 
-/** Initialise a (list) map. 
+/** Initialise a (list) map.
 
     @param[in] map = map to initialise
-    @param[in] delete_key = function to delete keys or NULL 
-    @param[in] delete_value = function to delete values or NULL 
+    @param[in] delete_key = function to delete keys or NULL
+    @param[in] delete_value = function to delete values or NULL
     @param[in] match_key = equality function on keys */
-void SCEDA_listmap_init(SCEDA_ListMap *map, SCEDA_delete_fun delete_key, 
+void SCEDA_listmap_init(SCEDA_ListMap *map, SCEDA_delete_fun delete_key,
 			SCEDA_delete_fun delete_value, SCEDA_match_fun match_key);
 
 /** Create a new (list) map, ready for use.
 
-    @param[in] delete_key = function to delete keys or NULL 
-    @param[in] delete_value = function to delete values or NULL 
-    @param[in] match_key = equality function on keys 
+    @param[in] delete_key = function to delete keys or NULL
+    @param[in] delete_value = function to delete values or NULL
+    @param[in] match_key = equality function on keys
 
     @return the (list) map */
 SCEDA_ListMap *SCEDA_listmap_create(SCEDA_delete_fun delete_key, SCEDA_delete_fun delete_value,
@@ -132,9 +132,9 @@ int SCEDA_listmap_lookup(SCEDA_ListMap *map, void **key, void **value);
 
 /** Return size of the map in time complexity O(1).
 
-    @param[in] map = map 
+    @param[in] map = map
 
-    @return size of map 
+    @return size of map
 
     \hideinitializer */
 #define SCEDA_listmap_size(map$) ((map$)->size)
@@ -149,9 +149,9 @@ int SCEDA_listmap_lookup(SCEDA_ListMap *map, void **key, void **value);
 
 /** Test whether the given map is empty in time complexity O(1).
 
-    @param[in] map = map 
+    @param[in] map = map
 
-    @return TRUE if map is empty, FALSE otherwise 
+    @return TRUE if map is empty, FALSE otherwise
 
     \hideinitializer */
 #define SCEDA_listmap_is_empty(map$) (SCEDA_listmap_size(map$) == 0)
@@ -161,27 +161,27 @@ typedef struct {
   SCEDA_ListMapElt *x;
 } SCEDA_ListMapIterator;
 
-/** Initialise a (list) map iterator. 
+/** Initialise a (list) map iterator.
 
     @param[in] map = map
-    @param[in] iter = map iterator 
+    @param[in] iter = map iterator
 
     \hideinitializer */
 #define SCEDA_listmap_iterator_init(map$, iter$) ((iter$)->x = SCEDA_listmap_head(map$))
 
 /** Test whether there is a next data in the map iterator.
 
-    @param[in] iter = map iterator 
+    @param[in] iter = map iterator
 
     \hideinitializer */
 #define SCEDA_listmap_iterator_has_next(iter$) ((iter$)->x != NULL)
 
-/** Return the next data of a (list) map iterator. 
+/** Return the next data of a (list) map iterator.
 
-    @param[in] iter = map iterator 
+    @param[in] iter = map iterator
     @param[out] key = corresponding key (filled by the iterator).
 
-    @return the "next" value in the map 
+    @return the "next" value in the map
 
     \hideinitializer */
 #define SCEDA_listmap_iterator_next(iter$, key$)              \
@@ -193,7 +193,7 @@ typedef struct {
 
 /** Clean up a (list) map iterator.
 
-    @param[in] iter = map iterator 
+    @param[in] iter = map iterator
 
     \hideinitializer */
 #define SCEDA_listmap_iterator_cleanup(iter$) (memset(iter$, 0, sizeof(SCEDA_ListMapIterator)))

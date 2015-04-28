@@ -2,17 +2,17 @@
    Copyright Sebastien Briais 2008, 2009
 
    This file is part of SCEDA.
-   
+
    SCEDA is free software: you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
    published by the Free Software Foundation, either version 3 of the
    License, or (at your option) any later version.
-   
+
    SCEDA is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with SCEDA.  If not, see
    <http://www.gnu.org/licenses/>.
@@ -183,7 +183,7 @@ static void SCEDA_treemap_left_rotate(SCEDA_TreeMap *map, SCEDA_TreeMapElt *x) {
 
 static void SCEDA_treemap_right_rotate(SCEDA_TreeMap *map, SCEDA_TreeMapElt *y) {
   SCEDA_TreeMapElt *x = y->left;
-  
+
   y->left = x->right;
   if(x->right != SCEDA_treemap_nil(map)) {
     x->right->parent = y;
@@ -262,7 +262,7 @@ int SCEDA_treemap_put(SCEDA_TreeMap *map, const void *key, const void *value, vo
 	if(x == x->parent->right) {
 	  x = x->parent;
 	  SCEDA_treemap_left_rotate(map, x);
-	} 
+	}
 	x->parent->color = BLACK;
 	x->parent->parent->color = RED;
 	SCEDA_treemap_right_rotate(map, x->parent->parent);
@@ -278,7 +278,7 @@ int SCEDA_treemap_put(SCEDA_TreeMap *map, const void *key, const void *value, vo
 	if(x == x->parent->left) {
 	  x = x->parent;
 	  SCEDA_treemap_right_rotate(map, x);
-	} 
+	}
 	x->parent->color = BLACK;
 	x->parent->parent->color = RED;
 	SCEDA_treemap_left_rotate(map, x->parent->parent);
@@ -287,7 +287,7 @@ int SCEDA_treemap_put(SCEDA_TreeMap *map, const void *key, const void *value, vo
   }
   SCEDA_treemap_root(map)->color = BLACK;
   /* done */
-  
+
   map->size++;
 
   return 0;
@@ -323,7 +323,7 @@ int SCEDA_treemap_remove(SCEDA_TreeMap *map, void **key, void **value) {
   } else {
     y = SCEDA_treemap_succ(map, z);
   }
-  
+
   SCEDA_TreeMapElt *x;
   if(y->left != SCEDA_treemap_nil(map)) {
     x = y->left;
